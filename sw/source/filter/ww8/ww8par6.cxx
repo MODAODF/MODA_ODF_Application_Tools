@@ -241,6 +241,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
         default:
             OSL_ENSURE(false, "Unknown grid type");
             [[fallthrough]];
+// Modify by Firefly(firefly@opendesktop.org.tw)
+// 強制不使用文字格子線
+#if 0
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(true);
@@ -252,6 +255,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
         case 2:
             eType = GRID_LINES_ONLY;
             break;
+#endif
     }
 
     aGrid.SetGridType(eType);

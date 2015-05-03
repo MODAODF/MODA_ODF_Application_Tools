@@ -37,12 +37,7 @@ endif
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/python,\
     scp2/source/python/file_python \
-    scp2/source/python/file_python_librelogo \
     scp2/source/python/module_python \
-))
-
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/python,\
-    scp2/source/python/module_python_librelogo \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

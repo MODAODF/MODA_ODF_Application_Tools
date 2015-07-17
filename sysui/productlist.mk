@@ -7,12 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-PRODUCTLIST := libreoffice libreofficedev
-PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
-PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
+PRODUCTLIST := libreoffice oxoffice libreofficedev
+PKGVERSION := $(USERDIRPRODUCTVERSION).$(OXO_VERSION_MINOR)
+PKGVERSIONSHORT := $(USERDIRPRODUCTVERSION)
 PRODUCTNAME.libreoffice := LibreOffice
+PRODUCTNAME.oxoffice := OxOffice
 PRODUCTNAME.libreofficedev := LibreOfficeDev
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
+UNIXFILENAME.oxoffice := oxoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
 
 # vim: set noet sw=4 ts=4:

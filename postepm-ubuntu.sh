@@ -4,7 +4,7 @@
 # run at top of source directory
 DPKG=`which dpkg`
 PKG=(OxOffice_R5_Linux_x86_deb OxOffice_R5_Linux_x86_deb_langpack_zh-TW)
-PRJ=(LibreOffice LibreOffice_languagepack)
+PRJ=(OxOffice OxOffice_languagepack)
 
 for idx in "${!PRJ[@]}" ; do
     prj="${PRJ[$idx]}" ;

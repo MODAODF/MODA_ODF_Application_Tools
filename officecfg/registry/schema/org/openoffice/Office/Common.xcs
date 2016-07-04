@@ -3759,7 +3759,7 @@
           <info>
             <desc>Specifies the background color of the highlight of a thumbnail in the start center.</desc>
           </info>
-          <value>14540253</value>
+          <value>16748288</value>
         </prop>
         <prop oor:name="StartCenterThumbnailsHighlightTextColor" oor:type="xs:int" oor:nillable="false">
           <!-- Default 3355443 = 0x333333 as specified in tdf#90452, comment 45 -->

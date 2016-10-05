@@ -4789,8 +4789,10 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             nAdjBiDi = 0;
             break;
         case SvxAdjust::BlockLine:
-        case SvxAdjust::Block:
             nAdj = nAdjBiDi = 3;
+            break;
+        case SvxAdjust::Block:
+            nAdj = nAdjBiDi = 4;
             break;
         case SvxAdjust::Center:
             nAdj = nAdjBiDi = 1;

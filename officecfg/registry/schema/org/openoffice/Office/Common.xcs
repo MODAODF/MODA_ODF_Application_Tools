@@ -5622,7 +5622,7 @@
           <desc>Determines if various experimental, and potentially unstable
           features should be enabled in the user interface.</desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="ScreenshotMode" oor:type="xs:boolean" oor:nillable="false">
         <info>

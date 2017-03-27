@@ -39,7 +39,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	( \
 		echo '[Bootstrap]' \
 		&& echo 'InstallMode=<installmode>' \
-		&& echo 'ProductKey=$(PRODUCTNAME) $(PRODUCTVERSION)' \
+		&& echo 'ProductKey=$(PRODUCTNAME) $(ABOUTPRODUCTVERSION)' \
 		$(if $(ENABLE_RELEASE_BUILD),\
 			&& echo 'UserInstallation=$$SYSUSERCONFIG/$(if $(filter-out HAIKU MACOSX WNT,$(OS)),$(shell echo $(PRODUCTNAME) | tr "[:upper:]" "[:lower:]"),$(shell echo $(PRODUCTNAME) | sed -e 's/ /%20/g'))/4', \
 			&& echo 'UserInstallation=$$ORIGIN/..') \

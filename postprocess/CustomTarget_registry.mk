@@ -560,7 +560,7 @@ postprocess_main_SED := \
 	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(subst $(COMMA),\x2c,$(OOO_VENDOR)),The Document Foundation),g' \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
-	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
+	-e 's,$${PRODUCTEXTENSION},,g' \
 	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_INFO_URL},http://www.openoffice.com.tw/,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \

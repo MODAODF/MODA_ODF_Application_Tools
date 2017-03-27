@@ -23,7 +23,7 @@
       <value>${PRODUCTNAME}</value>
     </prop>
     <prop oor:name="ooSetupVersion">
-      <value>${PRODUCTVERSION}</value>
+      <value>${ABOUTBOXPRODUCTVERSION}</value>
     </prop>
     <prop oor:name="ooSetupVersionAboutBox">
       <value>${ABOUTBOXPRODUCTVERSION}</value>

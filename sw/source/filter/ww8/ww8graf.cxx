@@ -2390,7 +2390,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
              pFSPA->nwr == 3 &&
              !IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell ) )
         {
-            eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
+            eHoriRel = text::RelOrientation::FRAME;
         }
 
         // Writer honours this wrap distance when aligned as "left" or "right",

@@ -1206,14 +1206,16 @@ void SVGFilter::implGenerateMetaData()
 
                         // Footer Field
                         xPropSet->getPropertyValue( "IsFooterVisible" )  >>= bFooterVisibility;
+                        xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
+                        if( !aFooterField.text.isEmpty() )
+                        {
+                            OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
+
+                        }
                         if( bFooterVisibility ) // visibility default value: 'visible'
                         {
-                            xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
-                            if( !aFooterField.text.isEmpty() )
-                            {
-                                OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
-                            }
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "footer-visibility", "visible" );
                         }
                         else
                         {

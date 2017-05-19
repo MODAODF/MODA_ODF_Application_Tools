@@ -228,6 +228,9 @@ class SVGTextWriter final
     OUString                                    msUrl;
     OUString                                    msHyperlinkIdList;
     bool                                        mbIsPlaceholderShape;
+
+    /* 用於判斷不能解析的 Placeholder  */
+    OUString                                    msPlaceholderInlineClass;
     static const bool                           mbIWS = false;
     vcl::Font                                   maCurrentFont;
     vcl::Font                                   maParentFont;

@@ -482,6 +482,7 @@ SVGTextWriter::SVGTextWriter(SVGExport& rExport, SVGAttributeWriter& rAttributeW
   mbIsURLField( false ),
   msUrl(),
   mbIsPlaceholderShape( false ),
+  msPlaceholderInlineClass(),
   maCurrentFont(),
   maParentFont()
 {
@@ -1198,6 +1199,7 @@ bool SVGTextWriter::nextTextPortion()
                                 || sFieldName == "Footer" || sFieldName == "PageNumber" )
                         {
                             mbIsPlaceholderShape = true;
+                            msPlaceholderInlineClass = sFieldName;
                         }
                         else
                         {
@@ -1692,6 +1694,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     if( mbIsPlaceholderShape )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "textfield", msPlaceholderInlineClass );  // textfield: 用來判斷無法解析的 placeholder: Date/Time, Header/Footer...
         mbIsPlaceholderShape = false;
     }
 

@@ -5685,6 +5685,33 @@ MasterPageView.prototype.createElement = function()
         var aTextFieldHandlerSet = this.aMetaSlide.theMetaDoc.aTextFieldHandlerSet;
         var sMasterSlideId = this.aMasterPage.id;
 
+        // 解析沒被解析的 Date/Time, Header/Footer...
+        var aFields = getElementsByClassName(this.aMasterPage.backgroundObjects, 'com.sun.star.drawing.TextShape');
+        for( var idx=0; idx < aFields.length; idx++ )
+        {
+            var aPlaceholderElement = getElementByClassName( aFields[idx], 'PlaceholderText' );
+            if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'PageNumber' )
+            {
+                aPlaceholderElement.innerHTML = this.aMetaSlide.nSlideNumber;
+            }
+            if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'DateTime' )
+            {
+                aPlaceholderElement.innerHTML = new Date().toLocaleString();
+            }
+            if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'Header' )
+            {
+                var headerid = getOOOAttribute(this.aMetaSlide.element, aOOOAttrHeaderField);
+                var headertext = document.getElementById(headerid).innerHTML;
+                aPlaceholderElement.innerHTML = headertext;
+            }
+            if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'Footer' )
+            {
+                var footerid = getOOOAttribute(this.aMetaSlide.element, aOOOAttrFooterField);
+                var footertext = document.getElementById(footerid).innerHTML;
+                aPlaceholderElement.innerHTML = footertext;
+            }
+        }
+
         var i = 0;
         var sId;
         for( ; i < aBackgroundObjectSubGroupIdList.length; ++i )

@@ -1024,6 +1024,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_Value_doc_ST_DocGrid_default:
                         pSectionContext->SetGridType(text::TextGridMode::NONE);
                         break;
+// Modify by AlanTang(alan.tang@ossii.com.tw)
+// default use "No Grid"
+#if 0
                     case NS_ooxml::LN_Value_doc_ST_DocGrid_lines:
                         pSectionContext->SetGridType(text::TextGridMode::LINES);
                         break;
@@ -1035,6 +1038,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         pSectionContext->SetGridType(text::TextGridMode::LINES_AND_CHARS);
                         pSectionContext->SetGridSnapToChars( true );
                         break;
+#endif
                     default :
                         OSL_FAIL("unknown SwTextGrid value");
                 }

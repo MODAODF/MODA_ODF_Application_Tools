@@ -100,4 +100,17 @@ End
 
 #endif
 
+/* ** CPMLIBRE ** */
+
+#ifdef WITH_EXTENSION_CPMLIBRE
+
+File gid_File_Oxt_CPMLIBRE
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "cpmlibre.filelist";
+End
+
+#endif
+
 #endif

@@ -13,6 +13,10 @@ $(eval $(call gb_Package_add_files,extras_tplossiitempl,$(LIBO_SHARE_FOLDER)/tem
 	Writer_12pt_Template.ott \
 	Writer_16pt_Template.ott \
 	Writer_14pt_Template.ott \
+	Writer_Meeting_Minutes.ott \
+	Writer_ODF_Implementation_Plan.ott \
+	Writer_SignInForm_3_Columns.ott \
+	Writer_SignInForm_4_Columns.ott \
 ))
 
 # vim: set noet sw=4 ts=4:

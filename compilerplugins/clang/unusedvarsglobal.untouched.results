@@ -1,0 +1,38 @@
+canvas/workben/canvasdemo.cxx:672
+    (anonymous namespace)::DemoApp aApp
+connectivity/source/drivers/evoab2/EApi.h:52
+    gconstpointer (*)(EContact *, EContactField) e_contact_get_const
+cppu/source/uno/check.cxx:315
+    (anonymous namespace)::BinaryCompatible_Impl aTest
+framework/source/services/ContextChangeEventMultiplexer.cxx:381
+    framework::(anonymous namespace)::Hook g_hook
+hwpfilter/source/nodes.h:92
+    int count
+pyuno/source/loader/pyuno_loader.cxx:240
+    pyuno_loader::(anonymous namespace)::PythonInit s_Init
+pyuno/source/module/pyuno_gc.cxx:45
+    pyuno::(anonymous namespace)::StaticDestructorGuard guard
+sal/osl/all/utility.cxx:45
+    osl::(anonymous namespace)::OGlobalTimer aGlobalTimer
+sal/qa/osl/file/osl_File.cxx:5199
+    (anonymous namespace)::GlobalObject theGlobalObject
+sal/rtl/cmdargs.cxx:46
+    (anonymous namespace)::ArgHolder argHolder
+soltools/cpp/cpp.h:239
+    int Lflag
+soltools/mkdepend/parse.c:40
+    symhash * maininclist
+soltools/mkdepend/pr.c:34
+    int width
+svx/source/gengal/gengal.cxx:323
+    (anonymous namespace)::GalApp aGalApp
+vcl/backendtest/VisualBackendTest.cxx:745
+    (anonymous namespace)::VisualBackendTestApp aApplication
+vcl/source/uipreviewer/previewer.cxx:113
+    (anonymous namespace)::UIPreviewApp aApp
+vcl/workben/icontest.cxx:216
+    (anonymous namespace)::IconTestApp aApp
+vcl/workben/mtfdemo.cxx:162
+    (anonymous namespace)::DemoMtfApp aApp
+vcl/workben/vcldemo.cxx:2445
+    (anonymous namespace)::DemoApp aApp

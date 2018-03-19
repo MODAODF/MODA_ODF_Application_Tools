@@ -19,7 +19,7 @@ build_goal:=$(if $(filter build build-nocheck uicheck,$(MAKECMDGOALS)),build)\
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
 COMPILER_PLUGINS := @COMPILER_PLUGINS@
-GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
+GIT_BUILD := 
 
 # Run autogen.sh if needed and force make to restart itself.
 # ... but there are several cases where we do not want to run

@@ -96,7 +96,6 @@ sub create_installation_directory
 
     $installdir = installer::systemactions::create_directories("install", $languageref);
     installer::logger::print_message( "... creating installation set in $installdir ...\n" );
-    remove_old_installation_sets($installdir);
     my $inprogressinstalldir = $installdir . "_inprogress";
     installer::systemactions::rename_directory($installdir, $inprogressinstalldir);
     $installdir = $inprogressinstalldir;

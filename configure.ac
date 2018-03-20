@@ -506,6 +506,24 @@ else
 fi
 AC_SUBST(USERDIRPRODUCTVERSION)
 
+AC_MSG_CHECKING([for defined of oxoffice minor version])
+if test -n "$with_oxo_version_minor" -a "$with_oxo_version_minor" != "yes" ; then
+    OXO_VERSION_MINOR="$with_oxo_version_minor"
+else
+    OXO_VERSION_MINOR="2"
+fi
+AC_SUBST(OXO_VERSION_MINOR)
+
+AC_MSG_CHECKING([for defined of oxoffice patch version])
+if test -n "$with_oxo_version_patch" -a "$with_oxo_version_patch" != "yes" ; then
+    OXO_VERSION_PATCH="$with_oxo_version_patch"
+else
+    OXO_VERSION_PATCH="1"
+fi
+AC_SUBST(OXO_VERSION_PATCH)
+
+
+
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -1823,6 +1841,27 @@ AC_ARG_WITH(userdirproduct-version,
     ],
     with_userdirproduct_version=$withval ,
 )
+
+AC_ARG_WITH(oxo-version-minor,
+    AS_HELP_STRING([--with-oxo-version-minor],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-oxo-version-minor="2"
+    ],
+    with_oxo_version_minor=$withval ,
+)
+
+AC_ARG_WITH(oxo-version-patch,
+    AS_HELP_STRING([--with-oxo-version-patch],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-oxo-version-patch="1"
+    ],
+    with_oxo_version_patch=$withval ,
+)
+
 AC_ARG_WITH(aboutbox-version,
     AS_HELP_STRING([--with-aboutbox-version],
         [Allows the builder to add a custom version tag that will appear in the

@@ -54,6 +54,9 @@
 #include <oox/token/namespaces.hxx>
 #include <memory>
 
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+
 using namespace oox;
 
 static OUString lcl_GetVbaTabName( SCTAB n )
@@ -158,7 +161,14 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
         Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
 
     // TODO: correct codepage for BIFF5?
-    sal_uInt16 nCodePage = XclTools::GetXclCodePage( (GetBiff() <= EXC_BIFF5) ? RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_UNICODE );
+    const com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    ::rtl::OUString aLanguage = rLocale.Language.toAsciiLowerCase();
+    ::rtl::OUString aCountry  = rLocale.Country.toAsciiLowerCase();
+
+    sal_uInt16 nCodePage = XclTools::GetXclCodePage( (GetBiff() <= EXC_BIFF5) ?
+                                                               (aLanguage.equalsAscii("zh") && aCountry.equalsAscii("tw")) ? RTL_TEXTENCODING_MS_950 : RTL_TEXTENCODING_MS_1252
+                                                                       : RTL_TEXTENCODING_UNICODE
+                                                               );
 
     if( GetBiff() <= EXC_BIFF5 )
     {

@@ -2373,7 +2373,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ExportFormatExcel eFormat = ExpBiff5;
             if( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
                 eFormat = ExpBiff8;
-            ErrCode eError = ScFormatFilter::Get().ScExportExcel5( rMed, &m_aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
+            ErrCode eError = ScFormatFilter::Get().ScExportExcel5( rMed, &m_aDocument, eFormat, RTL_TEXTENCODING_MS_950 );
 
             if( eError && !GetError() )
                 SetError(eError);

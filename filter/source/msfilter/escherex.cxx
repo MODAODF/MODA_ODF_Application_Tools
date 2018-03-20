@@ -829,10 +829,11 @@ void EscherPropertyContainer::CreateTextProperties(
                 nTextAttr |= 0x20002;
         }
     }
-    AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
-    AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
-    AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
-    AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
+    // http://mantis.ossii.com.tw/view.php?id=747
+    AddOpt( ESCHER_Prop_dxTextLeft, nTop * 360 );
+    AddOpt( ESCHER_Prop_dxTextRight, nBottom * 360 );
+    AddOpt( ESCHER_Prop_dyTextTop, nLeft * 360 );
+    AddOpt( ESCHER_Prop_dyTextBottom, nRight * 360 );
 
     AddOpt( ESCHER_Prop_WrapText, eWrapMode );
     AddOpt( ESCHER_Prop_AnchorText, eAnchor );

@@ -862,6 +862,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 ScaleEmu( nTextTop );
                 ScaleEmu( nTextBottom );
 
+               // http://mantis.ossii.com.tw/view.php?id=747
+                std::swap(nTextLeft, nTextTop);
+                std::swap(nTextRight, nTextBottom);
+
                 sal_Int32   nMinFrameWidth = 0;
                 sal_Int32   nMinFrameHeight = 0;
                 bool    bAutoGrowWidth, bAutoGrowHeight;

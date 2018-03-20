@@ -163,7 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/excelfilter \
 	sc/source/filter/oox/addressconverter \
 	sc/source/filter/oox/autofilterbuffer \
-	sc/source/filter/oox/autofiltercontext \
 	sc/source/filter/oox/biffhelper \
 	sc/source/filter/oox/chartsheetfragment \
 	sc/source/filter/oox/commentsbuffer \
@@ -190,7 +189,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/pivotcachebuffer \
 	sc/source/filter/oox/pivotcachefragment \
 	sc/source/filter/oox/pivottablebuffer \
-	sc/source/filter/oox/pivottablefragment \
 	sc/source/filter/oox/querytablebuffer \
 	sc/source/filter/oox/querytablefragment \
 	sc/source/filter/oox/revisionfragment \
@@ -218,6 +216,13 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheetfragment \
 	sc/source/filter/oox/worksheethelper \
 	sc/source/filter/oox/worksheetsettings \
+))
+
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69241
+$(eval $(call gb_Library_add_cxxobjects,scfilt,\
+       sc/source/filter/oox/autofiltercontext \
+       sc/source/filter/oox/pivottablefragment \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
 $(eval $(call gb_Library_use_externals,scfilt,\

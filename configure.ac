@@ -474,6 +474,37 @@ AC_MSG_CHECKING([for product version])
 PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
 AC_MSG_RESULT([$PRODUCTVERSION])
 AC_SUBST(PRODUCTVERSION)
+AC_MSG_CHECKING([for product name])
+if test -n "$with_product_name" -a "$with_product_name" != "yes" ; then
+    PRODUCTNAME="$with_product_name"
+else
+    PRODUCTNAME="OxOffice"
+fi
+AC_SUBST(PRODUCTNAME)
+
+AC_MSG_CHECKING([for about box version])
+if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then
+    ABOUTBOXPRODUCTVERSION="$with_aboutbox_version"
+else
+    ABOUTBOXPRODUCTVERSION="R5W1"
+fi
+AC_SUBST(ABOUTBOXPRODUCTVERSION)
+
+AC_MSG_CHECKING([for labeled product version])
+if test -n "$with_lproduct_version" -a "$with_lproduct_version" != "yes" ; then
+    LPRODUCTVERSION="$with_lproduct_version"
+else
+    LPRODUCTVERSION="R5"
+fi
+AC_SUBST(LPRODUCTVERSION)
+
+AC_MSG_CHECKING([for user dir product version])
+if test -n "$with_userdirproduct_version" -a "$with_userdirproduct_version" != "yes" ; then
+    USERDIRPRODUCTVERSION="$with_userdirproduct_version"
+else
+    USERDIRPRODUCTVERSION="5"
+fi
+AC_SUBST(USERDIRPRODUCTVERSION)
 
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
@@ -1762,6 +1793,45 @@ AC_ARG_WITH(product-name,
     AS_HELP_STRING([--with-product-name='My Own Office Suite'],
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
+
+AC_ARG_WITH(product-name,
+    AS_HELP_STRING([--with-product-name],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-product-name="OxOffice"
+    ],
+    with_product_name=$withval ,
+)
+
+AC_ARG_WITH(lproduct-version,
+    AS_HELP_STRING([--with-product-version],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-lproduct-version="R5"
+    ],
+    [with_lproduct_version=$withval] ,
+)
+
+AC_ARG_WITH(userdirproduct-version,
+    AS_HELP_STRING([--with-userdirprduct-version],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-userdirproduct-version="5"
+    ],
+    with_userdirproduct_version=$withval ,
+)
+AC_ARG_WITH(aboutbox-version,
+    AS_HELP_STRING([--with-aboutbox-version],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-aboutbox-version="R5W1"
+    ],
+    with_aboutbox_version=$withval ,
+)
 
 libo_FUZZ_ARG_ENABLE(community-flavor,
     AS_HELP_STRING([--disable-community-flavor],

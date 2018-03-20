@@ -137,6 +137,8 @@ public:
     /** Removes all splits and inserts the splits from rSplits. */
     void                        SetSplits( const ScCsvSplits& rSplits );
 
+    bool                        mbModeSplit;    // add by Wind < yc.yan@ossii.com.tw >
+
 private:
     /** Inserts a split and adjusts column data. */
     SAL_DLLPRIVATE bool                        ImplInsertSplit( sal_Int32 nPos );

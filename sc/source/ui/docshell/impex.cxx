@@ -1286,15 +1286,76 @@ static bool lcl_PutString(
     return bMultiLine;
 }
 
-static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
-                     bool& rbIsQuoted, bool& rbOverflowCell )
+// added by wind <yc.yan@ossii.com.tw>
+static OUString lcl_Substr( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext, sal_Int32 nLineLen )
 {
+    sal_Int32 nCurPos = 0;
+    sal_Int32 nRealPos = 0;
+    sal_Int32 nRealSize = rLine.getLength()*2;
+    sal_Int32 nMapSize = rLine.getLength()*5;
+    sal_Int32 *map = new sal_Int32[nMapSize];
+
+    // map correct position for Chinese char
+    for(; nCurPos < nRealSize;)
+    {
+       int nWordLen = ScImportExport::charRealLen( rLine.copy( nRealPos, 1) );
+       do
+       {
+           map[nCurPos++] = nRealPos;
+       }
+       while( --nWordLen > 0 );
+       nRealPos++;
+    }
+
+    // split by mapping position
+    OUString aNew;
+    sal_Int32 nNewLength = nNext;
+    for( nCurPos=nStart; nCurPos<nNewLength && nCurPos<nRealSize-1 && map[nCurPos] < rLine.getLength(); )
+    {
+        aNew += rLine.copy( map[nCurPos], 1 );
+        if( map[nCurPos]==map[nCurPos+1] )
+        {
+            sal_Int32 nPosValue = map[nCurPos];
+            while( nPosValue==map[++nCurPos] )
+                ;
+        }
+        else
+            nCurPos++;
+    }
+
+    // check for safe: out of bound
+    if( nLineLen>(nNewLength) && map[nNewLength-1]==map[nNewLength])
+    {
+        aNew = aNew.copy( 0, aNew.getLength()-1 );
+    }
+
+    // do like ltrim()
+    for( nCurPos=0;
+          ( OUStringToOString( aNew.copy( nCurPos, 1 ), RTL_TEXTENCODING_UTF8 ).getStr()[0] == ' ') && nCurPos < aNew.getLength();
+          nCurPos++ )
+        ;
+
+    OUString aRet;
+    if( nCurPos==aNew.getLength() )
+        aRet = aNew;
+    else
+        aRet = aNew.copy( nCurPos );
+
+    delete [] map;
+    return aRet;
+}
+
+static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
+                     bool& /*rbIsQuoted*/, bool& /*rbOverflowCell*/, sal_Int32 nLineLen )
+{
+#if 0
     sal_Int32 nLen = rLine.getLength();
     if (nNext > nLen)
         nNext = nLen;
+#endif
     if ( nNext <= nStart )
         return EMPTY_OUSTRING;
-
+#if 0
     const sal_Unicode* pStr = rLine.getStr();
 
     sal_Int32 nSpace = nNext;
@@ -1326,6 +1387,9 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
             return rLine.copy(nStart, nArbitraryCellLengthLimit);
         }
     }
+#else
+    return lcl_Substr( rLine, nStart, nNext, nLineLen );
+#endif
 }
 
 bool ScImportExport::ExtText2Doc( SvStream& rStrm )
@@ -1423,7 +1487,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
             EmbeddedNullTreatment( aLine);
 
-            sal_Int32 nLineLen = aLine.getLength();
+            sal_Int32 nLineLen = ScImportExport::charMonitorLen(aLine);
             SCCOL nCol = nStartCol;
             bool bMultiLine = false;
             if ( bFixed ) //  Fixed line length
@@ -1444,7 +1508,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                             sal_Int32 nStart = pColStart[i];
                             sal_Int32 nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
                             bool bIsQuoted = false;
-                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted, bOverflowCell );
+                            aCell = lcl_GetFixed( aLine, nStart, nNext, bIsQuoted, bOverflowCell, nLineLen );
                             if (bIsQuoted && bQuotedAsText)
                                 nFmt = SC_COL_TEXT;
 

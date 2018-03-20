@@ -201,6 +201,7 @@ void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
 }
 
 // event handling -------------------------------------------------------------
+bool mbModeSplit = false;
 
 IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
 {
@@ -215,10 +216,13 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
         case CSVCMD_REPAINT:
             if( !mxGrid->IsNoRepaint() )
             {
+                mxGrid->mbModeSplit = mbFixedMode;
                 mxGrid->Invalidate();
                 mxRuler->Invalidate();
                 InitHScrollBar();
                 InitVScrollBar();
+                mbModeSplit = false;
+                mxGrid->mbModeSplit = mbModeSplit;
             }
         break;
         case CSVCMD_MAKEPOSVISIBLE:
@@ -334,7 +338,9 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
     {
         mxGrid->DisableRepaint();
         mxRuler->ApplyLayout( aOldData );
+        mxGrid->mbModeSplit = mbFixedMode;
         mxGrid->ApplyLayout( aOldData );
+        mxGrid->mbModeSplit = false;
         mxGrid->EnableRepaint();
     }
 }

@@ -23,10 +23,32 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
+#include <comphelper/string.hxx>
+#include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
 #include <o3tl/sorted_vector.hxx>
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
+// =======================================================================
+// Add by Firefly <firefly@opendesktop.org.tw>
+static char const *aDefaultGroup = \
+"仿|" \
+"明;宋;Ming;Sung;Song|" \
+"楷;Kai|" \
+"隸;隶|" \
+"黑;Hei|" \
+"圓;圆|" \
+"行書;行书|勘亭流|古印|魏碑|" \
+"鋼筆;钢笔|" \
+"新藝;新艺|綜藝;综艺|海報;海报|空疊;空叠|疊圓;叠圆|廣告;广告|POP|" \
+"手寫;手写|注音|" \
+"Sans|" \
+"Serif|" \
+"Monospace|Mono" \
+"Symbol;Webdings;Dingbats";
+
+#if 0
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
@@ -60,17 +82,35 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 
     return ImplFontAttrs::None;
 }
+#endif
 
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
+    , mbMapNames( false )
     , mpPreMatchHook( nullptr )
     , mpFallbackHook( nullptr )
     , mnFallbackCount( -1 )
-{}
+{
+    // Add by Firefly (firefly@opendesktop.org.tw)
+    mnLastSortID = -99;
+    const char *pEnv = getenv("OOO_FONT_GROUP_LIST");
+    // 使用者定義優先處理
+    if (pEnv)
+    {
+       OUString aGroupName(pEnv, strlen(pEnv), RTL_TEXTENCODING_UTF8);
+       AddFontGroup(aGroupName);
+    }
+    OUString aDefault(aDefaultGroup, strlen(aDefaultGroup), RTL_TEXTENCODING_UTF8);
+    AddFontGroup(aDefault);
+}
 
 PhysicalFontCollection::~PhysicalFontCollection()
 {
     Clear();
+
+    // Add by Firefly (firefly@opendesktop.org.tw)
+    maGroupFontList.clear();
+    mnLastSortID = -99;
 }
 
 void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
@@ -98,6 +138,8 @@ void PhysicalFontCollection::Clear()
 
 void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
 {
+// Modify by Firefly <firefly@opendesktop.org.tw>
+#if 1
     // normalized family names of fonts suited for glyph fallback
     // if a font is available related fonts can be ignored
     // TODO: implement dynamic lists
@@ -169,6 +211,10 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
 
     mnFallbackCount = nMaxLevel;
     mpFallbackList  = std::move(pFallbackList);
+#else
+    mnFallbackCount = 0;
+    mpFallbackList  = NULL;
+#endif
 }
 
 PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
@@ -269,6 +315,13 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
         if( nFallbackLevel < mnFallbackCount )
             pFallbackData = (*mpFallbackList)[ nFallbackLevel ];
     }
+// firefly test
+#if 1
+    if( !pFallbackData )
+    {
+       pFallbackData = ImplFindFontFamilyOfDefaultFont();
+    }
+#endif
 
     return pFallbackData;
 }
@@ -278,6 +331,11 @@ void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
     OUString aSearchName = GetEnglishSearchFontName( pNewData->GetFamilyName() );
 
     PhysicalFontFamily* pFoundData = FindOrCreateFontFamily( aSearchName );
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    // Check and set the font group ID.
+    // If not match any group, the return ID is -1.
+    int nGroupID = ImplCheckGroupID(aSearchName, pNewData->GetMapNames());
+    pFoundData->SetGroupID(nGroupID);
 
     pFoundData->AddFontFace( pNewData );
 }
@@ -294,6 +352,48 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySearchName( cons
 
     PhysicalFontFamily* pFoundData = (*it).second.get();
     return pFoundData;
+}
+
+PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyByAliasName(const OUString& rSearchName,
+    const OUString& rShortName) const
+{
+    // short circuit for impossible font name alias
+    if (rSearchName.isEmpty())
+        return nullptr;
+
+    // short circuit if no alias names are available
+    if (!mbMapNames)
+        return nullptr;
+
+    // use the font's alias names to find the font
+    // TODO: get rid of linear search
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    while( it != maPhysicalFontFamilies.end() )
+    // Modify by Firefly <firefly@opendesktop.org.tw>
+    // BUG! 無窮迴圈
+    //for( ; it != maPhysicalFontFamilies.end() ; ++it)
+    {
+		PhysicalFontFamily* pData = nullptr;
+        pData = (*it).second.get();
+        if( pData->GetAliasNames().isEmpty() )
+            continue;
+
+        // if one alias name matches we found a matching font
+        OUString aMapNames = pData->GetAliasNames();
+        OUString aTempName;
+        sal_Int32 nIndex = 0;
+
+        do
+        {
+            aTempName = GetNextFontToken( GetEnglishSearchFontName(aMapNames), nIndex );
+           // Test, if the Font name match with one of the mapping names
+           if ( (aTempName == rSearchName) || (aTempName == rShortName) )
+              return pData;
+        }
+        while ( nIndex != -1 );
+     }
+
+     return nullptr;
 }
 
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFontName ) const
@@ -317,6 +417,101 @@ PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFontFamily( const OUStri
 
     return pFoundData;
 }
+
+// Add by Firefly <firefly@opendesktop.org.tw>
+// 切割字體屬性群組字串
+void PhysicalFontCollection::AddFontGroup(const OUString rGroupName)
+{
+    if (rGroupName.getLength())
+    {
+       sal_Int32 nTokens = comphelper::string::getTokenCount(rGroupName, '|');
+       for (sal_Int32 nIndex = 0; nIndex < nTokens; nIndex++)
+       {
+           OUString aGroup = rGroupName.getToken(nIndex, '|');
+           if (aGroup.getLength())
+           {
+               maGroupFontList.push_back(GetEnglishSearchFontName(aGroup));
+           }
+       }
+    }
+}
+
+// Add by Firefly <firefly@opendesktop.org.tw>
+// 檢查並傳回字型名稱所屬 ID
+int PhysicalFontCollection::ImplCheckGroupID(const OUString& rName, const OUString& rAliasName) const
+{
+    OUString aFullNames = rName;
+    if (rAliasName.getLength())
+    {
+       aFullNames += ";";
+       aFullNames += rAliasName;
+    }
+    aFullNames = GetEnglishSearchFontName(aFullNames);
+
+    // 依序取出各個群組做比對
+    for (sal_uInt64 i = 0 ; i < maGroupFontList.size(); i++)
+    {
+       OUString aGroupNames = maGroupFontList.at(i);
+       // 再分解群組成員與字型名稱做比對
+       OUString aTempName;
+       sal_Int32 nIndex = 0;
+       do
+       {
+           aTempName = GetNextFontToken(aGroupNames, nIndex); // 群組成員名稱
+           if (aTempName.getLength() && aFullNames.indexOf(aTempName) != -1)
+           {
+#if defined(HDU_DEBUG)
+               printf("ID=%2d, Check Name=%s, Match Group=%s\n", i, OUStringToOString( aFullNames,RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString( aTempName,RTL_TEXTENCODING_UTF8 ).getStr());
+#endif
+               return i;
+           }
+       }
+       while (nIndex != -1);
+    }
+    return -1;
+}
+
+// Add by Firefly <firefly@opendesktop.org.tw>
+PhysicalFontFamily* PhysicalFontCollection::ImplFindByGroupName(const OUString& rName) const
+{
+    PhysicalFontFamily* pFoundData = NULL;
+    int nGroupID = ImplCheckGroupID(rName, OUString());
+    // 取得系統字型的群組 ID
+    PhysicalFontFamily* pDefaultData = ImplFindFontFamilyOfDefaultFont();
+    int nDefaultGroupID = ImplCheckGroupID(pDefaultData->GetFamilyName(), pDefaultData->GetAliasNames());
+
+    // 如果系統字型有群組，而且也跟要求的字型群組一樣的話，就傳回系統字型
+    if (nDefaultGroupID >= 0 && nDefaultGroupID == nGroupID)
+       return pDefaultData;
+
+    // 有找到字體群組的話, 取出該字體群組中 Quality 最大的那個
+    //int nQuality = 0;
+    if (nGroupID >= 0)
+    {
+       PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+       for(; it != maPhysicalFontFamilies.end(); ++it)
+       {
+		   PhysicalFontFamily* pData = nullptr;
+           pData = (*it).second.get();
+           // 忽略不是該群組的字體
+           if (pData->GetGroupID() != nGroupID)
+               continue;
+
+           return pData;
+       }
+/*
+       // 取得群組中最佳字體
+       if (pData->GetMinQuality() > nQuality)
+       {
+           pFoundData = pData;
+           nQuality = pData->GetMinQuality();
+       }
+*/
+    }
+    return pFoundData;
+}
+
+// -----------------------------------------------------------------------
 
 PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByTokenNames(const OUString& rTokenStr) const
 {
@@ -813,6 +1008,45 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
 
 PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() const
 {
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    // 依據國家地區別，取出預設字型才對，否則都以英文為主，取出的字型就不對
+#if 1
+    PhysicalFontFamily* pFoundData = nullptr;
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+    const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
+
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    OUString aLanguage = aLocale.Language.toAsciiLowerCase();
+    //OUString aCountry  = aLocale.Country.toAsciiLowerCase();
+    DefaultFontType nType[4];
+    if (aLanguage.equalsAscii("zh") || aLanguage.equalsAscii("ja") || aLanguage.equalsAscii("ko"))
+    {
+       nType[0] = DefaultFontType::CJK_TEXT;
+       nType[1] = DefaultFontType::CJK_DISPLAY;
+       nType[2] = DefaultFontType::UI_SANS;
+       nType[3] = DefaultFontType::UI_FIXED;
+    }
+    else
+    {
+       nType[0] = DefaultFontType::SANS_UNICODE;
+       nType[1] = DefaultFontType::SANS;
+       nType[2] = DefaultFontType::SERIF;
+       nType[3] = DefaultFontType::FIXED;
+    }
+    OUString aFontName;
+    for (unsigned int i = 0 ; i < sizeof(nType) ; i++)
+    {
+       aFontName = rDefaults.getDefaultFont(Application::GetSettings().GetLanguageTag(), nType[i]);
+       pFoundData = FindFontFamilyByTokenNames(aFontName);
+       if (pFoundData)
+       {
+           return pFoundData;
+       }
+    }
+    }
+#else
+
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     PhysicalFontFamily* pFoundData = nullptr;
@@ -842,6 +1076,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
             return pFoundData;
     }
 
+#endif
     // now try to find a reasonable non-symbol font
 
     ImplInitMatchData();
@@ -963,6 +1198,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
     OUString& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
+    // Firefly NOTE:
+    // 本段程式是依據文件傳來的字型名稱尋找系統中是否有相同字體
+    // 傳來的字體名稱有可能以 ';' 分號區隔多個字體名稱
     for(;;)
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
@@ -982,6 +1220,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName );
+// Disable by Firefly <firefly@opendesktop.org.tw>
+// 不需要
+#if 0
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
@@ -1009,7 +1250,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
                 rFSD.SetWeight(WEIGHT_DONTKNOW);
             }
         }
-
+#endif
         // restore the features to make the font selection data unique
         rFSD.maTargetName = aOrigName;
 
@@ -1017,6 +1258,26 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
+
+       // 找別名
+       if (mbMapNames)
+       {
+           pFoundData = ImplFindFontFamilyByAliasName(aSearchName, rFSD.maTargetName);
+            if (pFoundData)
+           {
+               return pFoundData;
+           }
+       }
+
+       // 看看有無同性質的字體
+       if (maGroupFontList.size())
+       {
+           pFoundData = ImplFindByGroupName(rFSD.maTargetName);
+            if (pFoundData)
+           {
+               return pFoundData;
+           }
+       }
 
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
@@ -1059,6 +1320,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         bMultiToken = true;
     }
 
+// Disable by Firefly<firefly@opendesktop.org.tw>
+#if 0
     // if the first font was not available find the next available font in
     // the semicolon separated list of font names. A font is also considered
     // available when there is a matching entry in the Tools->Options->Fonts
@@ -1084,6 +1347,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             return pFoundData;
     }
 
+#endif
     // if no font with a directly matching name is available use the
     // first font name token and get its attributes to find a replacement
     if ( bMultiToken )
@@ -1101,6 +1365,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     utl::FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                                              eSearchWeight, eSearchWidth, nSearchType );
 
+// Disable by Firefly <firefly@opendesktop.org.tw>
+#if 0
     // note: the search name was already translated to english (if possible)
     // use the font's shortened name if needed
     if ( aSearchShortName != aSearchName )
@@ -1121,7 +1387,10 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             }
         }
     }
+#endif
 
+// Disable by Firefly <firefly@opendesktop.org.tw>
+#if 0
     // use font fallback
     const utl::FontNameAttr* pFontAttr = nullptr;
     if (!aSearchName.isEmpty() && !utl::ConfigManager::IsFuzzing())
@@ -1143,6 +1412,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
                 return pFoundData;
         }
     }
+#endif
 
     // if a target symbol font is not available use a default symbol font
     if( rFSD.IsSymbolFont() )
@@ -1158,6 +1428,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     }
 
     // now try the other font name tokens
+// Disable by Firefly <firefly@opendesktop.org.tw>
+#if 0
     while( nTokenPos != -1 )
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
@@ -1260,6 +1532,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         pFoundData = ImplFindFontFamilyOfDefaultFont();
     }
 
+#else
+    PhysicalFontFamily* pFoundData = ImplFindFontFamilyOfDefaultFont();
+#endif
     return pFoundData;
 }
 

@@ -136,6 +136,10 @@ public:
     bool            IsKashidaPosValid(int nCharPos) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    // OK. I have been defined.
+    friend class OutputDevice;
+    //--------------------------------------------
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
     void            AddFallback(std::unique_ptr<SalLayout> pFallbackLayout, ImplLayoutRuns const &);
     // give up ownership of the initial pBaseLayout taken by the ctor

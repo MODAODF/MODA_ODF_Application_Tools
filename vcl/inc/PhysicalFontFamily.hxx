@@ -78,6 +78,9 @@ public:
 
 static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                   FontFamily eFamily, const utl::FontNameAttr* pFontAttr );
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    void                 SetGroupID(const int nID) { mnGroupID=nID; }
+    int                  GetGroupID() const { return mnGroupID; };
 
 private:
     std::vector< rtl::Reference<PhysicalFontFace> > maFontFaces;
@@ -89,6 +92,8 @@ private:
     FontFamily          meFamily;
     FontPitch           mePitch;
     int                 mnMinQuality;       // quality of the worst font face
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    int                        mnGroupID;
 
     ImplFontAttrs       mnMatchType;        // MATCH - Type
     OUString            maMatchFamilyName;  // MATCH - FamilyName

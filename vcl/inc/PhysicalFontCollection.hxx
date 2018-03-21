@@ -24,6 +24,7 @@
 
 #include "fontinstance.hxx"
 #include "PhysicalFontFamily.hxx"
+#include <vector>
 #include <array>
 
 #define MAX_GLYPHFALLBACK 16
@@ -63,14 +64,26 @@ public:
     // prepare platform specific font substitutions
     void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
     void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
+    
+    // Add by Firefly(firefly@ossii.com.tw)
+    int GetFallbackCount() const {return mnFallbackCount;}
+    int ImplCheckGroupID( const OUString&, const OUString& ) const;
+    bool SetFallbackByGroupID( const int nGroupID );
+    //--------------------------------------------------------
 
     // misc utilities
     std::shared_ptr<PhysicalFontCollection> Clone() const;
     std::unique_ptr<ImplDeviceFontList> GetDeviceFontList() const;
     std::unique_ptr<ImplDeviceFontSizeList> GetDeviceFontSizeList( const OUString& rFontName ) const;
+    
+    // Add by Firefly(firefly@ossii.com.tw)
+    void                   AddFontGroup(const OUString);
+    PhysicalFontFamily*    ImplFindByGroupName( const OUString& ) const;
+    //----------------------------------------------------------------
 
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
+    bool                    mbMapNames;     // true if MapNames are available
 
     typedef std::unordered_map<OUString, std::unique_ptr<PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
@@ -80,11 +93,17 @@ private:
 
     mutable std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
     mutable int             mnFallbackCount;
+    // Add by Firefly(firefly@ossii.com.tw)
+    typedef std::vector<OUString> GroupFontList;
+    GroupFontList           maGroupFontList;
+    int                     mnLastSortID;
+    //----------------------------------------------------------------
 
     void                    ImplInitMatchData() const;
     void                    ImplInitGenericGlyphFallback() const;
 
     PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
+    PhysicalFontFamily*     ImplFindFontFamilyByAliasName ( const OUString& rSearchName, const OUString& rShortName) const;
     PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
     PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;

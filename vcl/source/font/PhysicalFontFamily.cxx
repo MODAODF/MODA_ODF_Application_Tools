@@ -93,6 +93,9 @@ PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
     meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),
     mnMinQuality( -1 ),
+    // Add by Firefly <firefly@opendesktop.org.tw>
+    // 預設沒有所屬群組
+    mnGroupID( -1 ),
     mnMatchType( ImplFontAttrs::None ),
     meMatchWeight( WEIGHT_DONTKNOW ),
     meMatchWidth( WIDTH_DONTKNOW )
@@ -126,9 +129,26 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     mnTypeFaces |= FontTypeFaces::Scalable;
 
     if( pNewFontFace->IsSymbolFont() )
+    {
         mnTypeFaces |= FontTypeFaces::Symbol;
+    }
     else
+    {
         mnTypeFaces |= FontTypeFaces::NoneSymbol;
+        // Add by Firefly <firefly@opendesktop.org.tw>
+        // 中日韓字體權值優先
+        OUString aCheckName = maFamilyName;
+        if (pNewFontFace->GetMapNames().getLength())
+        {
+            aCheckName += pNewFontFace->GetMapNames();
+        }
+
+        ImplFontAttrs nIsCJK = lcl_IsCJKFont(aCheckName);
+        if (nIsCJK & ImplFontAttrs::CJK)
+        {
+            mnMinQuality += 100000000;
+        }
+    }
 
     if( pNewFontFace->GetWeight() != WEIGHT_DONTKNOW )
     {

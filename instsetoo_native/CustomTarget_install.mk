@@ -85,7 +85,7 @@ $(foreach pkgformat,$(5),\
 && $(if $(filter-out archive,$(pkgformat)),ENABLE_STRIP=1) $(PERL) -w $< \
 	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
-	-p $(PRODUCTNAME_no_spaces)$(3) \
+	-p "$(PRODUCTNAME_no_spaces)"$(3) \
 	-u $(instsetoo_OUT) \
 	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
 	$(if $(filter WNT,$(OS)), \

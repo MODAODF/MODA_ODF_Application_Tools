@@ -756,11 +756,6 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         if ( getTextBox()->maLayoutFlow == "vertical-ideographic" )
         {
             PropertySet( xShape ).setAnyProperty( PROP_WritingMode, uno::makeAny( text::WritingMode2::TB_RL ) );
-
-            PropertySet( xShape ).setAnyProperty( PROP_TopBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceLeft )));
-            PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceTop )));
-            PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceRight )));
-            PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
         }
 
         sal_Int16 nWritingMode = text::WritingMode2::LR_TB;

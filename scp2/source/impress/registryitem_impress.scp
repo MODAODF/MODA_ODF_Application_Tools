@@ -100,7 +100,7 @@ RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Progid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\ProgID";
-    Value = "soffice.StarImpressDocument.6";
+    Value = "oxoffice.StarImpressDocument.6";
 End
 
 RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Programmable
@@ -134,7 +134,7 @@ RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Versionind
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\VersionIndependentProgID";
-    Value = "soffice.StarImpressDocument.6";
+    Value = "oxoffice.StarImpressDocument.6";
 End
 
 // MSOLE embedded object in OASIS file format
@@ -219,7 +219,7 @@ RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Progid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\ProgID";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Programmable
@@ -253,34 +253,34 @@ RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionind
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\VersionIndependentProgID";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6";
+    Subkey = "oxoffice.StarImpressDocument.6";
     REG_VALUE_LNG(SO60_PRESENT)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\CLSID";
+    Subkey = "oxoffice.StarImpressDocument.6\CLSID";
     Value = "{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\DefaultIcon";
+    Subkey = "oxoffice.StarImpressDocument.6\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,7";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6";
+    Subkey = "oxoffice.StarImpressDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
@@ -288,7 +288,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6";
+    Subkey = "oxoffice.StarImpressDocument.6";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(SO60_PRESENT)
 End
@@ -296,90 +296,90 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\Insertable";
+    Subkey = "oxoffice.StarImpressDocument.6\Insertable";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\server";
+    Subkey = "oxoffice.StarImpressDocument.6\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\0";
+    Subkey = "oxoffice.StarImpressDocument.6\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-1";
+    Subkey = "oxoffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-2";
+    Subkey = "oxoffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell";
+    Subkey = "oxoffice.StarImpressDocument.6\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\new";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\new\command";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\open\command";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\print\command";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\printto\command";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Show
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\show";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\show";
     REG_VALUE_LNG(SO60_SHOW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Show_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shell\show\command";
+    Subkey = "oxoffice.StarImpressDocument.6\shell\show\command";
     Value = "\"<progpath>\program\soffice.exe\" -show \"%1\"";
 End
 
@@ -387,19 +387,19 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarImpressDocument\CurVer";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "soffice.StarImpressDocument.6";
+    Value = "oxoffice.StarImpressDocument.6";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6";
+    Subkey = "oxoffice.StarImpressTemplate.6";
     ModuleID = gid_Module_Prg_Impress_Bin;
     REG_VALUE_LNG(SO60_IMPRESS_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\DefaultIcon";
+    Subkey = "oxoffice.StarImpressTemplate.6\DefaultIcon";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "<progpath>\program\soffice.bin,8";
 End
@@ -407,7 +407,7 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressTemplate.6";
+    Subkey = "oxoffice.StarImpressTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
@@ -415,49 +415,49 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressTemplate.6";
+    Subkey = "oxoffice.StarImpressTemplate.6";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(SO60_IMPRESS_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell\new";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell\new";
     ModuleID = gid_Module_Prg_Impress_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell\new\command";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell\new\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell\open\command";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell\print\command";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell\print\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarImpressTemplate.6\shell\printto\command";
+    Subkey = "oxoffice.StarImpressTemplate.6\shell\printto\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -466,7 +466,7 @@ RegistryItem gid_Regitem_Sti
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sti";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "soffice.StarImpressTemplate.6";
+    Value = "oxoffice.StarImpressTemplate.6";
 End
 
 RegistryItem gid_Regitem_Sti_PersistentHandler
@@ -493,7 +493,7 @@ End
 RegistryItem gid_Regitem_StarImpressTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "oxoffice.StarImpressTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -509,7 +509,7 @@ End
 RegistryItem gid_Regitem_sti_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "soffice.StarImpressTemplate.6";
+    Subkey = "oxoffice.StarImpressTemplate.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -547,7 +547,7 @@ End
 RegistryItem gid_Regitem_StarImpressDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "oxoffice.StarImpressDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -571,7 +571,7 @@ RegistryItem gid_Regitem__Sxi
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".sxi";
-    Value = "soffice.StarImpressDocument.6";
+    Value = "oxoffice.StarImpressDocument.6";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxi
@@ -579,7 +579,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sxi";
-    Value = "soffice.StarImpressDocument.6";
+    Value = "oxoffice.StarImpressDocument.6";
     Styles = ();
 End
 
@@ -587,7 +587,7 @@ End
 RegistryItem gid_Regitem_sxi_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "soffice.StarImpressDocument.6";
+    Subkey = "oxoffice.StarImpressDocument.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -627,7 +627,7 @@ End
 RegistryItem gid_Regitem_ImpressDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "OxOffice.ImpressDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -635,7 +635,7 @@ RegistryItem gid_Regitem__Odp
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".odp";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odp
@@ -643,7 +643,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".odp";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
     Styles = ();
 End
 
@@ -652,7 +652,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "application/vnd.oasis.opendocument.presentation";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
     Styles = ();
 End
 
@@ -676,7 +676,7 @@ End
 RegistryItem gid_Regitem_Odp_Openoffice_Impressdocument_1_Shellnew
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".odp\LibreOffice.ImpressDocument.1\ShellNew";
+    Subkey = ".odp\OxOffice.ImpressDocument.1\ShellNew";
     Name = "FileName";
     Value = "<progpath>\share\template\shellnew\soffice.odp";
 End
@@ -685,34 +685,34 @@ RegistryItem gid_Regitem_Openoffice_Starimpressdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarImpressDocument\CurVer";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1";
+    Subkey = "OxOffice.ImpressDocument.1";
     REG_VALUE_LNG(OO_PRESENT)
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\CLSID";
+    Subkey = "OxOffice.ImpressDocument.1\CLSID";
     Value = "{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\DefaultIcon";
+    Subkey = "OxOffice.ImpressDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,7";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1";
+    Subkey = "OxOffice.ImpressDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
@@ -720,7 +720,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1";
+    Subkey = "OxOffice.ImpressDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_PRESENT)
 End
@@ -729,7 +729,7 @@ End
 RegistryItem gid_Regitem_odp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.ImpressDocument.1";
+    Subkey = "OxOffice.ImpressDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -746,62 +746,62 @@ End
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\Insertable";
+    Subkey = "OxOffice.ImpressDocument.1\Insertable";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\protocol\StdFileEditing\server";
+    Subkey = "OxOffice.ImpressDocument.1\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\protocol\StdFileEditing\verb\0";
+    Subkey = "OxOffice.ImpressDocument.1\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\protocol\StdFileEditing\verb\-1";
+    Subkey = "OxOffice.ImpressDocument.1\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\protocol\StdFileEditing\verb\-2";
+    Subkey = "OxOffice.ImpressDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell";
+    Subkey = "OxOffice.ImpressDocument.1\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\new";
+    Subkey = "OxOffice.ImpressDocument.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\new\command";
+    Subkey = "OxOffice.ImpressDocument.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\open\command";
+    Subkey = "OxOffice.ImpressDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
@@ -809,28 +809,28 @@ End
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\print\command";
+    Subkey = "OxOffice.ImpressDocument.1\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\printto\command";
+    Subkey = "OxOffice.ImpressDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Show
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\show";
+    Subkey = "OxOffice.ImpressDocument.1\shell\show";
     REG_VALUE_LNG(SO60_SHOW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Show_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressDocument.1\shell\show\command";
+    Subkey = "OxOffice.ImpressDocument.1\shell\show\command";
     Value = "\"<progpath>\program\soffice.exe\" -show \"%1\"";
 End
 
@@ -840,7 +840,7 @@ RegistryItem gid_Regitem__Fodp
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = ".fodp";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodp
@@ -848,7 +848,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".fodp";
-    Value = "LibreOffice.ImpressDocument.1";
+    Value = "OxOffice.ImpressDocument.1";
 End
 
 RegistryItem gid_Regitem_Fodp_Contenttype
@@ -893,7 +893,7 @@ End
 RegistryItem gid_Regitem_ImpressTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "OxOffice.ImpressTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -901,7 +901,7 @@ RegistryItem gid_Regitem_Otp
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".otp";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Value = "LibreOffice.ImpressTemplate.1";
+    Value = "OxOffice.ImpressTemplate.1";
 End
 
 RegistryItem gid_Regitem_Otp_Contenttype
@@ -914,14 +914,14 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1";
+    Subkey = "OxOffice.ImpressTemplate.1";
     ModuleID = gid_Module_Prg_Impress_Bin;
     REG_VALUE_LNG(OO_PRESENT_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\DefaultIcon";
+    Subkey = "OxOffice.ImpressTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "<progpath>\program\soffice.bin,8";
 End
@@ -929,7 +929,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressTemplate.1";
+    Subkey = "OxOffice.ImpressTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
 End
@@ -937,7 +937,7 @@ End
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "LibreOffice.ImpressTemplate.1";
+    Subkey = "OxOffice.ImpressTemplate.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_PRESENT_TEMPLATE)
 End
@@ -946,7 +946,7 @@ End
 RegistryItem gid_Regitem_otp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.ImpressTemplate.1";
+    Subkey = "OxOffice.ImpressTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -962,42 +962,42 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell";
+    Subkey = "OxOffice.ImpressTemplate.1\shell";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell\new";
+    Subkey = "OxOffice.ImpressTemplate.1\shell\new";
     ModuleID = gid_Module_Prg_Impress_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell\new\command";
+    Subkey = "OxOffice.ImpressTemplate.1\shell\new\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell\open\command";
+    Subkey = "OxOffice.ImpressTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell\print\command";
+    Subkey = "OxOffice.ImpressTemplate.1\shell\print\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.ImpressTemplate.1\shell\printto\command";
+    Subkey = "OxOffice.ImpressTemplate.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -1009,7 +1009,7 @@ RegistryItem gid_Regitem_OpenOffice_ODP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "LibreOffice.ImpressDocument.1";
+    Name = "OxOffice.ImpressDocument.1";
     Value = " ";
 End
 
@@ -1018,7 +1018,7 @@ RegistryItem gid_Regitem_OpenOffice_OTP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".otp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "LibreOffice.ImpressTemplate.1";
+    Name = "OxOffice.ImpressTemplate.1";
     Value = " ";
 End
 
@@ -1027,7 +1027,7 @@ RegistryItem gid_Regitem_OpenOffice_SXI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxi\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "soffice.StarImpressDocument.6";
+    Name = "oxoffice.StarImpressDocument.6";
     Value = " ";
 End
 
@@ -1036,7 +1036,7 @@ RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sti\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "soffice.StarImpressTemplate.6";
+    Name = "oxoffice.StarImpressTemplate.6";
     Value = " ";
 End
 
@@ -1045,7 +1045,7 @@ RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "soffice.StarImpressDocument.6";
+    Name = "oxoffice.StarImpressDocument.6";
     Value = " ";
 End
 
@@ -1054,7 +1054,7 @@ RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "LibreOffice.ImpressDocument.1";
+    Name = "OxOffice.ImpressDocument.1";
     Value = " ";
 End
 
@@ -1064,7 +1064,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".otp";
-    Value = "LibreOffice.ImpressTemplate.1";
+    Value = "OxOffice.ImpressTemplate.1";
     Styles = ();
 End
 
@@ -1073,7 +1073,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sti";
-    Value = "soffice.StarImpressTemplate.6";
+    Value = "oxoffice.StarImpressTemplate.6";
     Styles = ();
 End
 

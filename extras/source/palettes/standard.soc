@@ -144,4 +144,10 @@
   <draw:color draw:name="Dark Teal 4" draw:color="#302709"/>
   <draw:color draw:name="Dark Green 4" draw:color="#2e2706"/>
   <draw:color draw:name="Dark Lime 4" draw:color="#342a06"/>
+  
+  <draw:color draw:name="Red Hat 1" draw:color="#cc0000"/>
+  <draw:color draw:name="Red Hat 2" draw:color="#0093d9"/>
+  <draw:color draw:name="Red Hat 3" draw:color="#ff8d00"/>
+  <draw:color draw:name="Red Hat 4" draw:color="#abb400"/>
+  <draw:color draw:name="Red Hat 5" draw:color="#4e376b"/>
 </office:color-table>

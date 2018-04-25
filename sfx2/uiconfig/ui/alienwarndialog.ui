@@ -65,7 +65,7 @@
         <child>
           <object class="GtkCheckButton" id="ask">
             <property name="label" translatable="yes" context="alienwarndialog|ask">_Ask when not saving in ODF or default format</property>
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>

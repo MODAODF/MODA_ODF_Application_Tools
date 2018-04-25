@@ -12885,11 +12885,22 @@ WITH_EXTRA_EXTENSIONS=
 AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
 libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[ct2n],[])
+libo_CHECK_EXTENSION([Onekey2ODF],[ONEKEY2ODF],[onekey2odf],[onekey2odf],[])
 libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
 if test "x$with_java" != "xno"; then
     libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
     libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[languagetool],[])
 fi
+
+# Check whether --enable-ext-onekey2odf was given.
+# AC_MSG_CHECKING([for onekey2odf])
+if test -z "${enable_ext_onekey2odf+set}"; then :
+    OSSII_WITH_EXTENSION_ONEKEY2ODF=no
+else
+    OSSII_WITH_EXTENSION_ONEKEY2ODF=yes
+fi
+$as_echo "OSSII_WITH_EXTENSION_ONEKEY2ODF = $OSSII_WITH_EXTENSION_ONEKEY2ODF"
+AC_SUBST(OSSII_WITH_EXTENSION_ONEKEY2ODF)
 
 AC_MSG_CHECKING([whether to build opens___.ttf])
 if test "$enable_build_opensymbol" = "yes"; then

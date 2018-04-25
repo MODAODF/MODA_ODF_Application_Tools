@@ -13,4 +13,8 @@ ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,numbertext,$(NUMBERTEXT_EXTENSION_PACK)))
 endif
 
+ifeq ($(OSSII_WITH_EXTENSION_ONEKEY2ODF),yes)
+$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,onekey2odf,onekey2odf.oxt))
+endif
+
 # vim: set noet sw=4 ts=4:

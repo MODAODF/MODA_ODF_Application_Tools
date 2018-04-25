@@ -138,3 +138,18 @@ description = "Script provider for JavaScript extension for %PRODUCTNAME %PRODUC
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
+
+Start
+module = "gid_Module_Optional_Extensions_ONEKEY2ODF"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-onekey2odf"
+solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-onekey2odf"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "OSSII"
+solariscopyright = "solariscopyrightfile"
+vendor = "%OOOVENDOR"
+description = "ONEKEY2ODF extension for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

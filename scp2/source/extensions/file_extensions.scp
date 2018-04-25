@@ -87,4 +87,17 @@ End
 
 #endif
 
+/* ** ONEKEY2ODF ** */
+
+#ifdef WITH_EXTENSION_ONEKEY2ODF
+
+File gid_File_Oxt_ONEKEY2ODF
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "onekey2odf.filelist";
+End
+
+#endif
+
 #endif

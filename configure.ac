@@ -12894,13 +12894,15 @@ fi
 
 # Check whether --enable-ext-onekey2odf was given.
 # AC_MSG_CHECKING([for onekey2odf])
-if test -z "${enable_ext_onekey2odf+set}"; then :
-    OSSII_WITH_EXTENSION_ONEKEY2ODF=no
-else
-    OSSII_WITH_EXTENSION_ONEKEY2ODF=yes
+if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+    if test -z "${enable_ext_onekey2odf+set}"; then :
+        OSSII_WITH_EXTENSION_ONEKEY2ODF=no
+    else
+        OSSII_WITH_EXTENSION_ONEKEY2ODF=yes
+    fi
+    $as_echo "OSSII_WITH_EXTENSION_ONEKEY2ODF = $OSSII_WITH_EXTENSION_ONEKEY2ODF"
+    AC_SUBST(OSSII_WITH_EXTENSION_ONEKEY2ODF)
 fi
-$as_echo "OSSII_WITH_EXTENSION_ONEKEY2ODF = $OSSII_WITH_EXTENSION_ONEKEY2ODF"
-AC_SUBST(OSSII_WITH_EXTENSION_ONEKEY2ODF)
 
 AC_MSG_CHECKING([whether to build opens___.ttf])
 if test "$enable_build_opensymbol" = "yes"; then

@@ -103,11 +103,15 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     if( rAttribs.hasAttribute( XML_vert ) ) {
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
         sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
-        if (tVert == XML_vert || tVert == XML_eaVert || tVert == XML_mongolianVert)
+        // if (tVert == XML_vert || tVert == XML_eaVert || tVert == XML_mongolianVert)
+        if (tVert == XML_mongolianVert)
             mrTextBodyProp.moRotation = 5400000;
         else if (tVert == XML_vert270)
             mrTextBodyProp.moRotation = 5400000 * 3;
         else {
+            if (tVert == XML_vert || tVert == XML_eaVert){
+                mrTextBodyProp.moRotation = 5400000 * 4;
+            }
             bool bRtl = rAttribs.getBool( XML_rtl, false );
             mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWritingMode,
                 ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB ));

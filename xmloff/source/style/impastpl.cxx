@@ -34,10 +34,17 @@
 
 #include "impastpl.hxx"
 
+#if defined(_WIN32)
+    #include <config_folders.h>
+    #include <rtl/bootstrap.hxx>
+#endif
+
 using namespace ::std;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
+std::vector<OUString> svector;
 
 // Class XMLAutoStyleFamily
 // ctor/dtor class XMLAutoStyleFamily
@@ -578,6 +585,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         XmlStyleFamily nFamily,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
+    bool add_flag = false;
     // Get list of parents for current family (nFamily)
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
     auto const iter = m_FamilySet.find(pTemp);
@@ -631,6 +639,52 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
     OUString aStrFamilyName = rFamily.maStrFamilyName;
 
+#if defined(_WIN32)
+    OUString stylename = impastpl_getCacheFolder() + "\\stylename.txt";
+    if(aStrFamilyName.compareTo("graphic") == 0){
+        FILE *file = NULL;
+        if ((file = fopen (OUStringToOString( stylename, RTL_TEXTENCODING_UTF8 ).getStr(), "a+")) != NULL) {
+            char name[20];
+            //~ printf("open the file!!!!!!\n");
+            while(fscanf(file, "%s", name) != EOF){
+                svector.push_back(OUString::createFromAscii(name));
+            }
+            std::vector<OUString>::iterator it;
+            it = std::unique(svector.begin(), svector.end());
+            svector.resize( std::distance(svector.begin(),it) );
+            fclose(file);
+        }else{
+            //~ printf("can't get file!!!!!!\n");
+        }
+    }else{
+        //~ printf("we remove /tmp/stylename.txt!!!!!\n");
+        remove(OUStringToOString( stylename, RTL_TEXTENCODING_UTF8 ).getStr());
+    }
+#else
+    if(aStrFamilyName.compareTo("graphic") == 0){
+        FILE *file = fopen("/tmp/stylename.txt", "r");
+        if (file!=NULL){
+            char name[20];
+            //~ printf("open the file!!!!!!\n");
+            while(fscanf(file, "%s", name) != EOF){
+                svector.push_back(OUString::createFromAscii(name));
+            }
+            std::vector<OUString>::iterator it;
+            it = std::unique(svector.begin(), svector.end());
+            svector.resize( std::distance(svector.begin(),it) );
+            //~ for(unsigned int k=0; k<svector.size(); k++)
+                //~ printf(  BROWN "style_name_get[%d]" NONECOLOR "= %s \n",k,OUStringToOString( svector[k], RTL_TEXTENCODING_UTF8 ).getStr());
+            fclose(file);
+        }else{
+            //~ printf("can't get file!!!!!!\n");
+        }
+    }else{
+        //~ printf("we remove /tmp/stylename.txt!!!!!\n");
+        remove("/tmp/stylename.txt");
+    }
+#endif
+
+    vector<OUString>::iterator it_i;
     for( size_t i = 0; i < nCount; i++ )
     {
         assert(aExpStyles[i].mpProperties);
@@ -672,6 +726,23 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                                              *rFamily.mxMapper, GetExport().GetMM100UnitConverter(),
                                              GetExport().GetNamespaceMap());
 
+            for(it_i=svector.begin(); it_i!=svector.end(); ++it_i) {
+                if(GetExport().GetAttrList().getValueByIndex(0).compareTo(*it_i) == 0){
+                    
+                    if(it_i==svector.end()-1){
+                        svector.clear();
+                        #if defined(_WIN32)
+                            OUString stylename = impastpl_getCacheFolder() + "\\stylename.txt";
+                            remove(OUStringToOString( stylename, RTL_TEXTENCODING_UTF8 ).getStr());
+                        #else
+                            //~ printf("we remove /tmp/stylename.txt!!!!!\n");
+                            remove("/tmp/stylename.txt");
+                        #endif
+                    }
+                    break;
+                }
+            }
+
             SvXMLElementExport aElem( GetExport(),
                                       XML_NAMESPACE_STYLE, sName,
                                       true, true );
@@ -700,6 +771,15 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 GetExport(),
                 aExpStyles[i].mpProperties->GetProperties(),
                 nStart, nEnd, SvXmlExportFlags::IGN_WS, bExtensionNamespace );
+
+            if(add_flag){
+                GetExport().AddAttribute( "style:writing-mode", "tb-rl" );
+                SvXMLElementExport oElem( GetExport(), XML_NAMESPACE_STYLE,
+                                  XML_PARAGRAPH_PROPERTIES,
+                                  true,
+                                  false );
+                add_flag = false;
+            }
 
             pAntiImpl->exportStyleContent(GetExport().GetDocHandler(), nFamily,
                                           aExpStyles[i].mpProperties->GetProperties(),

@@ -119,9 +119,43 @@
 #include <XMLImageMapExport.hxx>
 #include <memory>
 
+#if defined(_WIN32)
+    #include <config_folders.h>
+    #include <rtl/bootstrap.hxx>
+    #include <io.h>
+#else
+    #include <unistd.h>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
+
+struct XmlShapeAttr
+{
+    OUString    draw_style_name;
+};
+
+XmlShapeAttr axmlshapeattr;
+
+#if defined(_WIN32)
+    OUString shapeexport_getCacheFolder()
+    {
+        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+
+        rtl::Bootstrap::expandMacros(url);
+
+        OUString aSysPath;
+        if( url.startsWith( "file://" ) )
+        {
+            OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( url.pData, &aSysPath.pData ) == osl_File_E_None )
+                url = aSysPath;
+        }
+        return url;
+    }
+    OUString getshapeflag = shapeexport_getCacheFolder() + "\\getshapeflag";
+#endif
 
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
 
@@ -563,6 +597,7 @@ namespace
             SvXMLExport& mrExport;
     };
 }
+
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */,
@@ -663,8 +698,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             if( xNamed.is() )
             {
                 const OUString aName( xNamed->getName() );
-                if( !aName.isEmpty() )
+                if( !aName.isEmpty() ){
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
+                    if( !aShapeInfo.msStyleName.isEmpty() )
+                    {
+                        axmlshapeattr.draw_style_name = aShapeInfo.msStyleName;
+                    }
+                }
             }
         }
     }
@@ -677,6 +717,71 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         else
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
     }
+
+#ifndef mts1158
+uno::Reference< container::XNamed > oNamed( xShape, uno::UNO_QUERY );
+if( oNamed.is() )
+{
+    const OUString oName( oNamed->getName() );
+    if( !oName.isEmpty() ){
+        if( !aShapeInfo.msStyleName.isEmpty() ){
+            const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+            // geometry
+            const OUString sCustomShapeGeometry( "CustomShapeGeometry" );
+            if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
+            {
+                OUString        aStr;
+                OUStringBuffer  aStrBuffer;
+                uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );
+                uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+
+                if ( aGeoPropSet >>= aGeoPropSeq )
+                {
+                    OUString aCustomShapeType( "non-primitive" );
+
+                    sal_Int32 j, nGeoPropCount = aGeoPropSeq.getLength();
+                    for ( j = 0; j < nGeoPropCount; j++ )
+                    {
+                        const beans::PropertyValue& rGeoProp = aGeoPropSeq[ j ];
+                        if(rGeoProp.Name.compareTo("TextPreRotateAngle") == 0)
+                        {
+                            double fTextRotateAngle = 0;
+                            if ( (rGeoProp.Value >>= fTextRotateAngle) && fTextRotateAngle != 0)
+                            {
+                                ::sax::Converter::convertDouble(
+                                        aStrBuffer, fTextRotateAngle );
+                                aStr = aStrBuffer.makeStringAndClear();
+                                if(aStr.compareTo("-360") == 0){
+                                    #if defined(_WIN32)
+                                        OUString stylename = shapeexport_getCacheFolder() + "\\stylename.txt";
+                                        FILE *file = NULL;
+                                        if (( file = fopen (OUStringToOString( stylename, RTL_TEXTENCODING_UTF8 ).getStr(), "a+")) != NULL) {
+                                            //~ printf("open the /tmp/stylename file!!!!\n");
+                                            fprintf(file, "%s\n", OUStringToOString( axmlshapeattr.draw_style_name, RTL_TEXTENCODING_UTF8 ).getStr());
+                                            fclose(file);
+                                        }
+                                    #else
+                                    FILE *file = fopen("/tmp/stylename.txt", "a+");
+                                        if (file!=NULL){
+                                            //~ printf("open the /tmp/stylename file!!!!\n");
+                                            fprintf(file, "%s\n", OUStringToOString( axmlshapeattr.draw_style_name, RTL_TEXTENCODING_UTF8 ).getStr());
+                                            fclose(file);
+                                        }
+                                    #endif
+                                }else{
+                                    memset(&axmlshapeattr,0,sizeof(axmlshapeattr));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#endif
 
     // export text style name
     if( !aShapeInfo.msTextStyleName.isEmpty() )
@@ -757,6 +862,11 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     onExport( xShape );
 
+#if defined(_WIN32)
+    if( _access( OUStringToOString( getshapeflag, RTL_TEXTENCODING_UTF8 ).getStr(), 0 ) != 0 ) {
+#else
+    if( access( "/tmp/getshapeflag", 0 ) != 0 ) {
+#endif
     // export shape element
     switch(aShapeInfo.meShapeType)
     {
@@ -902,10 +1012,18 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawCustomShape:
         {
-            if ( aShapeInfo.xCustomShapeReplacement.is() )
-                ImpExportGroupShape( aShapeInfo.xCustomShapeReplacement, nFeatures, pRefPoint );
-            else
-                ImpExportCustomShape( xShape, nFeatures, pRefPoint );
+            #if defined(_WIN32)
+            if( _access( OUStringToOString( getshapeflag, RTL_TEXTENCODING_UTF8 ).getStr(), 0 ) != 0 ) {
+            #else
+            if( access( "/tmp/getshapeflag", 0 ) != 0 ) {
+            #endif
+                if ( aShapeInfo.xCustomShapeReplacement.is() )
+                     ImpExportGroupShape( aShapeInfo.xCustomShapeReplacement, nFeatures, pRefPoint );
+                else
+                    ImpExportCustomShape( xShape, nFeatures, pRefPoint );
+            }else{
+                //~ printf("have /tmp/getshapeflag\n");
+            }
             break;
         }
 
@@ -928,7 +1046,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 
     pHyperlinkElement.reset();
-
+}else{
+    //~ printf("have /tmp/getshapeflag\n");
+}
     // #97489# #97111#
     // if there was an error and no element for the shape was exported
     // we need to clear the attribute list or the attributes will be
@@ -1557,13 +1677,21 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
             return; // do not export to ODF 1.1/1.2/1.3
         }
     }
-    uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() )
-    {
-        uno::Reference< container::XEnumerationAccess > xEnumAccess( xShape, uno::UNO_QUERY );
-        if( xEnumAccess.is() && xEnumAccess->hasElements() )
-            mrExport.GetTextParagraphExport()->exportText( xText, false, true, eExtensionNS );
-    }
+    #if defined(_WIN32)
+        if( _access( OUStringToOString( getshapeflag, RTL_TEXTENCODING_UTF8 ).getStr(), 0 ) != 0 ) {
+    #else
+        if( access( "/tmp/getshapeflag", 0 ) != 0 ) {
+    #endif
+            uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+            if( xText.is() )
+            {
+                uno::Reference< container::XEnumerationAccess > xEnumAccess( xShape, uno::UNO_QUERY );
+                if( xEnumAccess.is() && xEnumAccess->hasElements() )
+                    mrExport.GetTextParagraphExport()->exportText( xText, false, true, eExtensionNS );
+            }
+        }else{
+            //~ printf("have /tmp/getshapeflag\n");
+        }
 }
 
 namespace {
@@ -4741,11 +4869,19 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                 ImpExportEnhancedPath( rExport, aCoordinates, aSegments );
         }
     }
-    SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_ENHANCED_GEOMETRY, true, true );
-    if ( bEquations )
-        ImpExportEquations( rExport, aEquations );
-    if ( bHandles )
-        ImpExportHandles( rExport, aHandles );
+    #if defined(_WIN32)
+    if( _access( OUStringToOString( getshapeflag, RTL_TEXTENCODING_UTF8 ).getStr(), 0 ) != 0 ) {
+    #else
+    if( access( "/tmp/getshapeflag", 0 ) != 0 ) {
+    #endif
+        SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_ENHANCED_GEOMETRY, true, true );
+        if ( bEquations )
+            ImpExportEquations( rExport, aEquations );
+        if ( bHandles )
+            ImpExportHandles( rExport, aHandles );
+    }else{
+        //~ printf("have /tmp/getshapeflag\n");
+    }
 }
 
 void XMLShapeExport::ImpExportCustomShape(

@@ -2024,6 +2024,23 @@ void SdXMLExport::ExportStyles_(bool bUsed)
 }
 
 #if defined(_WIN32)
+
+void writeurlfile(OUString url)
+{
+    remove("c:\\temp\\createurlfile.txt");
+    FILE *pf = NULL;
+    char cPath[256];
+    
+    if ((pf = fopen("c:\\temp\\createurlfile.txt","w")) == NULL) {
+        printf("could not open file\n");    
+    } else {
+        printf("Success open file\n");
+        snprintf(cPath,256,"%s",OUStringToOString( url, RTL_TEXTENCODING_UTF8 ).getStr());
+        fwrite(cPath,1,strlen(cPath),pf);
+        fclose(pf);
+    }
+}
+
 OUString getCacheFolder()
 {
     OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");

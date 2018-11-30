@@ -121,7 +121,7 @@
 
 #if defined(_WIN32)
     #include <config_folders.h>
-    #include <rtl/bootstrap.hxx>
+    #include <unotools/configmgr.hxx>
     #include <io.h>
 #else
     #include <unistd.h>
@@ -131,6 +131,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
 
+
 struct XmlShapeAttr
 {
     OUString    draw_style_name;
@@ -139,11 +140,29 @@ struct XmlShapeAttr
 XmlShapeAttr axmlshapeattr;
 
 #if defined(_WIN32)
+    OUString readurlfile()
+    {
+        FILE *pf = NULL;
+        char str[256];
+        OUString URL;
+        
+        if ((pf = fopen("c:\\temp\\createurlfile.txt","r")) == NULL) {
+            printf("could not open file\n");    
+        } else {
+            //~ printf("Success open file\n");
+            fgets(str, 256, pf);
+            fclose(pf);
+        }
+        URL += OStringToOUString(OString(str), RTL_TEXTENCODING_UTF8);
+        return URL;
+    }
+
     OUString shapeexport_getCacheFolder()
     {
-        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
-
-        rtl::Bootstrap::expandMacros(url);
+        OUString url("file:///");
+        url += OStringToOUString(OString(getenv("APPDATA")), RTL_TEXTENCODING_UTF8);
+        url += "/NDCODFApplicationTools/6/cache/";
+        url = url.replace('\\', '/');
 
         OUString aSysPath;
         if( url.startsWith( "file://" ) )

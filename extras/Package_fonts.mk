@@ -13,4 +13,7 @@ $(eval $(call gb_Package_use_customtarget,extras_fonts,extras/fonts))
 
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/opens___.ttf,opens___.ttf))
 
+$(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/SourceHanSansTW-Regular.otf,source/truetype/symbol/SourceHanSansTW-Regular.otf)) \
+$(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/SourceHanSansCN-Regular.otf,source/truetype/symbol/SourceHanSansCN-Regular.otf)) \
+
 # vim: set noet sw=4 ts=4:

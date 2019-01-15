@@ -67,7 +67,7 @@ Globals
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL https://www.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.com.tw/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
         }
         active          1

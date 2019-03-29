@@ -651,6 +651,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     const FontList* pFontList = GetFontList();
+    pNameBox->make_sorted();
     FillFontNames(*pNameBox, *pFontList);
 
     const SvxFontItem* pFontItem = nullptr;

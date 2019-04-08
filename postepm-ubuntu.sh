@@ -3,7 +3,7 @@
 # used for insert 'Section:' to every .deb file
 # run at top of source directory
 DPKG=`which dpkg`
-PKG=(OxOffice_R5_Linux_x86_deb OxOffice_R5_Linux_x86_deb_langpack_zh-TW)
+PKG=(OxOffice_R8_Linux_x86_deb OxOffice_R8_Linux_x86_deb_langpack_zh-TW)
 PRJ=(OxOffice OxOffice_languagepack)
 
 for idx in "${!PRJ[@]}" ; do

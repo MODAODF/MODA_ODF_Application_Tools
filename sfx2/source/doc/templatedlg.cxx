@@ -227,6 +227,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
 
     createDefaultTemplateMenu();
 
+    mpLocalView->readlistdata();
     mxLocalView->Populate();
     mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
 

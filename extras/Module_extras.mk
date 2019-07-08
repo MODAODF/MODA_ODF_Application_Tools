@@ -77,4 +77,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_sourcehansans_fonts \
 ))
 
+$(eval $(call gb_Module_add_targets,extras,\
+	CustomTarget_cns11643_fonts \
+))
+
 # vim: set noet sw=4 ts=4:

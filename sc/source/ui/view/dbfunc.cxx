@@ -39,6 +39,8 @@
 #include <tabvwsh.hxx>
 #include <sortparam.hxx>
 
+#include <comphelper/lok.hxx>
+
 ScDBFunc::ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     ScViewFunc( pParent, rDocSh, pViewShell )
 {
@@ -352,6 +354,10 @@ void ScDBFunc::ToggleAutoFilter()
                 if (xBox->run() == RET_YES)
                 {
                     pDBData->SetHeader( true );     //! Undo ??
+                }
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                     pDBData->SetHeader( true );
                 }
             }
 

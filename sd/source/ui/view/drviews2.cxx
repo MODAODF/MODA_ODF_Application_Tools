@@ -192,6 +192,13 @@
 #include <ViewShellBase.hxx>
 #include <memory>
 
+#include <controller/SlsSlotManager.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -763,6 +770,40 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done ();
         }
         break;
+        case SID_MOVE_PAGE_UP:
+        {
+            sal_uInt16 curPage = maTabControl->GetCurPagePos();
+            if (curPage > 0)
+                GetDoc()->MovePages(curPage -2);
+            Cancel();
+            rReq.Done();
+        }
+        break;
+        case SID_MOVE_PAGE_DOWN:
+        {
+            sal_uInt16 curPage = maTabControl->GetCurPagePos();
+            sal_uInt16 lastPage = (GetDoc()->GetPageCount() - 1)/2 -1;
+            if(lastPage != curPage)
+                GetDoc()->MovePages(curPage + 1);
+            Cancel();
+            rReq.Done();
+        }
+        break;
+        case SID_MOVE_PAGE_FIRST:
+        {
+            GetDoc()->MovePages(-1);
+            Cancel();
+            rReq.Done();
+        }
+        break;
+        case SID_MOVE_PAGE_LAST:
+        {
+            sal_uInt16 lastPage = (GetDoc()->GetPageCount() - 1)/2 -1;
+            GetDoc()->MovePages(lastPage);
+            Cancel();
+            rReq.Done();
+        }
+        break;
 
         case SID_DUPLICATE_PAGE:
         {
@@ -780,7 +821,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done();
         }
         break;
-
         case SID_INSERT_MASTER_PAGE:
         {
             // Use the API to create a new page.

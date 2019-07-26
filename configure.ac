@@ -490,7 +490,7 @@ AC_MSG_CHECKING([for about box version])
 if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then
     ABOUTBOXPRODUCTVERSION="$with_aboutbox_version"
 else
-    ABOUTBOXPRODUCTVERSION="R8W3"
+    ABOUTBOXPRODUCTVERSION="R8L3"
 fi
 AC_SUBST(ABOUTBOXPRODUCTVERSION)
 
@@ -514,7 +514,7 @@ AC_MSG_CHECKING([for defined of oxoffice minor version])
 if test -n "$with_oxo_version_minor" -a "$with_oxo_version_minor" != "yes" ; then
     OXO_VERSION_MINOR="$with_oxo_version_minor"
 else
-    OXO_VERSION_MINOR="2"
+    OXO_VERSION_MINOR="3"
 fi
 AC_SUBST(OXO_VERSION_MINOR)
 
@@ -522,7 +522,7 @@ AC_MSG_CHECKING([for defined of oxoffice patch version])
 if test -n "$with_oxo_version_patch" -a "$with_oxo_version_patch" != "yes" ; then
     OXO_VERSION_PATCH="$with_oxo_version_patch"
 else
-    OXO_VERSION_PATCH="1"
+    OXO_VERSION_PATCH="0"
 fi
 AC_SUBST(OXO_VERSION_PATCH)
 

@@ -14,7 +14,7 @@ PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.oxoffice := OxOffice
 PRODUCTNAME.libreofficedev := LibreOfficeDev
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
-UNIXFILENAME.oxoffice := oxoffice$(PKGVERSIONSHORT)
+UNIXFILENAME.oxoffice := oxoffice
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
 
 # vim: set noet sw=4 ts=4:

@@ -29,7 +29,7 @@ solariscopyright = "solariscopyrightfile"
 vendor = "%OOOVENDOR"
 description = "UNO Runtime Environment"
 destpath = "/opt"
-packageversion = "%UREPACKAGEVERSION"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
@@ -45,5 +45,5 @@ solariscopyright = "solariscopyrightfile"
 vendor = "%OOOVENDOR"
 description = "UNO Runtime Environment"
 destpath = "/opt"
-packageversion = "%UREPACKAGEVERSION"
+packageversion = "%PACKAGEVERSION"
 End

@@ -12886,6 +12886,7 @@ AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
 libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[ct2n],[])
 libo_CHECK_EXTENSION([CpmLibre],[CPMLIBRE],[cpmlibre],[cpmlibre],[])
+libo_CHECK_EXTENSION([HyperLink],[HYPERLINK],[hyperlink],[hyperlink],[])
 libo_CHECK_EXTENSION([Onekey2ODF],[ONEKEY2ODF],[onekey2odf],[onekey2odf],[])
 libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
 if test "x$with_java" != "xno"; then

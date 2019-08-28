@@ -100,6 +100,19 @@ End
 
 #endif
 
+/* ** HYPERLINK ** */
+
+#ifdef WITH_EXTENSION_HYPERLINK
+
+File gid_File_Oxt_HYPERLINK
+	TXT_FILE_BODY;
+	Styles = (PACKED, FILELIST);
+	Dir = FILELIST_DIR;
+	Name = "hyperlink.filelist";
+End
+
+#endif
+
 /* ** CPMLIBRE ** */
 
 #ifdef WITH_EXTENSION_CPMLIBRE

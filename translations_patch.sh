@@ -12,6 +12,10 @@ if test $1 = "9" ; then
     if test ${#doc} = 0 ; then
         patch -p1 -f < ../icon-themes/ossii/NDC/NDCGOVODFTool.patch.po > /dev/null 2>&1
     fi
+    doc1=`awk '/Hyperlink\(NDC\)/{print}' ./source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po`
+    if test ${#doc1} = 0 ; then
+        patch -p1 -f < ../icon-themes/ossii/NDC/Hyperlink_NDC.patch.po > /dev/null 2>&1
+    fi
     patch -p1 -f < ../icon-themes/ossii/NDC/tooltip.patch.po > /dev/null 2>&1
 fi
 

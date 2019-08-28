@@ -482,6 +482,7 @@ const char* TEMPLATE_SHORT_NAMES_ARY[] =
     "standard",
     "styles",
     "officorr",
+    "NDCODFTemplate",
     "offimisc",
     "personal",
     "forms",

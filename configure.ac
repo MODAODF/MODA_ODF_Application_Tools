@@ -486,7 +486,7 @@ AC_MSG_CHECKING([for about box version])
 if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then
     ABOUTBOXPRODUCTVERSION="$with_aboutbox_version"
 else
-    ABOUTBOXPRODUCTVERSION="R5W1"
+    ABOUTBOXPRODUCTVERSION="R8W3"
 fi
 AC_SUBST(ABOUTBOXPRODUCTVERSION)
 
@@ -494,7 +494,7 @@ AC_MSG_CHECKING([for labeled product version])
 if test -n "$with_lproduct_version" -a "$with_lproduct_version" != "yes" ; then
     LPRODUCTVERSION="$with_lproduct_version"
 else
-    LPRODUCTVERSION="R5"
+    LPRODUCTVERSION="R8"
 fi
 AC_SUBST(LPRODUCTVERSION)
 
@@ -502,7 +502,7 @@ AC_MSG_CHECKING([for user dir product version])
 if test -n "$with_userdirproduct_version" -a "$with_userdirproduct_version" != "yes" ; then
     USERDIRPRODUCTVERSION="$with_userdirproduct_version"
 else
-    USERDIRPRODUCTVERSION="5"
+    USERDIRPRODUCTVERSION="8"
 fi
 AC_SUBST(USERDIRPRODUCTVERSION)
 

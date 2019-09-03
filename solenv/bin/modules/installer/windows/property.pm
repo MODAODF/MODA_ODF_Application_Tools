@@ -132,7 +132,7 @@ sub get_productname_for_property_table($$)
 
     my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
-    my $productname = $name . " " . $version;
+    my $productname = $name;
 
     my $productextension = "";
     if ( $allvariables->{'PRODUCTEXTENSION'} )

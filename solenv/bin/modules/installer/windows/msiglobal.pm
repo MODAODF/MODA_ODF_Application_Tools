@@ -1400,7 +1400,7 @@ sub set_msiproductversion
 
     if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
     {
-        $productversion = $1 . "\." . $2 . "\." . $3 . "\." . $installer::globals::buildid;
+        $productversion = $1 . "\." . $2 . "\." . $3;
     }
 
     $installer::globals::msiproductversion = $productversion;

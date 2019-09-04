@@ -917,6 +917,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplwizagenda \
 	extras_tplwizreport \
 	extras_tplwizstyles \
+	extras_tplndcodf \
 	framework_dtd \
 	$(if $(filter $(OS),MACOSX),infoplist) \
 	oox_customshapes \

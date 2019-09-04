@@ -287,7 +287,7 @@
           <value>2</value>
         </prop>
         <prop oor:name="ooSetupFactoryTemplateFile">
-          <value/>
+          <value>$(insturl)/share/template/common/NDCODFTemplate/swriter.ott</value>
         </prop>
         <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
           <value>false</value>

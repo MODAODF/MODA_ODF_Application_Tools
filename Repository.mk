@@ -918,6 +918,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplwizreport \
 	extras_tplwizstyles \
 	extras_tplndcodf \
+	extras_tplossiitempl \
 	framework_dtd \
 	$(if $(filter $(OS),MACOSX),infoplist) \
 	oox_customshapes \

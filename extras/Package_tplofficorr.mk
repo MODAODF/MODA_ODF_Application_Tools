@@ -9,9 +9,5 @@
 
 $(eval $(call gb_Package_Package,extras_tplofficorr,$(call gb_CustomTarget_get_workdir,extras/source/templates/officorr)))
 
-$(eval $(call gb_Package_add_files,extras_tplofficorr,$(LIBO_SHARE_FOLDER)/template/common/officorr,\
-	Modern_business_letter_sans_serif.ott \
-	Modern_business_letter_serif.ott \
-))
 
 # vim: set noet sw=4 ts=4:

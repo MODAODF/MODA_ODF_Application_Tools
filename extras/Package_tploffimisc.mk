@@ -9,8 +9,5 @@
 
 $(eval $(call gb_Package_Package,extras_tploffimisc,$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)))
 
-$(eval $(call gb_Package_add_files,extras_tploffimisc,$(LIBO_SHARE_FOLDER)/template/common/offimisc,\
-	Businesscard-with-logo.ott \
-))
 
 # vim: set noet sw=4 ts=4:

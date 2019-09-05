@@ -56,6 +56,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplwizreport \
 	Package_tplwizstyles \
 	Package_tplndcodf \
+	Package_tplossiitempl \
 	Package_wordbook \
 ))
 

@@ -594,6 +594,11 @@ Directory gid_Dir_Template_Common_Officorr
     DosName = "officorr";
 End
 
+Directory gid_Dir_Template_Common_Ossiitempl
+    ParentID = gid_Dir_Template_Common;
+    DosName = "NDCGOVODFTool";
+End
+
 Directory gid_Dir_Template_Common_Offimisc
     ParentID = gid_Dir_Template_Common;
     DosName = "offimisc";

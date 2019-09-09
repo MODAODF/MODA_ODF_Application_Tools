@@ -5782,7 +5782,7 @@
           names of the various icon themes ("breeze", "crystal", "elementary",
           etc.).</desc>
         </info>
-        <value>auto</value>
+        <value>tango</value>
       </prop>
       <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->

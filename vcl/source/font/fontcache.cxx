@@ -220,8 +220,28 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
         //optimization, but that's tricky to achieve cross-platform without
         //sufficient heavy-weight code that's likely to undo the value of the
         //optimization
-        if (nFallbackLevel == 1)
-            pFallbackData = pFontCollection->FindFontFamily("EUDC");
+
+        static char const *aTWKAI = "全字庫正楷體";
+        static char const *aTWSUNG = "全字庫正宋體";
+        static char const *aTWKAI_EXTB = "全字庫正楷體extb";
+        static char const *aTWSUNG_EXTB = "全字庫正宋體extb";
+        OUString atwkai(aTWKAI, strlen(aTWKAI), RTL_TEXTENCODING_UTF8);
+        OUString atwsung(aTWSUNG, strlen(aTWSUNG), RTL_TEXTENCODING_UTF8);
+        OUString atwkaiextb(aTWKAI_EXTB, strlen(aTWKAI_EXTB), RTL_TEXTENCODING_UTF8);
+        OUString atwsungextb(aTWSUNG_EXTB, strlen(aTWSUNG_EXTB), RTL_TEXTENCODING_UTF8);
+
+        if (nFallbackLevel == 1) {
+            if (rFontSelData.maSearchName.equalsAscii("twsung"))
+                pFallbackData = pFontCollection->FindFontFamily("twsungextb");
+            else if (rFontSelData.maSearchName.equals(atwsung))
+                pFallbackData = pFontCollection->FindFontFamily(atwsungextb);
+            else if (rFontSelData.maSearchName.equalsAscii("twkai"))
+                pFallbackData = pFontCollection->FindFontFamily("twkaiextb");
+            else if (rFontSelData.maSearchName.equals(atwkai))
+                pFallbackData = pFontCollection->FindFontFamily(atwkaiextb);
+            else
+                pFallbackData = pFontCollection->FindFontFamily("EUDC");
+        }
         if (!pFallbackData)
             pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, pFontInstance, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates

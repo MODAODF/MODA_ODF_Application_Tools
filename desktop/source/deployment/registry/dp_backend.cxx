@@ -621,13 +621,13 @@ void Package::processPackage_impl(
                                         : option.Value.Value)));
             if (action) {
 
-                OUString displayName = isRemoved() ? getName() : getDisplayName();
-                ProgressLevel progress(
-                    xCmdEnv,
-                    (doRegisterPackage
-                     ? PackageRegistryBackend::StrRegisteringPackage()
-                     : PackageRegistryBackend::StrRevokingPackage())
-                    + displayName );
+                //~ OUString displayName = isRemoved() ? getName() : getDisplayName();
+                //~ ProgressLevel progress(
+                    //~ xCmdEnv,
+                    //~ (doRegisterPackage
+                     //~ ? PackageRegistryBackend::StrRegisteringPackage()
+                     //~ : PackageRegistryBackend::StrRevokingPackage())
+                    //~ + displayName );
                 processPackage_( guard,
                                  doRegisterPackage,
                                  startup,

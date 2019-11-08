@@ -1138,8 +1138,8 @@ void PackageManagerImpl::reinstallDeployedPackages(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        ProgressLevel progress(
-            xCmdEnv, "Reinstalling all deployed packages..." );
+        //~ ProgressLevel progress(
+            //~ xCmdEnv, "Reinstalling all deployed packages..." );
 
         try_dispose( m_xRegistry );
         m_xRegistry.clear();

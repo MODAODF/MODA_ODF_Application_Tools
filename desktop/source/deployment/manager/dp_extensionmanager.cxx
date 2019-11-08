@@ -1228,17 +1228,17 @@ sal_Bool ExtensionManager::synchronize(
     try
     {
         ::osl::MutexGuard guard(getMutex());
-        OUString sSynchronizingShared(StrSyncRepository());
-        sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
-        dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
+        //~ OUString sSynchronizingShared(StrSyncRepository());
+        //~ sSynchronizingShared = sSynchronizingShared.replaceAll("%NAME", "shared");
+        //~ dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
         bool bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
-        progressShared.update("\n\n");
+        //~ progressShared.update("\n\n");
 
-        OUString sSynchronizingBundled(StrSyncRepository());
-        sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
-        dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
+        //~ OUString sSynchronizingBundled(StrSyncRepository());
+        //~ sSynchronizingBundled = sSynchronizingBundled.replaceAll("%NAME", "bundled");
+        //~ dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
         bModified |= static_cast<bool>(getBundledRepository()->synchronize(xAbortChannel, xCmdEnv));
-        progressBundled.update("\n\n");
+        //~ progressBundled.update("\n\n");
 
         //Always determine the active extension.
         //TODO: Is this still necessary?  (It used to be necessary for the

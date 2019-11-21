@@ -79,6 +79,8 @@ public:
     // Add by Firefly(firefly@ossii.com.tw)
     void                   AddFontGroup(const OUString);
     PhysicalFontFamily*    ImplFindByGroupName( const OUString& ) const;
+    PhysicalFontFamily*    FindCNS11643FontFamily( const OUString& ) const;
+    PhysicalFontFamily*    ImplUseCNS11643( const OUString& ,int) const;
     //----------------------------------------------------------------
 
 private:

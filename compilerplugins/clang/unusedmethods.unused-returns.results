@@ -1,0 +1,324 @@
+connectivity/source/inc/java/lang/Object.hxx:117
+    int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
+connectivity/source/inc/odbc/OConnection.hxx:78
+    short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+connectivity/source/inc/odbc/OStatement.hxx:115
+    _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
+extensions/source/scanner/sane.hxx:97
+    _Bool Sane::CheckConsistency(const char *,_Bool)
+extensions/source/scanner/sane.hxx:140
+    _Bool Sane::GetOptionValue(int,double *)
+extensions/source/scanner/sane.hxx:147
+    _Bool Sane::ActivateButtonOption(int)
+extensions/source/scanner/sane.hxx:153
+    _Bool Sane::Open(int)
+extensions/source/scanner/sanedlg.hxx:89
+    _Bool SaneDlg::LoadState()
+extensions/source/scanner/sanedlg.hxx:103
+    _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
+filter/source/flash/swfexporter.hxx:85
+    _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
+i18nlangtag/source/languagetag/languagetag.cxx:275
+    const class rtl::OUString & LanguageTagImpl::getBcp47() const
+idlc/inc/aststack.hxx:38
+    class AstStack * AstStack::push(class AstScope *)
+include/basegfx/range/b2dconnectedranges.hxx:217
+    type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
+include/basegfx/vector/b2dvector.hxx:115
+    class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
+include/basegfx/vector/b2ivector.hxx:100
+    class basegfx::B2IVector & basegfx::B2IVector::setLength(double)
+include/basegfx/vector/b3dvector.hxx:146
+    class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
+include/basegfx/vector/b3dvector.hxx:171
+    class basegfx::B3DVector & basegfx::B3DVector::normalize()
+include/comphelper/backupfilehelper.hxx:204
+    _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(const class rtl::OUString &)
+include/editeng/editview.hxx:220
+    class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:63
+    struct _LibreOfficeKitDocument * lok::Document::get()
+include/LibreOfficeKit/LibreOfficeKit.hxx:97
+    char * lok::Document::getPartPageRectangles()
+include/LibreOfficeKit/LibreOfficeKit.hxx:121
+    char * lok::Document::getPartHash(int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:349
+    char * lok::Document::getTextSelection(const char *,char **)
+include/LibreOfficeKit/LibreOfficeKit.hxx:361
+    _Bool lok::Document::paste(const char *,const char *,unsigned long)
+include/LibreOfficeKit/LibreOfficeKit.hxx:392
+    char * lok::Document::getCommandValues(const char *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:474
+    int lok::Document::getView()
+include/LibreOfficeKit/LibreOfficeKit.hxx:482
+    int lok::Document::getViewsCount()
+include/LibreOfficeKit/LibreOfficeKit.hxx:491
+    unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
+include/LibreOfficeKit/LibreOfficeKit.hxx:530
+    _Bool lok::Document::getViewIds(int *,unsigned long)
+include/LibreOfficeKit/LibreOfficeKit.hxx:591
+    _Bool lok::Document::insertCertificate(const unsigned char *,const int,const unsigned char *,const int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:605
+    _Bool lok::Document::addCertificate(const unsigned char *,const int)
+include/LibreOfficeKit/LibreOfficeKit.hxx:617
+    int lok::Document::getSignatureState()
+include/LibreOfficeKit/LibreOfficeKit.hxx:712
+    char * lok::Office::getFilterTypes()
+include/LibreOfficeKit/LibreOfficeKit.hxx:766
+    char * lok::Office::getVersionInfo()
+include/LibreOfficeKit/LibreOfficeKit.hxx:780
+    _Bool lok::Office::runMacro(const char *)
+include/oox/crypto/AgileEngine.hxx:121
+    _Bool oox::core::AgileEngine::decryptHmacKey()
+include/oox/crypto/AgileEngine.hxx:122
+    _Bool oox::core::AgileEngine::decryptHmacValue()
+include/oox/crypto/AgileEngine.hxx:137
+    _Bool oox::core::AgileEngine::encryptHmacValue()
+include/oox/crypto/CryptTools.hxx:113
+    _Bool oox::core::CryptoHash::update(class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > &,unsigned int)
+include/oox/dump/dumperbase.hxx:642
+    long oox::dump::FlagsList::getIgnoreFlags() const
+include/oox/dump/dumperbase.hxx:1412
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1418
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1420
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1424
+    type-parameter-?-? oox::dump::InputObjectBase::dumpValue(const struct oox::dump::ItemFormat &)
+include/oox/dump/dumperbase.hxx:1427
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1429
+    type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1433
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1435
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1437
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+include/oox/dump/dumperbase.hxx:1439
+    type-parameter-?-? oox::dump::InputObjectBase::dumpValue(_Bool,const struct oox::dump::ItemFormat &)
+include/oox/dump/oledumper.hxx:311
+    _Bool oox::dump::AxPropertyObjectBase::dumpBoolProperty()
+include/oox/dump/oledumper.hxx:312
+    int oox::dump::AxPropertyObjectBase::dumpHmmProperty()
+include/oox/dump/oledumper.hxx:313
+    unsigned char oox::dump::AxPropertyObjectBase::dumpMousePtrProperty()
+include/oox/dump/oledumper.hxx:315
+    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpBorderStyleProperty(type-parameter-?-?)
+include/oox/dump/oledumper.hxx:317
+    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpSpecialEffectProperty(type-parameter-?-?)
+include/oox/dump/oledumper.hxx:318
+    unsigned int oox::dump::AxPropertyObjectBase::dumpEnabledProperty()
+include/oox/dump/oledumper.hxx:319
+    int oox::dump::AxPropertyObjectBase::dumpOrientationProperty()
+include/oox/dump/oledumper.hxx:320
+    int oox::dump::AxPropertyObjectBase::dumpDelayProperty()
+include/oox/dump/oledumper.hxx:321
+    unsigned int oox::dump::AxPropertyObjectBase::dumpImagePosProperty()
+include/oox/dump/oledumper.hxx:322
+    unsigned char oox::dump::AxPropertyObjectBase::dumpImageSizeModeProperty()
+include/oox/dump/oledumper.hxx:323
+    unsigned char oox::dump::AxPropertyObjectBase::dumpImageAlignProperty()
+include/oox/dump/oledumper.hxx:326
+    unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
+include/oox/dump/oledumper.hxx:327
+    char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
+include/oox/export/shapes.hxx:203
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+include/oox/export/shapes.hxx:204
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int)
+include/oox/helper/binaryoutputstream.hxx:78
+    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
+include/oox/helper/binaryoutputstream.hxx:79
+    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
+include/oox/helper/propertyset.hxx:110
+    _Bool oox::PropertySet::setProperty(int,class Color)
+include/oox/ole/axbinarywriter.hxx:116
+    _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(class oox::ole::AxAlignedOutputStream &)
+include/oox/ole/olehelper.hxx:180
+    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
+include/oox/ole/olehelper.hxx:191
+    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
+include/sax/fshelper.hxx:210
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
+include/sax/fshelper.hxx:211
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+include/sax/fshelper.hxx:214
+    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/sfx2/linkmgr.hxx:64
+    _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
+include/sfx2/lnkbase.hxx:103
+    class sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
+include/svl/macitem.hxx:92
+    class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
+include/svl/poolitem.hxx:169
+    class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
+include/svx/dlgctrl.hxx:105
+    class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
+include/svx/framelink.hxx:195
+    class svx::frame::Style & svx::frame::Style::MirrorSelf()
+include/svx/SvxColorValueSet.hxx:55
+    class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
+include/test/sheet/xcellrangedata.hxx:21
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XCellRangeData::init()
+include/test/sheet/xdocumentauditing.hxx:29
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
+include/test/sheet/xnamedrange.hxx:22
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
+include/test/sheet/xsheetannotation.hxx:36
+    class com::sun::star::uno::Reference<class com::sun::star::sheet::XSheetAnnotation> apitest::XSheetAnnotation::getAnnotation(struct com::sun::star::table::CellAddress &)
+include/test/sheet/xspreadsheets2.hxx:40
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
+include/test/sheet/xstyleloader.hxx:27
+    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
+include/test/sheet/xusedareacursor.hxx:22
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
+include/tools/color.hxx:151
+    class SvStream & Color::Read(class SvStream &)
+include/tools/color.hxx:152
+    class SvStream & Color::Write(class SvStream &) const
+include/tools/config.hxx:38
+    _Bool Config::ImplUpdateConfig() const
+include/tools/multisel.hxx:93
+    _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
+include/vcl/bitmap.hxx:190
+    _Bool Bitmap::Dither(enum BmpDitherFlags)
+include/vcl/bitmapex.hxx:241
+    _Bool BitmapEx::Rotate(long,const class Color &)
+include/vcl/fontcharmap.hxx:48
+    class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
+include/vcl/gdimtf.hxx:186
+    class SvStream & GDIMetaFile::Read(class SvStream &)
+include/vcl/graphicfilter.hxx:260
+    class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
+include/vcl/GraphicNativeTransform.hxx:29
+    _Bool GraphicNativeTransform::rotateBitmapOnly(unsigned short)
+include/vcl/menu.hxx:388
+    _Bool Menu::HandleMenuActivateEvent(class Menu *) const
+include/vcl/menu.hxx:389
+    _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
+include/vcl/texteng.hxx:279
+    _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
+include/vcl/toolbox.hxx:514
+    _Bool ToolBox::ChangeHighlightUpDn(_Bool)
+include/vcl/weld.hxx:357
+    _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
+include/vcl/weld.hxx:1059
+    _Bool weld::TextView::get_selection_bounds(int &,int &)
+lotuswordpro/inc/lwpsvstream.hxx:76
+    class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
+lotuswordpro/inc/lwpsvstream.hxx:77
+    class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
+lotuswordpro/inc/lwpsvstream.hxx:78
+    class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+sc/inc/document.hxx:2107
+    const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
+sc/inc/orcusfilters.hxx:44
+    _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
+sc/source/core/opencl/formulagroupcl.cxx:997
+    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,_Bool &)
+sc/source/core/opencl/formulagroupcl.cxx:1237
+    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::__cxx11::basic_stringstream<char> &,int,_Bool &)
+sc/source/filter/inc/workbookhelper.hxx:259
+    _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
+sc/source/filter/xml/XMLStylesExportHelper.hxx:178
+    _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
+sc/source/ui/inc/select.hxx:72
+    _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
+sc/source/ui/vba/vbaformat.hxx:69
+    class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
+sc/source/ui/vba/vbaformat.hxx:73
+    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &)
+sc/source/ui/vba/vbaformat.hxx:76
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
+sc/source/ui/vba/vbaformat.hxx:79
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
+sc/source/ui/vba/vbaformat.hxx:85
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+sc/source/ui/vba/vbaformat.hxx:91
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+sc/source/ui/vba/vbaformat.hxx:97
+    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+sc/source/ui/vba/vbaformat.hxx:103
+    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+sc/source/ui/vba/vbaformat.hxx:109
+    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+sc/source/ui/vba/vbaformat.hxx:115
+    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+sc/source/ui/vba/vbaformat.hxx:121
+    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+sc/source/ui/vba/vbaformat.hxx:127
+    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+sc/source/ui/vba/vbaformat.hxx:133
+    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+sc/source/ui/vba/vbaformat.hxx:139
+    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+sc/source/ui/vba/vbaformat.hxx:145
+    class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
+sc/source/ui/vba/vbaformat.hxx:151
+    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+sd/source/filter/eppt/pptx-epptooxml.cxx:123
+    class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/ui/inc/OutlineViewShell.hxx:115
+    class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
+sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
+    int sd::IBluetoothSocket::write(const void *,unsigned int)
+sw/inc/calc.hxx:113
+    class SwSbxValue & SwSbxValue::MakeDouble()
+sw/inc/doc.hxx:1066
+    _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
+sw/inc/doc.hxx:1252
+    _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
+sw/inc/editsh.hxx:264
+    _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
+sw/inc/editsh.hxx:633
+    const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
+sw/inc/IDocumentUndoRedo.hxx:181
+    _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
+sw/inc/swcrsr.hxx:156
+    _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
+sw/inc/tblafmt.hxx:349
+    _Bool SwTableAutoFormatTable::Load(class SvStream &)
+sw/source/core/inc/laycache.hxx:64
+    _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
+sw/source/core/inc/scriptinfo.hxx:227
+    _Bool SwScriptInfo::GetBoundsOfHiddenRange(int,int &,int &) const
+sw/source/filter/ww8/ww8toolbar.hxx:339
+    _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
+sw/source/uibase/inc/fldmgr.hxx:114
+    const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
+sw/source/uibase/inc/mailmergewizard.hxx:79
+    _Bool SwMailMergeWizard::skipUntil(unsigned short)
+ucb/source/ucp/webdav-neon/ContentProperties.hxx:169
+    _Bool webdav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &) const
+ucb/source/ucp/webdav-neon/NeonSession.hxx:239
+    _Bool webdav_ucp::NeonSession::UNLOCK(struct ne_lock *)
+vcl/inc/font/FeatureCollector.hxx:48
+    _Bool vcl::font::FeatureCollector::collect()
+vcl/inc/opengl/salbmp.hxx:96
+    _Bool OpenGLSalBitmap::ImplScaleFilter(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,unsigned int)
+vcl/inc/opengl/salbmp.hxx:98
+    _Bool OpenGLSalBitmap::ImplScaleConvolution(const class rtl::Reference<class OpenGLContext> &,const double &,const double &,const class vcl::Kernel &)
+vcl/inc/opengl/salbmp.hxx:99
+    _Bool OpenGLSalBitmap::ImplScaleArea(const class rtl::Reference<class OpenGLContext> &,double,double)
+vcl/inc/opengl/texture.hxx:112
+    _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
+vcl/inc/salframe.hxx:222
+    _Bool SalFrame::SetPluginParent(struct SystemParentData *)
+vcl/inc/salgdi.hxx:212
+    class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
+vcl/inc/salgdi.hxx:395
+    _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
+vcl/inc/unx/gtk/gtkdata.hxx:164
+    int GtkSalDisplay::CaptureMouse(class SalFrame *)
+vcl/inc/unx/saldisp.hxx:316
+    _Bool SalDisplay::Dispatch(union _XEvent *)
+vcl/inc/WidgetDrawInterface.hxx:97
+    _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)
+vcl/source/gdi/pdfwriter_impl.hxx:1230
+    _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
+vcl/source/gdi/pdfwriter_impl.hxx:1231
+    _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
+vcl/source/gdi/pdfwriter_impl.hxx:1232
+    _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

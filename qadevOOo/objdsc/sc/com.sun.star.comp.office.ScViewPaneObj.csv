@@ -1,0 +1,5 @@
+"ScViewPaneObj";"com::sun::star::view::XControlAccess#optional";"getControl()"
+"ScViewPaneObj";"com::sun::star::view::XFormLayerAccess#optional";"getFromController()"
+"ScViewPaneObj";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"
+"ScViewPaneObj";"com::sun::star::view::XFormLayerAccess#optional";"setFormDesignMode()"
+

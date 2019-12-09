@@ -1,0 +1,13 @@
+--- misc/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:17.375000000 +0000
++++ misc/build/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:34.703125000 +0000
+@@ -81,10 +81,6 @@
+ #  ifndef XML_BUILDING_EXPAT
+ /* using Expat from an application */
+ 
+-#    if defined(_MSC_EXTENSIONS) && ! defined(__BEOS__) && ! defined(__CYGWIN__)
+-#      define XMLIMPORT __declspec(dllimport)
+-#    endif
+-
+ #  endif
+ #endif /* not defined XML_STATIC */
+ 

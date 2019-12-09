@@ -1,0 +1,268 @@
+---
+assumeFilename: sw/source/core/doc/docnew.cxx
+blacklist:
+    sw/inc/extinput.hxx:
+    - vector
+    sw/inc/fmtmeta.hxx:
+    - vector
+    sw/inc/istyleaccess.hxx:
+    - vector
+    sw/inc/shellres.hxx:
+    - memory
+    sw/inc/docary.hxx:
+    # Complete type is needed here:
+    # fldbas.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - fldbas.hxx
+    # numrule.hxx brings in SwNumRule, which is needed by SwNumRuleTable, as SwVectorModifyBase's dtor wants to delete it
+    - numrule.hxx
+    # tox.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - tox.hxx
+    # section.hxx brings in SwSectionFormat, which is needed by SwSectionFormats, as SwFormatsModifyBase's type param has to be complete
+    - section.hxx
+    sw/inc/docfac.hxx:
+    # Complete type is needed by rtl::Reference<SwDoc>.
+    - doc.hxx
+    sw/inc/accmap.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/crsrsh.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/cshtyp.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/fesh.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/modcfg.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/ndtyp.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/swtypes.hxx:
+    - o3tl/typed_flags_set.hxx
+    # Needed for macro #define
+    - com/sun/star/i18n/CollatorOptions.hpp
+    sw/inc/doc.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/docsh.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/list.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/IDocumentLinksAdministration.hxx:
+    - sal/types.h
+    sw/inc/pagedesc.hxx:
+    - boost/multi_index/identity.hpp
+    sw/inc/rdfhelper.hxx:
+    - com/sun/star/uno/Reference.h
+    sw/inc/ring.hxx:
+    - utility
+    sw/inc/shellid.hxx:
+    - sfx2/shell.hxx
+    sw/inc/swurl.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/tblenum.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/tox.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/undobj.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/itabenum.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/unosett.hxx:
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/unotxdoc.hxx:
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/breakit.hxx:
+    # std::unique_ptr dtor requires complete type
+    - com/sun/star/i18n/ForbiddenCharacters.hpp
+    sw/inc/dbmgr.hxx:
+    # uno::Sequence ctor needs the complete type
+    - com/sun/star/beans/PropertyValue.hpp
+    sw/inc/dlelstnr.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener.hpp
+    - com/sun/star/linguistic2/XLinguServiceEventListener.hpp
+    sw/inc/finalthreadmanager.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XTerminateListener2.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XJobManager.hpp
+    - o3tl/deleter.hxx
+    sw/inc/splargs.hxx:
+    # inline dtor, complete type is needed
+    - com/sun/star/linguistic2/XSpellAlternatives.hpp
+    - com/sun/star/linguistic2/XSpellChecker1.hpp
+    sw/inc/unocoll.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sw/inc/unobaseclass.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XEnumeration.hpp
+    sw/inc/unofieldcoll.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XRefreshable.hpp
+    sw/inc/unochart.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/chart2/data/XDataProvider.hpp
+    - com/sun/star/chart2/data/XDataSequence.hpp
+    - com/sun/star/chart2/data/XDataSource.hpp
+    - com/sun/star/chart2/data/XLabeledDataSequence2.hpp
+    - com/sun/star/chart2/data/XNumericalDataSequence.hpp
+    - com/sun/star/chart2/data/XRangeXMLConversion.hpp
+    - com/sun/star/chart2/data/XTextualDataSequence.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XModifiable.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sw/inc/unodraw.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XTextContent.hpp
+    sw/inc/unoframe.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/document/XEmbeddedObjectSupplier2.hpp
+    - com/sun/star/document/XEventsSupplier.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/text/XTextFrame.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sw/inc/unosrch.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XPropertyReplace.hpp
+    sw/inc/unoparagraph.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/beans/XTolerantMultiPropertySet.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XTextContent.hpp
+    - com/sun/star/text/XTextRange.hpp
+    sw/inc/unosett.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexReplace.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/unotbl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/XChartDataArray.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/sheet/XCellRangeData.hpp
+    - com/sun/star/table/XAutoFormattable.hpp
+    - com/sun/star/table/XCellRange.hpp
+    - com/sun/star/text/XTextTable.hpp
+    - com/sun/star/text/XTextTableCursor.hpp
+    - com/sun/star/util/XSortable.hpp
+    sw/inc/unotextbodyhf.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    sw/inc/unotextcursor.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/document/XDocumentInsertable.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/text/XMarkingAccess.hpp
+    - com/sun/star/text/XParagraphCursor.hpp
+    - com/sun/star/text/XRedline.hpp
+    - com/sun/star/text/XSentenceCursor.hpp
+    - com/sun/star/text/XWordCursor.hpp
+    - com/sun/star/util/XSortable.hpp
+    sw/inc/unoredlines.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XEnumerationAccess.hpp
+    sw/inc/unotxdoc.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/document/XDocumentLanguages.hpp
+    - com/sun/star/document/XLinkTargetSupplier.hpp
+    - com/sun/star/document/XRedlinesSupplier.hpp
+    - com/sun/star/drawing/XDrawPageSupplier.hpp
+    - com/sun/star/drawing/XDrawPagesSupplier.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/style/XAutoStylesSupplier.hpp
+    - com/sun/star/style/XStyleFamiliesSupplier.hpp
+    - com/sun/star/text/XBookmarksSupplier.hpp
+    - com/sun/star/text/XChapterNumberingSupplier.hpp
+    - com/sun/star/text/XDocumentIndexesSupplier.hpp
+    - com/sun/star/text/XEndnotesSupplier.hpp
+    - com/sun/star/text/XFlatParagraphIteratorProvider.hpp
+    - com/sun/star/text/XFootnotesSupplier.hpp
+    - com/sun/star/text/XLineNumberingProperties.hpp
+    - com/sun/star/text/XNumberingRulesSupplier.hpp
+    - com/sun/star/text/XPagePrintable.hpp
+    - com/sun/star/text/XReferenceMarksSupplier.hpp
+    - com/sun/star/text/XTextDocument.hpp
+    - com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp
+    - com/sun/star/text/XTextFieldsSupplier.hpp
+    - com/sun/star/text/XTextFramesSupplier.hpp
+    - com/sun/star/text/XTextGraphicObjectsSupplier.hpp
+    - com/sun/star/text/XTextSectionsSupplier.hpp
+    - com/sun/star/text/XTextTablesSupplier.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/util/XLinkUpdate.hpp
+    - com/sun/star/util/XRefreshable.hpp
+    - com/sun/star/util/XReplaceable.hpp
+    - com/sun/star/view/XRenderable.hpp
+    - com/sun/star/xforms/XFormsSupplier.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/hintids.hxx:
+    # used as template parameter of TypedWhichId
+    - class SfxStringItem
+    - class SvXMLAttrContainerItem
+    - class SwAttrSetChg
+    - class SwDocPosUpdate
+    - class SwFormatChg
+    - class SwFormatMeta
+    - class SwMsgPoolItem
+    - class SwPtrMsgPoolItem
+    - class SwUpdateAttr
+    - class SfxBoolItem
+    - class SvxCharSetColorItem
+    - class SvxColorItem
+    # used in extern declaration
+    - struct SfxItemInfo
+    sw/inc/textboxhelper.hxx:
+    # used as a template parameter
+    - class SwFormatContent
+    sw/qa/extras/rtfimport/rtfimport.cxx:
+    # complete type is wanted
+    - com/sun/star/text/XDocumentIndexMark.hpp
+    sw/qa/extras/rtfexport/rtfexport.cxx:
+    # complete type is wanted
+    - com/sun/star/awt/XBitmap.hpp
+    - com/sun/star/text/XTextColumns.hpp
+    sw/inc/pagepreviewlayout.hxx:
+    - vector
+    sw/inc/shellio.hxx:
+    - o3tl/deleter.hxx
+    - o3tl/typed_flags_set.hxx

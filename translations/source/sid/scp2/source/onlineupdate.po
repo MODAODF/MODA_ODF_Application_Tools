@@ -1,0 +1,33 @@
+#. extracted from scp2/source/onlineupdate
+msgid ""
+msgstr ""
+"Project-Id-Version: LO4-1\n"
+"Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
+"POT-Creation-Date: 2013-05-23 12:05+0200\n"
+"PO-Revision-Date: 2013-08-01 13:24+0300\n"
+"Last-Translator: Tadele Assefa Wami <milkyswd@gmail.com>\n"
+"Language-Team: 10,000 words\n"
+"Language: sid\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: LibreOffice\n"
+"X-Accelerator-Marker: ~\n"
+"X-Project-Style: openoffice\n"
+
+#: module_onlineupdate.ulf
+msgctxt ""
+"module_onlineupdate.ulf\n"
+"STR_NAME_MODULE_OPT_ONLINEUPDATE\n"
+"LngText.text"
+msgid "Online Update"
+msgstr "Xaadooshshu giddoonni yanneessi"
+
+#: module_onlineupdate.ulf
+msgctxt ""
+"module_onlineupdate.ulf\n"
+"STR_DESC_MODULE_OPT_ONLINEUPDATE\n"
+"LngText.text"
+msgid "Get automatically notified when a new update of %PRODUCTNAME becomes available."
+msgstr "Umi-loosaanchi hasse egensiisi, haaroo yanneessa %PRODUCTNAME anfiro"

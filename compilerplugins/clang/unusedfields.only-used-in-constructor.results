@@ -1,0 +1,596 @@
+avmedia/source/vlc/vlcframegrabber.hxx:36
+    avmedia::vlc::VLCFrameGrabber mInstance wrapper::Instance
+avmedia/source/vlc/vlcframegrabber.hxx:37
+    avmedia::vlc::VLCFrameGrabber mMedia wrapper::Media
+avmedia/source/vlc/wrapper/Types.hxx:39
+    libvlc_event_t p_obj void *
+avmedia/source/vlc/wrapper/Types.hxx:44
+    libvlc_event_t::(anonymous union)::(anonymous) dummy1 const char *
+avmedia/source/vlc/wrapper/Types.hxx:45
+    libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
+avmedia/source/vlc/wrapper/Types.hxx:46
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+avmedia/source/vlc/wrapper/Types.hxx:47
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+avmedia/source/vlc/wrapper/Types.hxx:53
+    libvlc_track_description_t psz_name char *
+basegfx/source/polygon/b2dtrapezoid.cxx:202
+    basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
+basic/qa/cppunit/basictest.hxx:27
+    MacroSnippet maDll class BasicDLL
+binaryurp/source/unmarshal.hxx:89
+    binaryurp::Unmarshal buffer_ com::sun::star::uno::Sequence<sal_Int8>
+binaryurp/source/writer.hxx:148
+    binaryurp::Writer state_ struct binaryurp::WriterState
+canvas/source/vcl/impltools.hxx:117
+    vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
+chart2/source/controller/accessibility/AccessibleChartShape.hxx:79
+    chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
+chart2/source/controller/inc/dlg_View3D.hxx:53
+    chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
+chart2/source/controller/inc/RangeSelectionListener.hxx:63
+    chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
+connectivity/source/commontools/RowFunctionParser.cxx:374
+    connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
+connectivity/source/commontools/RowFunctionParser.cxx:375
+    connectivity::(anonymous namespace)::ExpressionGrammar::definition assignment ::boost::spirit::rule<ScannerT>
+connectivity/source/drivers/evoab2/EApi.h:122
+    (anonymous) address_format char *
+connectivity/source/drivers/evoab2/EApi.h:126
+    (anonymous) ext char *
+connectivity/source/drivers/evoab2/NStatement.hxx:57
+    connectivity::evoab::FieldSort bAscending _Bool
+connectivity/source/drivers/mysqlc/mysqlc_resultset.hxx:65
+    connectivity::mysqlc::OResultSet m_rConnection class connectivity::mysqlc::OConnection &
+connectivity/source/inc/component/CResultSet.hxx:44
+    connectivity::component::OComponentResultSet m_bBookmarkable _Bool
+connectivity/source/inc/dbase/DResultSet.hxx:43
+    connectivity::dbase::ODbaseResultSet m_bBookmarkable _Bool
+connectivity/source/inc/file/FStatement.hxx:89
+    connectivity::file::OStatement_Base m_aCursorName class rtl::OUString
+connectivity/source/inc/file/FStatement.hxx:90
+    connectivity::file::OStatement_Base m_nMaxFieldSize sal_Int32
+connectivity/source/inc/file/FStatement.hxx:91
+    connectivity::file::OStatement_Base m_nMaxRows sal_Int32
+connectivity/source/inc/file/FStatement.hxx:92
+    connectivity::file::OStatement_Base m_nQueryTimeOut sal_Int32
+connectivity/source/inc/file/FStatement.hxx:93
+    connectivity::file::OStatement_Base m_nFetchSize sal_Int32
+connectivity/source/inc/file/FStatement.hxx:94
+    connectivity::file::OStatement_Base m_nResultSetType sal_Int32
+connectivity/source/inc/file/FStatement.hxx:95
+    connectivity::file::OStatement_Base m_nFetchDirection sal_Int32
+connectivity/source/inc/file/FStatement.hxx:96
+    connectivity::file::OStatement_Base m_nResultSetConcurrency sal_Int32
+connectivity/source/inc/file/FStatement.hxx:97
+    connectivity::file::OStatement_Base m_bEscapeProcessing _Bool
+connectivity/source/inc/flat/EResultSet.hxx:42
+    connectivity::flat::OFlatResultSet m_bBookmarkable _Bool
+connectivity/source/inc/java/lang/Object.hxx:45
+    connectivity::SDBThreadAttach m_aGuard jvmaccess::class VirtualMachine::AttachGuard
+cppcanvas/source/mtfrenderer/textaction.cxx:809
+    cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextLineInfo const tools::TextLineInfo
+cppcanvas/source/mtfrenderer/textaction.cxx:1638
+    cppcanvas::internal::(anonymous namespace)::OutlineAction maTextLineInfo const tools::TextLineInfo
+cppu/source/threadpool/threadpool.cxx:355
+    _uno_ThreadPool dummy sal_Int32
+cppu/source/typelib/typelib.cxx:59
+    AlignSize_Impl nInt16 sal_Int16
+cppu/source/uno/check.cxx:38
+    (anonymous namespace)::C1 n1 sal_Int16
+cppu/source/uno/check.cxx:67
+    (anonymous namespace)::D d sal_Int16
+cppu/source/uno/check.cxx:68
+    (anonymous namespace)::D e sal_Int32
+cppu/source/uno/check.cxx:72
+    (anonymous namespace)::E a sal_Bool
+cppu/source/uno/check.cxx:73
+    (anonymous namespace)::E b sal_Bool
+cppu/source/uno/check.cxx:74
+    (anonymous namespace)::E c sal_Bool
+cppu/source/uno/check.cxx:75
+    (anonymous namespace)::E d sal_Int16
+cppu/source/uno/check.cxx:76
+    (anonymous namespace)::E e sal_Int32
+cppu/source/uno/check.cxx:81
+    (anonymous namespace)::M n sal_Int32
+cppu/source/uno/check.cxx:82
+    (anonymous namespace)::M o sal_Int16
+cppu/source/uno/check.cxx:91
+    (anonymous namespace)::N2 m struct (anonymous namespace)::M
+cppu/source/uno/check.cxx:92
+    (anonymous namespace)::N2 p sal_Int16
+cppu/source/uno/check.cxx:97
+    (anonymous namespace)::O p double
+cppu/source/uno/check.cxx:98
+    (anonymous namespace)::O q sal_Int16
+cppu/source/uno/check.cxx:107
+    (anonymous namespace)::P p2 double
+cppu/source/uno/check.cxx:115
+    (anonymous namespace)::second a int
+cppu/source/uno/check.cxx:120
+    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
+cppu/source/uno/check.cxx:121
+    (anonymous namespace)::AlignSize_Impl dDouble double
+cppu/source/uno/check.cxx:126
+    (anonymous namespace)::Char1 c1 char
+cppu/source/uno/check.cxx:130
+    (anonymous namespace)::Char2 c2 char
+cppu/source/uno/check.cxx:134
+    (anonymous namespace)::Char3 c3 char
+cppu/source/uno/check.cxx:138
+    (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
+cui/source/dialogs/colorpicker.cxx:712
+    cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
+cui/source/factory/dlgfact.cxx:1381
+    SvxMacroAssignDialog m_aItems class SfxItemSet
+cui/source/inc/cfgutil.hxx:190
+    SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
+cui/source/inc/cuitabarea.hxx:233
+    SvxAreaTabPage maFixed_ChangeType enum ChangeType
+cui/source/inc/cuitabarea.hxx:241
+    SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
+cui/source/inc/tabstpge.hxx:93
+    SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:94
+    SvxTabulatorTabPage m_aRightWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:95
+    SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:96
+    SvxTabulatorTabPage m_aDezWin class TabWin_Impl
+dbaccess/source/core/api/RowSet.hxx:111
+    dbaccess::ORowSet m_aURL class rtl::OUString
+dbaccess/source/core/api/RowSet.hxx:125
+    dbaccess::ORowSet m_nMaxFieldSize sal_Int32
+dbaccess/source/core/api/RowSet.hxx:127
+    dbaccess::ORowSet m_nQueryTimeOut sal_Int32
+dbaccess/source/core/api/RowSet.hxx:129
+    dbaccess::ORowSet m_nTransactionIsolation sal_Int32
+dbaccess/source/core/api/RowSet.hxx:141
+    dbaccess::ORowSet m_bIsBookmarkable _Bool
+dbaccess/source/core/api/RowSet.hxx:143
+    dbaccess::ORowSet m_bCanUpdateInsertedRows _Bool
+dbaccess/source/core/api/RowSet.hxx:460
+    dbaccess::ORowSetClone m_nFetchDirection sal_Int32
+dbaccess/source/core/api/RowSet.hxx:461
+    dbaccess::ORowSetClone m_nFetchSize sal_Int32
+dbaccess/source/core/api/RowSet.hxx:462
+    dbaccess::ORowSetClone m_bIsBookmarkable _Bool
+dbaccess/source/core/dataaccess/connection.hxx:101
+    dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
+dbaccess/source/ui/dlg/admincontrols.hxx:52
+    dbaui::MySQLNativeSettings m_aControlDependencies ::svt::ControlDependencyManager
+drawinglayer/source/tools/emfphelperdata.hxx:155
+    emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
+drawinglayer/source/tools/emfphelperdata.hxx:156
+    emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
+editeng/source/editeng/impedit.hxx:460
+    ImpEditEngine aSelFuncSet class EditSelFunctionSet
+filter/source/flash/swfwriter.hxx:391
+    swf::Writer maMovieTempFile utl::TempFile
+filter/source/flash/swfwriter.hxx:392
+    swf::Writer maFontsTempFile utl::TempFile
+filter/source/graphicfilter/icgm/chart.hxx:44
+    DataNode nBoxX1 sal_Int16
+filter/source/graphicfilter/icgm/chart.hxx:45
+    DataNode nBoxY1 sal_Int16
+filter/source/graphicfilter/icgm/chart.hxx:46
+    DataNode nBoxX2 sal_Int16
+filter/source/graphicfilter/icgm/chart.hxx:47
+    DataNode nBoxY2 sal_Int16
+include/basic/basmgr.hxx:52
+    BasicError nReason enum BasicErrorReason
+include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
+    drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
+include/drawinglayer/texture/texture3d.hxx:62
+    drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
+include/drawinglayer/texture/texture3d.hxx:64
+    drawinglayer::texture::GeoTexSvxBitmapEx maTransparence class Bitmap
+include/filter/msfilter/svdfppt.hxx:881
+    ImplPPTParaPropSet nDontKnow1 sal_uInt32
+include/filter/msfilter/svdfppt.hxx:882
+    ImplPPTParaPropSet nDontKnow2 sal_uInt32
+include/filter/msfilter/svdfppt.hxx:883
+    ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
+include/LibreOfficeKit/LibreOfficeKitGtk.h:33
+    _LOKDocView aDrawingArea GtkDrawingArea
+include/LibreOfficeKit/LibreOfficeKitGtk.h:38
+    _LOKDocViewClass parent_class GtkDrawingAreaClass
+include/oox/export/shapes.hxx:123
+    oox::drawingml::ShapeExport maShapeMap oox::drawingml::ShapeExport::ShapeHashMap
+include/registry/registry.hxx:35
+    Registry_Api acquire void (*)(RegHandle)
+include/sfx2/classificationhelper.hxx:127
+    sfx::ClassificationKeyCreator m_ePolicyType const enum SfxClassificationPolicyType
+include/sfx2/msg.hxx:117
+    SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:119
+    SfxType0 nAttribs const sal_uInt16
+include/svl/ondemand.hxx:58
+    OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
+include/svx/ClassificationDialog.hxx:59
+    svx::ClassificationDialog m_bPerParagraph const _Bool
+include/svx/dialcontrol.hxx:115
+    svx::DialControl::DialControl_Impl mnInitialAngle sal_Int32
+include/svx/itemwin.hxx:34
+    SvxLineBox aDelayTimer class Timer
+include/vcl/font/Feature.hxx:102
+    vcl::font::Feature m_eType const enum vcl::font::FeatureType
+include/xmloff/shapeimport.hxx:140
+    SdXML3DLightContext mbSpecular _Bool
+jvmfwk/plugins/sunmajor/pluginlib/sunversion.hxx:102
+    jfw_plugin::SunVersion usVersion class rtl::OUString
+libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:35
+    GtvApplicationWindowPrivate lokDialog GtkWidget *
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
+    GtvApplicationWindow parent_instance GtkApplicationWindow
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
+    GtvApplicationWindow doctype LibreOfficeKitDocumentType
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:73
+    GtvApplicationWindowClass parentClass GtkApplicationWindowClass
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
+    GtvApplication parent GtkApplication
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:31
+    GtvApplicationClass parentClass GtkApplicationClass
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
+    GtvCalcHeaderBar parent GtkDrawingArea
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
+    GtvCalcHeaderBarClass parentClass GtkDrawingAreaClass
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
+    GtvCommentsSidebar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
+    GtvCommentsSidebarClass parentClass GtkBoxClass
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:28
+    GtvLokDialog parent GtkDialog
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.hxx:33
+    GtvLokDialogClass parentClass GtkDialogClass
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
+    GtvMainToolbar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
+    GtvMainToolbarClass parentClass GtkBoxClass
+lingucomponent/source/languageguessing/simpleguesser.cxx:79
+    textcat_t maxsize uint4
+lingucomponent/source/languageguessing/simpleguesser.cxx:81
+    textcat_t output char [1024]
+lotuswordpro/source/filter/bento.hxx:352
+    OpenStormBento::CBenNamedObject cNameListElmt class OpenStormBento::CBenNamedObjectListElmt
+lotuswordpro/source/filter/clone.hxx:23
+    detail::has_clone::(anonymous) a char [2]
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:201
+    oox::drawingml::ConditionAtom maIter struct oox::drawingml::IteratorAttr
+oox/source/drawingml/diagram/layoutnodecontext.cxx:84
+    oox::drawingml::AlgorithmContext mnRevision sal_Int32
+oox/source/drawingml/diagram/layoutnodecontext.cxx:126
+    oox::drawingml::ChooseContext msName class rtl::OUString
+oox/source/drawingml/hyperlinkcontext.hxx:43
+    oox::drawingml::HyperLinkContext maProperties class oox::PropertyMap &
+oox/source/ppt/timenodelistcontext.cxx:196
+    oox::ppt::MediaNodeContext mbIsNarration _Bool
+oox/source/ppt/timenodelistcontext.cxx:197
+    oox::ppt::MediaNodeContext mbFullScrn _Bool
+oox/source/ppt/timenodelistcontext.cxx:391
+    oox::ppt::SequenceTimeNodeContext mbConcurrent _Bool
+oox/source/ppt/timenodelistcontext.cxx:628
+    oox::ppt::AnimContext mnValueType sal_Int32
+oox/source/ppt/timenodelistcontext.cxx:710
+    oox::ppt::AnimScaleContext mbZoomContents _Bool
+oox/source/ppt/timenodelistcontext.cxx:850
+    oox::ppt::AnimMotionContext msPtsTypes class rtl::OUString
+oox/source/ppt/timenodelistcontext.cxx:851
+    oox::ppt::AnimMotionContext mnPathEditMode sal_Int32
+oox/source/ppt/timenodelistcontext.cxx:852
+    oox::ppt::AnimMotionContext mnAngle sal_Int32
+opencl/source/openclwrapper.cxx:306
+    openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
+pyuno/source/module/pyuno_impl.hxx:224
+    pyuno::(anonymous) ob_base PyObject
+pyuno/source/module/pyuno_impl.hxx:324
+    pyuno::stRuntimeImpl ob_base PyObject
+reportdesign/source/core/api/ReportDefinition.cxx:241
+    reportdesign::OStyle m_aSize awt::Size
+sal/osl/unx/thread.cxx:91
+    osl_thread_priority_st m_Highest const int
+sal/osl/unx/thread.cxx:92
+    osl_thread_priority_st m_Above_Normal const int
+sal/osl/unx/thread.cxx:93
+    osl_thread_priority_st m_Normal const int
+sal/osl/unx/thread.cxx:94
+    osl_thread_priority_st m_Below_Normal const int
+sal/osl/unx/thread.cxx:95
+    osl_thread_priority_st m_Lowest const int
+sal/osl/unx/thread.cxx:113
+    osl_thread_global_st m_priority const struct osl_thread_priority_st
+sal/qa/osl/process/osl_process.cxx:151
+    Test_osl_executeProcess env_param_ const class rtl::OUString
+sal/textenc/textenc.cxx:406
+    (anonymous namespace)::FullTextEncodingData module_ osl::Module
+sc/inc/column.hxx:125
+    ScColumn maCellsEvent const sc::CellStoreEvent
+sc/inc/compiler.hxx:256
+    ScCompiler::AddInMap pODFF const char *
+sc/inc/compiler.hxx:257
+    ScCompiler::AddInMap pEnglish const char *
+sc/inc/compiler.hxx:259
+    ScCompiler::AddInMap pUpper const char *
+sc/inc/interpretercontext.hxx:36
+    ScInterpreterContext mrDoc const class ScDocument &
+sc/inc/token.hxx:400
+    SingleDoubleRefModifier aDub struct ScComplexRefData
+sc/qa/unit/ucalc_column.cxx:104
+    aInputs aName const char *
+sc/source/core/data/document.cxx:1244
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
+sc/source/core/data/document.cxx:1245
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
+sc/source/filter/html/htmlpars.cxx:3029
+    (anonymous namespace)::CSSHandler::MemStr mp const char *
+sc/source/filter/html/htmlpars.cxx:3030
+    (anonymous namespace)::CSSHandler::MemStr mn size_t
+sc/source/filter/inc/htmlpars.hxx:614
+    ScHTMLQueryParser mnUnusedId ScHTMLTableId
+sc/source/filter/inc/sheetdatacontext.hxx:62
+    oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
+sc/source/filter/inc/xetable.hxx:1002
+    XclExpCellTable maArrayBfr class XclExpArrayBuffer
+sc/source/filter/inc/xetable.hxx:1003
+    XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
+sc/source/filter/inc/xiescher.hxx:1200
+    XclImpDffPropSet maDummyStrm class SvMemoryStream
+sc/source/filter/inc/xihelper.hxx:328
+    XclImpCachedValue mxTokArr XclImpCachedValue::ScTokenArrayPtr
+sc/source/filter/inc/xistream.hxx:172
+    XclImpBiff8StdDecrypter maCodec ::msfilter::MSCodec_Std97
+sc/source/filter/inc/xistream.hxx:194
+    XclImpBiff8CryptoAPIDecrypter maCodec ::msfilter::MSCodec_CryptoAPI
+sc/source/filter/oox/worksheethelper.cxx:387
+    oox::xls::WorksheetGlobals mxProgressBar oox::ISegmentProgressBarRef
+sc/source/filter/xml/xmldrani.hxx:75
+    ScXMLDatabaseRangeContext bIsSelection _Bool
+sc/source/filter/xml/xmlexternaltabi.hxx:112
+    ScXMLExternalRefCellContext mnCellType sal_Int16
+sc/source/filter/xml/xmltransformationi.hxx:121
+    ScXMLColumnNumberContext aType class rtl::OUString
+sc/source/filter/xml/xmltransformationi.hxx:155
+    ScXMLDateTimeContext aType class rtl::OUString
+sc/source/ui/inc/acredlin.hxx:51
+    ScAcceptChgDlg aReOpenIdle class Idle
+sc/source/ui/inc/anyrefdg.hxx:112
+    ScRefHandler m_aIdle class Idle
+sc/source/ui/inc/msgpool.hxx:35
+    ScMessagePool aGlobalStringItem class SfxStringItem
+sc/source/ui/inc/msgpool.hxx:36
+    ScMessagePool aGlobalSearchItem class SvxSearchItem
+sc/source/ui/inc/msgpool.hxx:37
+    ScMessagePool aGlobalSortItem class ScSortItem
+sc/source/ui/inc/msgpool.hxx:38
+    ScMessagePool aGlobalQueryItem class ScQueryItem
+sc/source/ui/inc/msgpool.hxx:39
+    ScMessagePool aGlobalSubTotalItem class ScSubTotalItem
+sc/source/ui/inc/msgpool.hxx:40
+    ScMessagePool aGlobalConsolidateItem class ScConsolidateItem
+sc/source/ui/inc/msgpool.hxx:41
+    ScMessagePool aGlobalPivotItem class ScPivotItem
+sc/source/ui/inc/msgpool.hxx:42
+    ScMessagePool aGlobalSolveItem class ScSolveItem
+sc/source/ui/inc/msgpool.hxx:43
+    ScMessagePool aGlobalUserListItem class ScUserListItem
+sc/source/ui/inc/msgpool.hxx:44
+    ScMessagePool aCondFormatDlgItem class ScCondFormatDlgItem
+sc/source/ui/inc/notemark.hxx:46
+    ScNoteMarker m_aTimer class Timer
+sccomp/source/solver/DifferentialEvolution.hxx:35
+    DifferentialEvolutionAlgorithm maRandomDevice std::random_device
+sccomp/source/solver/ParticelSwarmOptimization.hxx:56
+    ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
+scripting/source/stringresource/stringresource.cxx:1310
+    stringresource::BinaryInput m_aData const Sequence<sal_Int8>
+sd/inc/anminfo.hxx:52
+    SdAnimationInfo maSecondSoundFile const class rtl::OUString
+sd/source/filter/eppt/epptbase.hxx:347
+    PPTWriterBase maFraction const class Fraction
+sd/source/filter/ppt/pptin.hxx:82
+    SdPPTImport maParam struct PowerPointImportParam
+sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
+    accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
+sd/source/ui/remotecontrol/Receiver.hxx:36
+    sd::Receiver pTransmitter class sd::Transmitter *
+sd/source/ui/remotecontrol/ZeroconfService.hxx:36
+    sd::ZeroconfService port const uint
+sd/source/ui/table/TableDesignPane.hxx:104
+    sd::TableDesignPane aImpl const class sd::TableDesignWidget
+sd/source/ui/view/DocumentRenderer.cxx:1313
+    sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
+sd/source/ui/view/viewshel.cxx:1211
+    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
+sd/source/ui/view/viewshel.cxx:1212
+    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
+sd/source/ui/view/viewshel.cxx:1213
+    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
+sd/source/ui/view/viewshel.cxx:1214
+    sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
+sfx2/source/doc/doctempl.cxx:116
+    DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
+slideshow/source/engine/animationnodes/animationbasenode.hxx:89
+    slideshow::internal::AnimationBaseNode mpSubsetManager const slideshow::internal::SubsettableShapeManagerSharedPtr
+slideshow/source/engine/opengl/TransitionImpl.hxx:296
+    Vertex normal glm::vec3
+slideshow/source/engine/opengl/TransitionImpl.hxx:297
+    Vertex texcoord glm::vec2
+slideshow/source/engine/smilfunctionparser.cxx:499
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:500
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:501
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:502
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:503
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:504
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
+starmath/inc/view.hxx:218
+    SmViewShell maGraphicController const class SmGraphicController
+starmath/source/accessibility.hxx:271
+    SmEditSource rEditAcc class SmEditAccessible &
+svgio/inc/svgcharacternode.hxx:89
+    svgio::svgreader::SvgTextPosition maY ::std::vector<double>
+svl/source/crypto/cryptosign.cxx:121
+    (anonymous namespace)::(anonymous) extnID const SECItem
+svl/source/crypto/cryptosign.cxx:122
+    (anonymous namespace)::(anonymous) critical const SECItem
+svl/source/crypto/cryptosign.cxx:123
+    (anonymous namespace)::(anonymous) extnValue const SECItem
+svl/source/crypto/cryptosign.cxx:281
+    (anonymous namespace)::(anonymous) statusString SECItem
+svl/source/crypto/cryptosign.cxx:282
+    (anonymous namespace)::(anonymous) failInfo SECItem
+svtools/source/inc/svimpbox.hxx:125
+    SvImpLBox aFctSet class ImpLBSelEng
+svx/inc/GalleryControl.hxx:47
+    svx::sidebar::GalleryControl mpGallery class Gallery *
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1083
+    (anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1084
+    (anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1085
+    (anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1086
+    (anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1087
+    (anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1088
+    (anonymous namespace)::ExpressionGrammar::definition ternaryFunction ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1089
+    (anonymous namespace)::ExpressionGrammar::definition funcRef_decl ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1090
+    (anonymous namespace)::ExpressionGrammar::definition functionReference ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1091
+    (anonymous namespace)::ExpressionGrammar::definition modRef_decl ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1092
+    (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1093
+    (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
+svx/source/dialog/framelinkarray.cxx:379
+    svx::frame::MergedCellIterator mnFirstRow size_t
+svx/source/dialog/imapwnd.hxx:78
+    IMapWindow maItemInfos struct SfxItemInfo [1]
+svx/source/gallery2/galbrws2.cxx:115
+    (anonymous namespace)::GalleryThemePopup maBuilder class VclBuilder
+svx/source/stbctrls/pszctrl.cxx:94
+    FunctionPopup_Impl m_aBuilder class VclBuilder
+svx/source/stbctrls/selctrl.cxx:37
+    SelectionTypePopup m_aBuilder class VclBuilder
+svx/source/stbctrls/zoomctrl.cxx:56
+    ZoomPopup_Impl m_aBuilder class VclBuilder
+svx/source/svdraw/svdcrtv.cxx:49
+    ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
+svx/source/xml/xmleohlp.cxx:72
+    OutputStorageWrapper_Impl aTempFile class utl::TempFile
+sw/inc/unosett.hxx:144
+    SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
+sw/qa/core/test_ToxTextGenerator.cxx:134
+    ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
+sw/qa/extras/uiwriter/uiwriter.cxx:4006
+    IdleTask maIdle class Idle
+sw/source/core/crsr/crbm.cxx:64
+    (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
+sw/source/core/inc/swfont.hxx:975
+    SvStatistics nGetStretchTextSize sal_uInt16
+sw/source/core/layout/dbg_lay.cxx:170
+    SwImplEnterLeave nAction const enum DbgAction
+sw/source/core/text/inftxt.hxx:686
+    SwTextSlot aText class rtl::OUString
+sw/source/core/text/porfld.cxx:141
+    SwFieldSlot aText class rtl::OUString
+sw/source/ui/dbui/mmaddressblockpage.hxx:209
+    SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
+sw/source/uibase/docvw/romenu.hxx:35
+    SwReadOnlyPopup m_aBuilder class VclBuilder
+sw/source/uibase/inc/cption.hxx:43
+    SwCaptionDialog m_aTextFilter class TextFilterAutoConvert
+sw/source/uibase/inc/glossary.hxx:95
+    SwGlossaryDlg m_aNoSpaceFilter class TextFilter
+sw/source/uibase/inc/olmenu.hxx:77
+    SwSpellPopup m_aBuilder class VclBuilder
+sw/source/uibase/inc/olmenu.hxx:86
+    SwSpellPopup m_nLangParaMenuId const sal_uInt16
+sw/source/uibase/inc/optload.hxx:185
+    SwCaptionOptPage m_aTextFilter class TextFilterAutoConvert
+sw/source/uibase/inc/regionsw.hxx:255
+    SwInsertSectionTabDialog m_nNotePageId sal_uInt16
+sw/source/uibase/inc/regionsw.hxx:275
+    SwSectionPropertyTabDialog m_nNotePageId sal_uInt16
+sw/source/uibase/inc/uivwimp.hxx:95
+    SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
+sw/source/uibase/inc/unodispatch.hxx:46
+    SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard const class SolarMutexGuard
+toolkit/source/awt/stylesettings.cxx:90
+    toolkit::StyleMethodGuard m_aGuard const class SolarMutexGuard
+ucb/source/ucp/gio/gio_mount.hxx:46
+    OOoMountOperationClass parent_class GMountOperationClass
+ucb/source/ucp/gio/gio_mount.hxx:49
+    OOoMountOperationClass _gtk_reserved1 void (*)(void)
+ucb/source/ucp/gio/gio_mount.hxx:50
+    OOoMountOperationClass _gtk_reserved2 void (*)(void)
+ucb/source/ucp/gio/gio_mount.hxx:51
+    OOoMountOperationClass _gtk_reserved3 void (*)(void)
+ucb/source/ucp/gio/gio_mount.hxx:52
+    OOoMountOperationClass _gtk_reserved4 void (*)(void)
+unotools/source/config/defaultoptions.cxx:94
+    SvtDefaultOptions_Impl m_aUserDictionaryPath class rtl::OUString
+vcl/headless/svpgdi.cxx:308
+    (anonymous namespace)::SourceHelper aTmpBmp class SvpSalBitmap
+vcl/inc/canvasbitmap.hxx:44
+    vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
+vcl/inc/graphic/Manager.hxx:42
+    vcl::graphic::Manager maSwapOutTimer class Timer
+vcl/inc/opengl/RenderList.hxx:29
+    Vertex color glm::vec4
+vcl/inc/opengl/RenderList.hxx:30
+    Vertex lineData glm::vec4
+vcl/inc/opengl/zone.hxx:46
+    OpenGLVCLContextZone aZone const class OpenGLZone
+vcl/inc/salmenu.hxx:42
+    SalMenuButtonItem mnId sal_uInt16
+vcl/inc/salmenu.hxx:43
+    SalMenuButtonItem maImage class Image
+vcl/inc/salmenu.hxx:44
+    SalMenuButtonItem maToolTipText class rtl::OUString
+vcl/inc/unx/i18n_ic.hxx:41
+    SalI18N_InputContext maPreeditStartCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:42
+    SalI18N_InputContext maPreeditDoneCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:43
+    SalI18N_InputContext maPreeditDrawCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:44
+    SalI18N_InputContext maPreeditCaretCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:45
+    SalI18N_InputContext maCommitStringCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:46
+    SalI18N_InputContext maSwitchIMCallback XIMCallback
+vcl/inc/unx/i18n_ic.hxx:47
+    SalI18N_InputContext maDestroyCallback XIMCallback
+vcl/source/app/salvtables.cxx:1613
+    SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
+vcl/source/gdi/jobset.cxx:35
+    ImplOldJobSetupData cDeviceName char [32]
+vcl/source/gdi/jobset.cxx:36
+    ImplOldJobSetupData cPortName char [32]
+vcl/unx/gtk3/gtk3gtkinst.cxx:2495
+    CrippledViewport viewport GtkViewport
+vcl/unx/gtk/a11y/atkhypertext.cxx:29
+    (anonymous) atk_hyper_link const AtkHyperlink
+vcl/unx/gtk/a11y/atkwrapper.hxx:49
+    AtkObjectWrapper aParent const AtkObject
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/gloactiongroup.cxx:30
+    GLOAction parent_instance GObject
+vcl/unx/gtk/glomenu.cxx:20
+    GLOMenu parent_instance const GMenuModel
+writerfilter/source/dmapper/PropertyMap.hxx:197
+    writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
+xmloff/source/text/XMLTextListBlockContext.hxx:35
+    XMLTextListBlockContext msListStyleName class rtl::OUString
+xmloff/source/text/XMLTextListBlockContext.hxx:41
+    XMLTextListBlockContext mbSetDefaults _Bool

@@ -1,0 +1,191 @@
+---
+assumeFilename: sd/source/core/drawdoc.cxx
+blacklist:
+    sd/inc/CustomAnimationCloner.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/CustomAnimationPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sd/inc/CustomAnimationEffect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    - com/sun/star/animations/XAudio.hpp
+    - com/sun/star/animations/XTimeContainer.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    sd/inc/OutlinerIterator.hxx:
+    # base class has to be a complete type
+    - svx/svdobj.hxx
+    sd/inc/sderror.hxx:
+    # needed for defines
+    - vcl/errcode.hxx
+    sd/inc/sdfilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XModel.hpp
+    - com/sun/star/task/XStatusIndicator.hpp
+    sd/inc/sdmod.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - sot/storage.hxx
+    sd/inc/sdpage.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawPage.hpp
+    - com/sun/star/office/XAnnotation.hpp
+    sd/inc/stlfamily.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    sd/inc/stlpool.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/lang/XComponent.hpp
+    sd/inc/stlsheet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    sd/inc/textapi.hxx:
+    # base class has to be a complete type
+    - editeng/outliner.hxx
+    sd/inc/TransitionPreset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    sd/inc/undoanim.hxx:
+    # base class has to be a complete type
+    - com/sun/star/animations/XAnimationNode.hpp
+    sd/inc/undo/undoobjects.hxx:
+    # base class has to be a complete type
+    - tools/weakbase.hxx
+    sd/source/filter/eppt/eppt.hxx:
+    # base class has to be a complete type
+    - escherex.hxx
+    sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    - com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp
+    - com/sun/star/awt/XFocusListener.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    sd/source/ui/inc/AccessibleDrawDocumentView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleGroupPosition.hpp
+    sd/source/ui/inc/AccessibleSlideSorterObject.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/AccessibleSlideSorterView.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/DrawDocShell.hxx:
+    # base class has to be a complete type
+    - fupoor.hxx
+    sd/source/ui/inc/DocumentRenderer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XRenderable.hpp
+    sd/source/ui/inc/DrawController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawView.hpp
+    - com/sun/star/drawing/framework/XControllerManager.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/view/XFormLayerAccess.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    - sfx2/sfxbasecontroller.hxx
+    sd/source/ui/inc/fupage.hxx:
+    # base class has to be a complete type
+    - vcl/weld.hxx
+    sd/source/ui/inc/OutlineView.hxx:
+    #std::unique_ptr deleter type has to be complete
+    - o3tl/deleter.hxx
+    sd/source/ui/inc/slideshow.hxx:
+    # typedef needs a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/presentation/XPresentation2.hpp
+    sd/source/ui/inc/unomodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XDrawPages.hpp
+    sd/source/ui/inc/unosrch.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XReplaceDescriptor.hpp
+    sd/source/ui/inc/ViewShellManager.hxx:
+    #std::unique_ptr deleter type has to be complete
+    - o3tl/deleter.hxx
+    sd/source/ui/inc/ViewTabBar.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    - com/sun/star/drawing/framework/XTabBar.hpp
+    - com/sun/star/drawing/framework/XToolBar.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    sd/source/ui/inc/framework/Configuration.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/drawing/framework/XConfiguration.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/framework/ConfigurationController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/DrawModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/ImpressModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/ModuleController.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XModuleController.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/inc/framework/Pane.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XPane.hpp
+    - com/sun/star/drawing/framework/XPane2.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    sd/source/ui/inc/framework/PresentationModule.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/inc/framework/PresentationFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceFactory.hpp
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    sd/source/ui/inc/framework/ResourceId.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceId.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/framework/ViewShellWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/drawing/framework/XRelocatableResource.hpp
+    - com/sun/star/drawing/framework/XView.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/view/XSelectionSupplier.hpp
+    sd/source/ui/inc/tools/IdleDetection.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    sd/source/ui/inc/tools/PropertySet.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    sd/source/ui/inc/tools/SlotStateListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:
+    # Needed for template
+    - o3tl/deleter.hxx

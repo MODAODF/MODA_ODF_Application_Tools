@@ -1,0 +1,24 @@
+--with-jdk-home=/cygdrive/c/Program Files (x86)/Java/jdk1.8.0_144
+--with-vendor=OSS Integral Institute Co., Ltd.
+--with-lang=en-US zh-TW
+--with-ant-home=/cygdrive/c/sources/apache-ant-1.9.5
+--with-branding=./icon-themes/ossii/NDC/brand
+--with-product-name=NDCODFApplicationTools
+--with-lproduct-version=0
+--with-aboutbox-version=1.0.0
+--with-userdirproduct-version=6
+--without-junit
+--disable-silent-msi
+--disable-sdremote
+--disable-odk
+--disable-ext-ossiimenus
+--disable-ext-ossiiconverter
+--disable-online-update
+--enable-fetch-external
+--enable-activex
+--enable-atl
+--enable-openssl
+--enable-release-build
+--with-myspell-dicts=yes
+--with-windows-sdk=7.1A
+--with-external-tar=/cygdrive/c/sources/external_tarballs

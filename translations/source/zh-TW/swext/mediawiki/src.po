@@ -1,0 +1,32 @@
+#. extracted from swext/mediawiki/src
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
+"POT-Creation-Date: 2013-05-23 12:05+0200\n"
+"PO-Revision-Date: 2012-03-25 05:41+0200\n"
+"Last-Translator: Cheng-Chia <pswo10680@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: LibreOffice\n"
+"X-Accelerator-Marker: ~\n"
+
+#: description.xml
+msgctxt ""
+"description.xml\n"
+"dispname\n"
+"description.text"
+msgid "Wiki Publisher"
+msgstr "Wiki 發布器"
+
+#: description.xml
+msgctxt ""
+"description.xml\n"
+"extdesc\n"
+"description.text"
+msgid "The Wiki Publisher enables you to create Wiki articles on MediaWiki servers without having to know the syntax of the MediaWiki markup language. Publish your new and existing documents transparently with the Writer to a wiki page.\n"
+msgstr "Wiki 發布器讓您可以在 MediaWiki 伺服器上建立 Wiki 文章，而不必知道 MediaWiki 標記語言的語法。就用 Writer 透明地將新的或計有的文件發布至 wiki 頁面吧。\n"

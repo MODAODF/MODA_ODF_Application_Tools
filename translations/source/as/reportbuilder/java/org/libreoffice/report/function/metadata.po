@@ -1,0 +1,64 @@
+#. extracted from reportbuilder/java/org/libreoffice/report/function/metadata
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
+"POT-Creation-Date: 2013-05-23 12:05+0200\n"
+"PO-Revision-Date: 2013-06-17 09:52+0000\n"
+"Last-Translator: ngoswami <ngoswami@redhat.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: as\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: LibreOffice\n"
+"X-Accelerator-Marker: ~\n"
+"X-POOTLE-MTIME: 1371462724.0\n"
+
+#: Author-Function_en_US.properties
+msgctxt ""
+"Author-Function_en_US.properties\n"
+"display-name\n"
+"property.text"
+msgid "AUTHOR"
+msgstr "লেখক"
+
+#: Author-Function_en_US.properties
+msgctxt ""
+"Author-Function_en_US.properties\n"
+"description\n"
+"property.text"
+msgid "Returns the author of the report."
+msgstr "সংবাদৰ লেখক প্ৰদান কৰে।"
+
+#: Title-Function_en_US.properties
+msgctxt ""
+"Title-Function_en_US.properties\n"
+"display-name\n"
+"property.text"
+msgid "TITLE"
+msgstr "শীৰ্ষক"
+
+#: Title-Function_en_US.properties
+msgctxt ""
+"Title-Function_en_US.properties\n"
+"description\n"
+"property.text"
+msgid "Returns the title of the report."
+msgstr "সংবাদৰ শীৰ্ষক প্ৰদান কৰে।"
+
+#: category_en_US.properties
+msgctxt ""
+"category_en_US.properties\n"
+"display-name\n"
+"property.text"
+msgid "MetaData"
+msgstr "মেটাডাটা"
+
+#: category_en_US.properties
+msgctxt ""
+"category_en_US.properties\n"
+"description\n"
+"property.text"
+msgid "Contains functions about meta data"
+msgstr "মেটাডাটাৰ বিষয়ে ফলনসমূহ অন্তৰ্ভুক্ত কৰে"

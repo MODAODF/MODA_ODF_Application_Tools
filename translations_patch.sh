@@ -2,23 +2,8 @@
 # patch translations
 echo patch translations....
 cd translations
-# cp -a ../icon-themes/ossii/zh-TW_cui_uiconfig_ui_common.po ./source/zh-TW/cui/uiconfig/ui.po
-git am ../icon-themes/ossii/*.patch > /dev/null 2>&1|| git am --abort > /dev/null 2>&1
 
 # for NDC
-if test $1 = "9" ; then
-    cp -a ../icon-themes/ossii/NDC/zh-TW_cui_uiconfig_ui.po ./source/zh-TW/cui/uiconfig/ui.po
-    doc=`awk '/NDCGOVODFTool/{print}' ./source/zh-TW/sfx2/source/doc.po`
-    if test ${#doc} = 0 ; then
-        patch -p1 -f < ../icon-themes/ossii/NDC/NDCGOVODFTool.patch.po > /dev/null 2>&1
-    fi
-    doc1=`awk '/Hyperlink\(NDC\)/{print}' ./source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po`
-    if test ${#doc1} = 0 ; then
-        patch -p1 -f < ../icon-themes/ossii/NDC/Hyperlink_NDC.patch.po > /dev/null 2>&1
-    fi
-    patch -p1 -f < ../icon-themes/ossii/NDC/tooltip.patch.po > /dev/null 2>&1
-    patch -p1 -f < ../icon-themes/ossii/NDC/sfx2_uiconfig_ui.patch.po > /dev/null 2>&1
-    patch -p1 -f < ../icon-themes/ossii/NDC/msi_languages.patch.po > /dev/null 2>&1
-fi
+git am ../icon-themes/ossii/0001-NDC-v2.0.2-translations.patch > /dev/null 2>&1|| git am --abort > /dev/null 2>&1
 
 cd -

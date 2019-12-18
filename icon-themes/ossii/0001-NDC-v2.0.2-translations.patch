@@ -1,0 +1,153 @@
+From d7ee545a5875b1b64a01d8925c79871c3e2b96a4 Mon Sep 17 00:00:00 2001
+From: AlanTom <alan.tang@ossii.com.tw>
+Date: Fri, 6 Dec 2019 10:20:58 +0800
+Subject: [PATCH] NDC v2.0.2 translations
+
+Change-Id: I4567ad4476deb669c0fd2553bf572c40d5da6d35
+---
+ source/zh-TW/cui/messages.po                  |  4 +--
+ .../inc_openoffice/windows/msi_languages.po   |  2 +-
+ .../registry/data/org/openoffice/Office/UI.po |  4 +--
+ source/zh-TW/scp2/source/ooo.po               |  2 +-
+ source/zh-TW/sfx2/messages.po                 | 26 ++++++++++++++++---
+ 5 files changed, 29 insertions(+), 9 deletions(-)
+ mode change 100644 => 100755 source/zh-TW/cui/messages.po
+ mode change 100644 => 100755 source/zh-TW/instsetoo_native/inc_openoffice/windows/msi_languages.po
+ mode change 100644 => 100755 source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po
+ mode change 100644 => 100755 source/zh-TW/scp2/source/ooo.po
+ mode change 100644 => 100755 source/zh-TW/sfx2/messages.po
+
+diff --git a/source/zh-TW/cui/messages.po b/source/zh-TW/cui/messages.po
+old mode 100644
+new mode 100755
+index 77e49236903..df3d98f7fc8
+--- a/source/zh-TW/cui/messages.po
++++ b/source/zh-TW/cui/messages.po
+@@ -2307,8 +2307,8 @@ msgstr "請見記錄：$GITHASH"
+ msgctxt "aboutdialog|description"
+ msgid "%PRODUCTNAME is a modern, easy-to-use, open source productivity suite for word processing, spreadsheets, presentations and more."
+ msgstr ""
+-"%PRODUCTNAME 是款現代、易用、開源的生產力套裝軟體，\n"
+-"可用於文書處理、試算表、簡報等。"
++"本軟體是一套開放文件格式(ODF)應用工具組合，\n"
++"用以協助單位人員產出符合基礎開放文件格式(ODF)之應用軟體套件。"
+ 
+ #: cui/uiconfig/ui/aboutdialog.ui:227
+ msgctxt "aboutdialog|copyright"
+diff --git a/source/zh-TW/instsetoo_native/inc_openoffice/windows/msi_languages.po b/source/zh-TW/instsetoo_native/inc_openoffice/windows/msi_languages.po
+old mode 100644
+new mode 100755
+index ef0d9bfa0a6..63832c23df7
+--- a/source/zh-TW/instsetoo_native/inc_openoffice/windows/msi_languages.po
++++ b/source/zh-TW/instsetoo_native/inc_openoffice/windows/msi_languages.po
+@@ -1670,7 +1670,7 @@ msgctxt ""
+ "OOO_CONTROL_124\n"
+ "LngText.text"
+ msgid "Build contributed in collaboration with the community by [Manufacturer]. For credits, see: https://www.documentfoundation.org"
+-msgstr "本組建版為社群與 [Manufacturer] 攜手合作貢獻而成。若想瞭解貢獻者，請見：​https://www.documentfoundation.org"
++msgstr "由 [Manufacturer] 與社群共同合作所貢獻的組建產品。若想瞭解貢獻者，請見：​https://www.documentfoundation.org"
+ 
+ #: Control.ulf
+ msgctxt ""
+diff --git a/source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po b/source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po
+old mode 100644
+new mode 100755
+index 4e49457e38c..5619a20a96d
+--- a/source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po
++++ b/source/zh-TW/officecfg/registry/data/org/openoffice/Office/UI.po
+@@ -20643,8 +20643,8 @@ msgctxt ""
+ "..GenericCommands.UserInterface.Commands..uno:SendFeedback\n"
+ "Label\n"
+ "value.text"
+-msgid "Send Feedback"
+-msgstr "傳送意見回饋"
++msgid "Send Feedback..."
++msgstr "軟體更新資訊"
+ 
+ #: GenericCommands.xcu
+ msgctxt ""
+diff --git a/source/zh-TW/scp2/source/ooo.po b/source/zh-TW/scp2/source/ooo.po
+old mode 100644
+new mode 100755
+index 7194cfbde4e..5cb5f6ea2b0
+--- a/source/zh-TW/scp2/source/ooo.po
++++ b/source/zh-TW/scp2/source/ooo.po
+@@ -38,7 +38,7 @@ msgctxt ""
+ "STR_FI_TOOLTIP_SOFFICE\n"
+ "LngText.text"
+ msgid "LibreOffice, the office productivity suite provided by The Document Foundation. See https://www.documentfoundation.org"
+-msgstr "LibreOffice，由文件基金會提供的辦公生產力套裝軟體。請見 https://www.documentfoundation.org"
++msgstr "%PRODUCTNAME"
+ 
+ #: module_helppack.ulf
+ msgctxt ""
+diff --git a/source/zh-TW/sfx2/messages.po b/source/zh-TW/sfx2/messages.po
+old mode 100644
+new mode 100755
+index 4f3ee3aac07..60d028572ff
+--- a/source/zh-TW/sfx2/messages.po
++++ b/source/zh-TW/sfx2/messages.po
+@@ -1066,6 +1066,16 @@ msgctxt "RID_CNT_STR_WAITING"
+ msgid "The templates are being initialized for first-time usage."
+ msgstr "現在首次初始化需要使用的範本檔案。"
+ 
++#: doctempl.src
++msgctxt "RID_CNT_STR_CACHE"
++msgid "The templates are being initialized for thumbnail cache."
++msgstr "現在初始化需要使用的範本縮圖暫存檔案。"
++
++#: doctempl.src
++msgctxt "RID_CNT_STR_LOAD"
++msgid "Loading..."
++msgstr "載入中..."
++
+ #: include/sfx2/strings.hrc:229
+ msgctxt "STR_NODEFPRINTER"
+ msgid ""
+@@ -1712,6 +1722,16 @@ msgctxt "TEMPLATE_LONG_NAMES_ARY"
+ msgid "Business Correspondence"
+ msgstr "商務信函"
+ 
++#: doctempl.src
++msgctxt "TEMPLATE_LONG_NAMES_ARY"
++msgid "NDCGOVODFTool"
++msgstr "全國機關共用範本"
++
++#: doctempl.src
++msgctxt "TEMPLATE_LONG_NAMES_ARY"
++msgid "NDCODFTemplate"
++msgstr "預設範本"
++
+ #: sfx2/inc/doctempl.hrc:29
+ msgctxt "TEMPLATE_LONG_NAMES_ARY"
+ msgid "Other Business Documents"
+@@ -2343,7 +2363,7 @@ msgstr "類別"
+ #: sfx2/uiconfig/ui/loadtemplatedialog.ui:235
+ msgctxt "loadtemplatedialog|label2"
+ msgid "Templates"
+-msgstr "範本"
++msgstr "%PRODUCTNAME 範本"
+ 
+ #: sfx2/uiconfig/ui/loadtemplatedialog.ui:256
+ msgctxt "loadtemplatedialog|text"
+@@ -2928,7 +2948,7 @@ msgstr "所有類別"
+ #: sfx2/uiconfig/ui/templatedlg.ui:65
+ msgctxt "templatedlg|TemplateDialog"
+ msgid "Templates"
+-msgstr "範本"
++msgstr "%PRODUCTNAME 範本"
+ 
+ #: sfx2/uiconfig/ui/templatedlg.ui:146
+ msgctxt "templatedlg|search_filter|tooltip_text"
+@@ -2953,7 +2973,7 @@ msgstr "依類別篩選"
+ #: sfx2/uiconfig/ui/templatedlg.ui:205
+ msgctxt "templatedlg|label1"
+ msgid "Filter"
+-msgstr "篩選器"
++msgstr "範本類型"
+ 
+ #: sfx2/uiconfig/ui/templatedlg.ui:282
+ msgctxt "templatedlg|thumbnailviewlabel"
+-- 
+2.21.0
+

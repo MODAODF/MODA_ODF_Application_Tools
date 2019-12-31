@@ -31,6 +31,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallroot \
 	Package_gallsystem \
 	Package_gallwwwgraf \
+	Package_gallcountry \
+	Package_gallODF \
+	Package_gallforbidden \
+	Package_gallhospital \
+	Package_gallfileformat \
 	Package_glade \
 	Package_labels \
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
@@ -70,7 +75,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_symbols \
 	Gallery_sound \
 	Gallery_txtshapes \
-	Gallery_transportation \
+	Gallery_country \
+	Gallery_forbidden \
+	Gallery_ODF \
+	Gallery_hospital \
+	Gallery_fileformat \
 ))
 endif
 

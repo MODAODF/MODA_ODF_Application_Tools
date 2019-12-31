@@ -22,6 +22,26 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/galler
 	sg36.sdg \
 	sg36.sdv \
 	sg36.thm \
+	country.sdg \
+	country.sdv \
+	country.thm \
+	country.str \
+	ODF.sdg \
+	ODF.sdv \
+	ODF.thm \
+	ODF.str \
+	hospital.sdg \
+	hospital.sdv \
+	hospital.thm \
+	hospital.str \
+	forbidden.sdg \
+	forbidden.sdv \
+	forbidden.thm \
+	forbidden.str \
+	fileformat.sdg \
+	fileformat.sdv \
+	fileformat.thm \
+	fileformat.str \
 ))
 
 # vim: set noet sw=4 ts=4:

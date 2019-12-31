@@ -43,4 +43,23 @@ en-US = "Text Shapes"
 [transportation]
 en-US = "Transportation"
 
+[country]
+en-US = "country"
+zh-TW = "國旗"
+
+[ODF]
+en-US = "ODF"
+
+[hospital]
+en-US = "hospital"
+zh-TW = "醫院"
+
+[forbidden]
+en-US = "forbidden"
+zh-TW = "禁止符號"
+
+[fileformat]
+en-US = "fileformat"
+zh-TW = "檔案格式"
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

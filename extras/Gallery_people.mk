@@ -62,6 +62,28 @@ $(eval $(call gb_Gallery_add_files,people,$(LIBO_SHARE_FOLDER)/gallery/people,\
 	extras/source/gallery/people/Tourist-Female2.png \
 	extras/source/gallery/people/Tourist-Male1.png \
 	extras/source/gallery/people/Tourist-Male2.png \
+	extras/source/gallery/people/iconfinder_10_2698683.svg \
+	extras/source/gallery/people/iconfinder_10_avatar_2754575.svg \
+	extras/source/gallery/people/iconfinder_11_2698687.svg \
+	extras/source/gallery/people/iconfinder_11_avatar_2754576.svg \
+	extras/source/gallery/people/iconfinder_12_avatar_2754577.svg \
+	extras/source/gallery/people/iconfinder_1_2698689.svg \
+	extras/source/gallery/people/iconfinder_1_avatar_2754574.svg \
+	extras/source/gallery/people/iconfinder_2_2698682.svg \
+	extras/source/gallery/people/iconfinder_2_avatar_2754578.svg \
+	extras/source/gallery/people/iconfinder_3_2698691.svg \
+	extras/source/gallery/people/iconfinder_3_avatar_2754579.svg \
+	extras/source/gallery/people/iconfinder_4_2698686.svg \
+	extras/source/gallery/people/iconfinder_4_avatar_2754580.svg \
+	extras/source/gallery/people/iconfinder_5_2698688.svg \
+	extras/source/gallery/people/iconfinder_5_avatar_2754581.svg \
+	extras/source/gallery/people/iconfinder_6_2698690.svg \
+	extras/source/gallery/people/iconfinder_7_2698692.svg \
+	extras/source/gallery/people/iconfinder_7_avatar_2754582.svg \
+	extras/source/gallery/people/iconfinder_8_2698685.svg \
+	extras/source/gallery/people/iconfinder_8_avatar_2754583.svg \
+	extras/source/gallery/people/iconfinder_9_2698684.svg \
+	extras/source/gallery/people/iconfinder_9_avatar_2754584.svg \
 ))
 
 # vim: set noet sw=4 ts=4:

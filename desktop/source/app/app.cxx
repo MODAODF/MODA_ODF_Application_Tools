@@ -2423,10 +2423,10 @@ void Desktop::OpenSplashScreen()
 
 void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 {
-    if(m_rSplashScreen.is())
-    {
-        m_rSplashScreen->setValue(iProgress);
-    }
+    //~ if(m_rSplashScreen.is())
+    //~ {
+        //~ m_rSplashScreen->setValue(iProgress);
+    //~ }
 }
 
 void Desktop::SetSplashScreenText( const OUString& rText )

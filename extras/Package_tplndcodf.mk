@@ -22,6 +22,7 @@ $(eval $(call gb_Package_add_files,extras_tplndcodf,$(LIBO_SHARE_FOLDER)/templat
   orangine-stylish.otp \
   oschloe_en_004.otp \
   oschloe_en_006.otp \
+  smartart-objects-workaround.otp \
 ))
 
 # vim: set noet sw=4 ts=4:

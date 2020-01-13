@@ -5370,12 +5370,12 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
         aLine.append( nObject );
         aLine.append( " 0 obj\n"
                       "<<" );
-        if( !m_aContext.DocumentInfo.Title.isEmpty() )
-        {
-            aLine.append( "/Title" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
-            aLine.append( "\n" );
-        }
+        //~ if( !m_aContext.DocumentInfo.Title.isEmpty() )
+        //~ {
+            //~ aLine.append( "/Title" );
+            //~ appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
+            //~ aLine.append( "\n" );
+        //~ }
         if( !m_aContext.DocumentInfo.Author.isEmpty() )
         {
             aLine.append( "/Author" );

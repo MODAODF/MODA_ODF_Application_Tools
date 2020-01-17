@@ -40,7 +40,6 @@
 /autogen.lastrun.bak
 /ChangeLog
 /config.Build.log
-/config.guess
 /config.log
 /config.status
 /config.parms
@@ -100,7 +99,6 @@ eclipsesettingfile.xml
 # things below this point are targeted for elimination
 
 #stuff that we should no generated where they are
-/desktop/scripts/soffice.sh
 /intltool-extract.in
 /intltool-merge.in
 /intltool-update.in

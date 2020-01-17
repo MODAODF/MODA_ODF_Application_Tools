@@ -758,8 +758,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             std::vector<OUString>::iterator it;
             it = std::unique(svector.begin(), svector.end());
             svector.resize( std::distance(svector.begin(),it) );
-            for(unsigned int k=0; k<svector.size(); k++)
-                printf(  BROWN "style_name_get[%d]" NONECOLOR "= %s \n",k,OUStringToOString( svector[k], RTL_TEXTENCODING_UTF8 ).getStr());
+            //~ for(unsigned int k=0; k<svector.size(); k++)
+                //~ printf(  BROWN "style_name_get[%d]" NONECOLOR "= %s \n",k,OUStringToOString( svector[k], RTL_TEXTENCODING_UTF8 ).getStr());
             fclose(file);
         }else{
             //~ printf("can't get file!!!!!!\n");

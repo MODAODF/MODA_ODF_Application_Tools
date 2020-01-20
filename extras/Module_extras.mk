@@ -80,6 +80,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_ODF \
 	Gallery_hospital \
 	Gallery_fileformat \
+	Gallery_transportation \
 ))
 endif
 

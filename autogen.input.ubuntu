@@ -1,0 +1,24 @@
+## Productname setting 
+--with-vendor=OSS Integral Institute Co., Ltd.
+--with-branding=./icon-themes/ossii/NDC/brand
+--with-product-name=NDCODFApplicationTools
+--with-aboutbox-version=2.0.3
+--with-lproduct-version=0
+--with-userdirproduct-version=8
+--with-oxo-version-minor=3
+--with-oxo-version-patch=1
+
+## Custom oxt
+--enable-ext-onekey2odf
+--enable-ext-cpmlibre
+--enable-ext-ndchelp
+--enable-ext-hyperlink
+
+## Additional language support
+--with-myspell-dicts=yes
+--with-lang=en-US zh-TW
+
+## Build deb packages
+--disable-odk
+--with-package-format=deb 
+--enable-epm

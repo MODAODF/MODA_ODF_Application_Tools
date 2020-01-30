@@ -1403,15 +1403,19 @@ sub set_msiproductversion
         $productversion = $1 . "\." . $2 . "\." . $3;
     }
 
-    $installer::globals::msiproductversion = $productversion;
+    # ndc tools version since 6.3 begin
+    # $installer::globals::msiproductversion = $productversion;
 
-    # Setting $installer::globals::msimajorproductversion, to differ between old version in upgrade table
+    # Setting $installer::globals::msi          majorproductversion, to differ between old version in upgrade table
 
     if ( $installer::globals::msiproductversion =~ /^\s*(\d+)\./ )
     {
         my $major = $1;
         $installer::globals::msimajorproductversion = $major . "\.0\.0";
     }
+    my $mainver = 6;
+    my $secver = ($2 * 100) + $3 + 2;
+    $installer::globals::msiproductversion = $mainver . "\." . $secver;
 }
 
 #################################################################################

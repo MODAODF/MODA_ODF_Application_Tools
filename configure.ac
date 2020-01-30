@@ -470,10 +470,6 @@ AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 dnl ===================================================================
 dnl Product version
 dnl ===================================================================
-AC_MSG_CHECKING([for product version])
-PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
-AC_MSG_RESULT([$PRODUCTVERSION])
-AC_SUBST(PRODUCTVERSION)
 AC_MSG_CHECKING([for product name])
 if test -n "$with_product_name" -a "$with_product_name" != "yes" ; then
     PRODUCTNAME="$with_product_name"
@@ -522,6 +518,10 @@ else
 fi
 AC_SUBST(OXO_VERSION_PATCH)
 
+AC_MSG_CHECKING([for product version])
+PRODUCTVERSION="$ABOUTBOXPRODUCTVERSION"
+AC_MSG_RESULT([$PRODUCTVERSION])
+AC_SUBST(PRODUCTVERSION)
 
 
 AC_PROG_EGREP

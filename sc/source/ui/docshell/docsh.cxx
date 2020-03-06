@@ -480,6 +480,17 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     else
         bRet = aImport.Import(ImportFlags::All, nError);
 
+    if (nError.StripWarningAndDynamic() == ERRCODE_SC_READ) {
+        // reset errorcode
+        bRet = true;
+        nError = ERRCODE_NONE;
+        // warnning message
+        weld::Window* pWin = GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetActiveDialogParent(),
+                VclMessageType::Warning, VclButtonsType::Ok,ScResId(STR_XML_META_FORMAT_WAINNING)));
+        xWarn->run();
+    }
+
     if ( nError )
         pLoadMedium->SetError(nError);
 

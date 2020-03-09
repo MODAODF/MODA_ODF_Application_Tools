@@ -12894,17 +12894,35 @@ if test "x$with_java" != "xno"; then
     libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[languagetool],[])
 fi
 
+# Check whether --enable-ext-cpmlibre was given.
+# AC_MSG_CHECKING([for cpmlibre])
+if test -z "${enable_ext_cpmlibre+set}"; then :
+    CPMLIBRE_EXTENSION_PACK=no
+else
+    CPMLIBRE_EXTENSION_PACK=yes
+fi
+$as_echo "CPMLIBRE_EXTENSION_PACK = $CPMLIBRE_EXTENSION_PACK"
+AC_SUBST(CPMLIBRE_EXTENSION_PACK)
+
+# Check whether --enable-ext-hyperlink was given.
+# AC_MSG_CHECKING([for hyperlink])
+if test -z "${enable_ext_hyperlink+set}"; then :
+    HYPERLINK_EXTENSION_PACK=no
+else
+    HYPERLINK_EXTENSION_PACK=yes
+fi
+$as_echo "HYPERLINK_EXTENSION_PACK = $HYPERLINK_EXTENSION_PACK"
+AC_SUBST(HYPERLINK_EXTENSION_PACK)
+
 # Check whether --enable-ext-onekey2odf was given.
 # AC_MSG_CHECKING([for onekey2odf])
-if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-    if test -z "${enable_ext_onekey2odf+set}"; then :
-        OSSII_WITH_EXTENSION_ONEKEY2ODF=no
-    else
-        OSSII_WITH_EXTENSION_ONEKEY2ODF=yes
-    fi
-    $as_echo "OSSII_WITH_EXTENSION_ONEKEY2ODF = $OSSII_WITH_EXTENSION_ONEKEY2ODF"
-    AC_SUBST(OSSII_WITH_EXTENSION_ONEKEY2ODF)
+if test -z "${enable_ext_onekey2odf+set}"; then :
+    ONEKEY2ODF_EXTENSION_PACK=no
+else
+    ONEKEY2ODF_EXTENSION_PACK=yes
 fi
+$as_echo "ONEKEY2ODF_EXTENSION_PACK = $ONEKEY2ODF_EXTENSION_PACK"
+AC_SUBST(ONEKEY2ODF_EXTENSION_PACK)
 
 AC_MSG_CHECKING([whether to build opens___.ttf])
 if test "$enable_build_opensymbol" = "yes"; then

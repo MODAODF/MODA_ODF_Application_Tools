@@ -13,11 +13,15 @@ ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,numbertext,$(NUMBERTEXT_EXTENSION_PACK)))
 endif
 
+ifeq ($(CPMLIBRE_EXTENSION_PACK),yes)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,cpmlibre,cpmlibre.oxt))
+endif
 
+ifeq ($(HYPERLINK_EXTENSION_PACK),yes)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,hyperlink,hyperlink.oxt))
+endif
 
-ifeq ($(OSSII_WITH_EXTENSION_ONEKEY2ODF),yes)
+ifeq ($(ONEKEY2ODF_EXTENSION_PACK),yes)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,onekey2odf,onekey2odf.oxt))
 endif
 

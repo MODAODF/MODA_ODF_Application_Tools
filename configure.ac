@@ -478,6 +478,14 @@ else
 fi
 AC_SUBST(PRODUCTNAME)
 
+AC_MSG_CHECKING([for product name with space])
+if test -n "$with_product_name_with_space" -a "$with_product_name_with_space" != "yes" ; then
+    PRODUCTNAME_WITH_SPACE="$with_product_name_with_space"
+else
+    PRODUCTNAME_WITH_SPACE="OxOffice"
+fi
+AC_SUBST(PRODUCTNAME_WITH_SPACE)
+
 AC_MSG_CHECKING([for about box version])
 if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then
     ABOUTBOXPRODUCTVERSION="$with_aboutbox_version"
@@ -1820,6 +1828,16 @@ AC_ARG_WITH(product-name,
                           Usage:     --with-product-name="OxOffice"
     ],
     with_product_name=$withval ,
+)
+
+AC_ARG_WITH(product-name-with-space,
+    AS_HELP_STRING([--with-product-name-with-space],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-product-name-with-space="OxOffice R8"
+    ],
+    with_product_name_with_space=$withval ,
 )
 
 AC_ARG_WITH(lproduct-version,

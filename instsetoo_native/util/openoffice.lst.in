@@ -44,7 +44,7 @@ Globals
     {
         variables
         {
-            PRODUCTNAME @PRODUCTNAME@
+            PRODUCTNAME @PRODUCTNAME_WITH_SPACE@
             PRODUCTVERSION @ABOUTBOXPRODUCTVERSION@
             PRODUCTEXTENSION
             POSTVERSIONEXTENSION

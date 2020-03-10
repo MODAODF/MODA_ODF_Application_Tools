@@ -58,7 +58,7 @@ Globals
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
-            PACKAGEVERSION @ABOUTBOXPRODUCTVERSION@
+            PACKAGEVERSION @USERDIRPRODUCTVERSION@.@OXO_VERSION_MINOR@.@OXO_VERSION_PATCH@
             PACKAGEREVISION @OXO_VERSION_PATCH@
             LICENSENAME LGPL
             ROOTMODULEGID gid_Module_Root

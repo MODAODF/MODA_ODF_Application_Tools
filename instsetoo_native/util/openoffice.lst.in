@@ -38,7 +38,7 @@ Globals
     }
 }
 
-OxOffice
+@PRODUCTNAME@
 {
     Settings
     {

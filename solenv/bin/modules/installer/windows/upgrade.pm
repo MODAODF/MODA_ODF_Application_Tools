@@ -37,12 +37,32 @@ sub create_upgrade_table
 
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
+    my $productversion = $installer::globals::msiproductversion;
+    if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+    {
+        $productversion = $1 . "\." . $2 . "\." . $3;
+    }
+    my $upgradever ="";
+    # for ndc edition
+    if ( $allvariableshashref->{'PRODUCTNAME'} eq "NDC ODF Application Tools" )
+    {
+        # ndc tools version since 6.3 begin
+        my $mainver = 6;
+        my $secver = ($2 * 100) + $3 + 2;
+        $upgradever = $mainver . "\." . $secver;
+    }
+    else
+    {
+        # for ossii or other edition
+        $upgradever = $installer::globals::msiproductversion;
+    }
+
     # Setting all products, that must be removed.
-    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "513" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+    my $newline = $installer::globals::upgradecode . "\t" . "\t" . $upgradever . "\t" . "\t" . "513" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
     # preventing downgrading
-    $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+    $newline = $installer::globals::upgradecode . "\t" . $upgradever . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
     push(@upgradetable, $newline);
 
     # Saving the file

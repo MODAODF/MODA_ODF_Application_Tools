@@ -711,15 +711,15 @@ void splash_draw_progress( struct splash* splash, int progress )
         length = 0;
     }
     // border
-    XSetForeground( splash->display, splash->gc, splash->framecolor.pixel );
-    XDrawRectangle( splash->display, splash->win, splash->gc, splash->tlx, splash->tly,
-            splash->barwidth, splash->barheight );
+    //~ XSetForeground( splash->display, splash->gc, splash->framecolor.pixel );
+    //~ XDrawRectangle( splash->display, splash->win, splash->gc, splash->tlx, splash->tly,
+            //~ splash->barwidth, splash->barheight );
 
-    // progress bar
-    XSetForeground( splash->display, splash->gc, splash->barcolor.pixel );
-    XFillRectangle( splash->display, splash->win, splash->gc,
-            splash->tlx + splash->barspace, splash->tly + splash->barspace,
-            length + 1, splash->barheight - 2 * splash->barspace + 1 );
+    //~ // progress bar
+    //~ XSetForeground( splash->display, splash->gc, splash->barcolor.pixel );
+    //~ XFillRectangle( splash->display, splash->win, splash->gc,
+            //~ splash->tlx + splash->barspace, splash->tly + splash->barspace,
+            //~ length + 1, splash->barheight - 2 * splash->barspace + 1 );
 
     // pending events
     process_events(splash);

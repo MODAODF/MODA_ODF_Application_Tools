@@ -276,6 +276,9 @@ enum class ErrCodeClass {
 #define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 5)
 #define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  6)
 
+// sc meta.xml check warning
+#define ERRCODE_SC_READ                  ErrCode(ErrCodeArea::Sc, ErrCodeClass::Read, 18)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

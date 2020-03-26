@@ -499,6 +499,17 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     else
         bRet = aImport.Import(ImportFlags::All, nError);
 
+    if (nError.StripWarningAndDynamic() == ERRCODE_SC_READ) {
+        // reset errorcode
+        bRet = true;
+        nError = ERRCODE_NONE;
+        // warnning message
+        vcl::Window* pWin = GetActiveDialogParent();
+        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                VclMessageType::Warning, VclButtonsType::Ok,ScResId(STR_XML_META_FORMAT_WAINNING)));
+        xWarn->run();
+    }
+
     if ( nError )
         pLoadMedium->SetError(nError);
 

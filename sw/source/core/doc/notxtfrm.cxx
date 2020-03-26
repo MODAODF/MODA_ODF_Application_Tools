@@ -1009,7 +1009,8 @@ void paintGraphicUsingPrimitivesHelper(
             }
 
             aContent[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                aTarget,
+                    basegfx::B2DPolyPolygon(
+                        basegfx::utils::createPolygonFromRect(aExpandedClipRange)),
                 aContent);
         }
     }

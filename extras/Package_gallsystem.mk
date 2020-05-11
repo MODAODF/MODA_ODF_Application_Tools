@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-system_galleries := arrows bpmn bullets diagrams flowchart fontwork icons network shapes symbolshapes
+system_galleries := arrows bpmn bullets diagrams flowchart fontwork icons network shapes symbolshapes country odf_icons hospital forbidden fileformat
 
 $(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
@@ -15,6 +15,11 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/galler
     $(addsuffix .sdg,$(system_galleries)) \
     $(addsuffix .sdv,$(system_galleries)) \
     $(addsuffix .thm,$(system_galleries)) \
+    country.str \
+    odf_icons.str \
+    hospital.str \
+    forbidden.str \
+    fileformat.str \
 ))
 
 # vim: set noet sw=4 ts=4:

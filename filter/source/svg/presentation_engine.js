@@ -5696,7 +5696,10 @@ MasterPageView.prototype.createElement = function()
             }
             if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'DateTime' )
             {
-                aPlaceholderElement.innerHTML = new Date().toLocaleString();
+                //~ aPlaceholderElement.innerHTML = new Date().toLocaleString();
+                var datatimeid = getOOOAttribute(this.aMetaSlide.element, aOOOAttrDateTimeField);
+                var datatimetext = document.getElementById(datatimeid).innerHTML;
+                aPlaceholderElement.innerHTML = datatimetext;
             }
             if( aPlaceholderElement && aPlaceholderElement.getAttribute('textfield') == 'Header' )
             {

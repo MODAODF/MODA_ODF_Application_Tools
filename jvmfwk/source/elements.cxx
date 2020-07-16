@@ -117,7 +117,8 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
         root, nullptr, reinterpret_cast<xmlChar const *>("enabled"), reinterpret_cast<xmlChar const *>(""));
     if (nodeEn == nullptr)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    xmlSetNsProp(nodeEn, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("true"));
+    xmlSetNsProp(nodeEn, nsXsi, reinterpret_cast<xmlChar const *>("nil"), reinterpret_cast<xmlChar const *>("false"));
+    xmlNodeSetContent(nodeEn,reinterpret_cast<xmlChar const *>("false"));
     //add a new line
     xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
     xmlAddChild(root, nodeCrLf);

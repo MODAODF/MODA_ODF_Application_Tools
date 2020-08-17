@@ -529,8 +529,6 @@ void SvxLRSpaceItem::AdjustLeft()
         nLeftMargin = nTxtLeft + nFirstLineOfst;
     else
         nLeftMargin = nTxtLeft;
-    // mts_1316 adjusted leftmargin for print
-    nLeftMargin = nLeftMargin * 1.5;
 }
 
 

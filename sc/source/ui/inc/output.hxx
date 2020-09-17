@@ -109,7 +109,7 @@ private:
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
-        bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
+        bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields, bool bShowZeroToMinus);
         void setPatternToEngine(bool bUseStyleColor);
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
@@ -193,6 +193,7 @@ private:
     bool    mbShowFormulas;
     bool    bShowSpellErrors;   // Show spelling errors in EditObjects
     bool    bMarkClipped;
+    bool    mbShowZeroToMinus;
 
     bool    bSnapPixel;
 
@@ -291,6 +292,7 @@ public:
     void    SetMetaFileMode( bool bNewMode );
     void    SetGridColor( const Color& rColor );
     void    SetMarkClipped( bool bSet );
+    void    SetShowZeroToMinus( bool bSet );
     void    SetShowNullValues ( bool bSet );
     void    SetShowFormulas   ( bool bSet );
     void    SetShowSpellErrors( bool bSet );

@@ -511,7 +511,8 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
                                      pOutput->mpDoc,
                                      pOutput->mbShowNullValues,
                                      pOutput->mbShowFormulas,
-                                     true );
+                                     true,
+                                     pOutput->mbShowZeroToMinus);
             if ( nFormat )
             {
                 nRepeatPos = aString.indexOf( 0x1B );
@@ -2349,7 +2350,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
 {}
 
 bool ScOutputData::DrawEditParam::readCellContent(
-    const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
+    const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields, bool bShowZeroToMinus)
 {
     if (maCell.meType == CELLTYPE_EDIT)
     {
@@ -2383,7 +2384,8 @@ bool ScOutputData::DrawEditParam::readCellContent(
                                  *pDoc->GetFormatTable(),
                                  pDoc,
                                  bShowNullValues,
-                                 bShowFormulas);
+                                 bShowFormulas,
+                                 bShowZeroToMinus);
 
         mpEngine->SetText(aString);
         if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
@@ -2914,7 +2916,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields))
+    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields, mbShowZeroToMinus))
         // Failed to read cell content.  Bail out.
         return;
 
@@ -3284,7 +3286,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields))
+    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields, mbShowZeroToMinus))
         // Failed to read cell content.  Bail out.
         return;
 
@@ -3527,7 +3529,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields))
+    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields, mbShowZeroToMinus))
         // Failed to read cell content.  Bail out.
         return;
 
@@ -3784,7 +3786,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields))
+    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields, mbShowZeroToMinus))
         // Failed to read cell content.  Bail out.
         return;
 
@@ -4083,7 +4085,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     //  Read content from cell
 
     bool bWrapFields = false;
-    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields))
+    if (!rParam.readCellContent(mpDoc, mbShowNullValues, mbShowFormulas, mbSyntaxMode, mbUseStyleColor, mbForceAutoColor, bWrapFields, mbShowZeroToMinus))
         // Failed to read cell content.  Bail out.
         return;
 
@@ -4710,7 +4712,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                          *mpDoc->GetFormatTable(),
                                                          mpDoc,
                                                          mbShowNullValues,
-                                                         mbShowFormulas);
+                                                         mbShowFormulas,
+                                                         mbShowZeroToMinus);
 
                                 pEngine->SetText(aString);
                                 if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )

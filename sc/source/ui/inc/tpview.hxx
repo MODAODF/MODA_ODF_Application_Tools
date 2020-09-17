@@ -43,6 +43,7 @@ class ScTpContentOptions : public SfxTabPage
     VclPtr<CheckBox>        pAnchorCB;
     VclPtr<CheckBox>        pClipMarkCB;
     VclPtr<CheckBox>        pRangeFindCB;
+    VclPtr<CheckBox>        pZtmCB;
 
     VclPtr<ListBox>         pObjGrfLB;
     VclPtr<ListBox>         pDiagramLB;

@@ -550,6 +550,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
     aOutputData.SetShowSpellErrors  ( rDoc.GetDocOptions().IsAutoSpell() );
     aOutputData.SetMarkClipped      ( rOpts.GetOption( VOPT_CLIPMARKS ) );
+    aOutputData.SetShowZeroToMinus  ( rOpts.GetOption( VOPT_ZEROTOMINUS ) );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 

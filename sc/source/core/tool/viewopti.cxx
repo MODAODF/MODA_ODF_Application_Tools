@@ -109,6 +109,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_ANCHOR      ] = true;
     aOptArr[ VOPT_PAGEBREAKS  ] = true;
     aOptArr[ VOPT_CLIPMARKS   ] = true;
+    aOptArr[ VOPT_ZEROTOMINUS ] = true;
 
     aModeArr[VOBJ_TYPE_OLE ]  = VOBJ_MODE_SHOW;
     aModeArr[VOBJ_TYPE_CHART] = VOBJ_MODE_SHOW;
@@ -226,6 +227,7 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCDISPLAYOPT_OBJECTGRA      6
 #define SCDISPLAYOPT_CHART          7
 #define SCDISPLAYOPT_DRAWING        8
+#define SCDISPLAYOPT_ZEROTOMINUS    9
 
 #define CFGPATH_GRID        "Office.Calc/Grid"
 
@@ -264,7 +266,8 @@ Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
             "TextOverflow",             // SCDISPLAYOPT_TEXTOVER
             "ObjectGraphic",            // SCDISPLAYOPT_OBJECTGRA
             "Chart",                    // SCDISPLAYOPT_CHART
-            "DrawingObject"};           // SCDISPLAYOPT_DRAWING;
+            "DrawingObject",            // SCDISPLAYOPT_DRAWING;
+            "ZeroToMinus"};             // SCDISPLAYOPT_ZEROTOMINUS;
 }
 
 Sequence<OUString> ScViewCfg::GetGridPropertyNames()
@@ -376,6 +379,9 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCDISPLAYOPT_TEXTOVER:
                         SetOption( VOPT_CLIPMARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
+                    case SCDISPLAYOPT_ZEROTOMINUS:
+                        SetOption( VOPT_ZEROTOMINUS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCDISPLAYOPT_OBJECTGRA:
                         if ( pValues[nProp] >>= nIntVal )
@@ -535,6 +541,9 @@ IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCDISPLAYOPT_TEXTOVER:
                 pValues[nProp] <<= GetOption( VOPT_CLIPMARKS );
+                break;
+            case SCDISPLAYOPT_ZEROTOMINUS:
+                pValues[nProp] <<= GetOption( VOPT_ZEROTOMINUS );
                 break;
             case SCDISPLAYOPT_OBJECTGRA:
                 pValues[nProp] <<= static_cast<sal_Int32>(GetObjMode( VOBJ_TYPE_OLE ));

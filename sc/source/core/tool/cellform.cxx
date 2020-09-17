@@ -32,7 +32,7 @@
 
 void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
-                              bool bNullVals, bool bFormula, bool bUseStarFormat )
+                              bool bNullVals, bool bFormula, bool bUseStarFormat, bool bZeroToMinus )
 {
     *ppColor = nullptr;
 
@@ -47,6 +47,10 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUStrin
         case CELLTYPE_VALUE:
         {
             const double & nValue = rCell.mfValue;
+            // show zero to minus
+            if (bZeroToMinus && nValue == 0.0)
+                rString = "-";
+
             if (!bNullVals && nValue == 0.0)
                 rString.clear();
             else
@@ -107,13 +111,13 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUStrin
 
 OUString ScCellFormat::GetString(
     ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat, Color** ppColor,
-    SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula )
+    SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula, bool bZeroToMinus )
 {
     OUString aString;
     *ppColor = nullptr;
 
     ScRefCellValue aCell(rDoc, rPos);
-    GetString(aCell, nFormat, aString, ppColor, rFormatter, &rDoc, bNullVals, bFormula);
+    GetString(aCell, nFormat, aString, ppColor, rFormatter, &rDoc, bNullVals, bFormula, bZeroToMinus);
     return aString;
 }
 

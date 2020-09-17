@@ -55,6 +55,7 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     get(pAnchorCB,"anchor");
     get(pClipMarkCB,"clipmark");
     get(pRangeFindCB,"rangefind");
+    get(pZtmCB,"ztm");
 
     get(pObjGrfLB,"objgrf");
     get(pDiagramLB,"diagram");
@@ -82,6 +83,7 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     pValueCB    ->SetClickHdl(aCBHdl);
     pAnchorCB   ->SetClickHdl(aCBHdl);
     pClipMarkCB ->SetClickHdl(aCBHdl);
+    pZtmCB      ->SetClickHdl(aCBHdl);
 
     pVScrollCB  ->SetClickHdl(aCBHdl);
     pHScrollCB  ->SetClickHdl(aCBHdl);
@@ -115,6 +117,7 @@ void ScTpContentOptions::dispose()
     pAnchorCB.clear();
     pClipMarkCB.clear();
     pRangeFindCB.clear();
+    pZtmCB.clear();
     pObjGrfLB.clear();
     pDiagramLB.clear();
     pDrawLB.clear();
@@ -142,6 +145,7 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pValueCB   ->IsValueChangedFromSaved() ||
         pAnchorCB  ->IsValueChangedFromSaved() ||
         pClipMarkCB->IsValueChangedFromSaved() ||
+        pZtmCB     ->IsValueChangedFromSaved() ||
         pObjGrfLB  ->IsValueChangedFromSaved() ||
         pDiagramLB ->IsValueChangedFromSaved() ||
         pDrawLB    ->IsValueChangedFromSaved() ||
@@ -193,6 +197,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     pValueCB   ->Check(pLocalOptions->GetOption(VOPT_SYNTAX));
     pAnchorCB  ->Check(pLocalOptions->GetOption(VOPT_ANCHOR));
     pClipMarkCB->Check(pLocalOptions->GetOption(VOPT_CLIPMARKS));
+    pZtmCB     ->Check(pLocalOptions->GetOption(VOPT_ZEROTOMINUS));
 
     pObjGrfLB  ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
     pDiagramLB ->SelectEntryPos( static_cast<sal_uInt16>(pLocalOptions->GetObjMode(VOBJ_TYPE_CHART)) );
@@ -223,6 +228,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     pValueCB->SaveValue();
     pAnchorCB->SaveValue();
     pClipMarkCB->SaveValue();
+    pZtmCB->SaveValue();
     pObjGrfLB->SaveValue();
     pDiagramLB->SaveValue();
     pDrawLB->SaveValue();
@@ -276,6 +282,7 @@ IMPL_LINK( ScTpContentOptions, CBHdl, Button*, pBtn, void )
     else if ( pValueCB     == pBtn )   eOption = VOPT_SYNTAX;
     else if ( pAnchorCB    == pBtn )   eOption = VOPT_ANCHOR;
     else if ( pClipMarkCB  == pBtn )   eOption = VOPT_CLIPMARKS;
+    else if ( pZtmCB       == pBtn )   eOption = VOPT_ZEROTOMINUS;
     else if ( pVScrollCB       == pBtn )   eOption = VOPT_VSCROLL;
     else if ( pHScrollCB       == pBtn )   eOption = VOPT_HSCROLL;
     else if ( pTblRegCB        == pBtn )   eOption = VOPT_TABCONTROLS;

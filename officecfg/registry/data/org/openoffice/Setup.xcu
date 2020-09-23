@@ -20,7 +20,7 @@
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice">
   <node oor:name="Product">
     <prop oor:name="ooName">
-      <value>${PRODUCTNAME}</value>
+      <value>${PRODUCTNAME} ${LPRODUCTVERSION}</value>
     </prop>
     <prop oor:name="ooSetupVersion">
       <value>${ABOUTBOXPRODUCTVERSION}</value>

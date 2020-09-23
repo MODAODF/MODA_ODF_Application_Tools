@@ -558,6 +558,7 @@ postprocess_main_SED := \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
 	-e 's,$${PRODUCTEXTENSION},,g' \
+	-e 's,$${LPRODUCTVERSION},$(if $(findstring National,$(OOO_VENDOR)),'',${LPRODUCTVERSION}),g' \
 	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_INFO_URL},http://www.ndc.gov.tw/,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \

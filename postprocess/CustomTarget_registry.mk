@@ -556,7 +556,7 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(l
 
 postprocess_main_SED := \
 	-e 's,$${ABOUTBOXPRODUCTVERSION},$(ABOUTBOXPRODUCTVERSION),g' \
-	-e 's,$${ABOUTBOXPRODUCTVERSIONSUFFIX},$(LIBO_VERSION_SUFFIX_SUFFIX),g' \
+	-e 's,$${ABOUTBOXPRODUCTVERSIONSUFFIX},,g' \
 	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(subst $(COMMA),\x2c,$(OOO_VENDOR)),The Document Foundation),g' \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \

@@ -47,6 +47,9 @@
 #include <sal/log.hxx>
 #include <memory>
 
+#include <svdata.hxx>
+#include <PhysicalFontCollection.hxx>
+
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -951,7 +954,19 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::FONT:
                 {
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
-                    m_rOuterFace.SetFont( pA->GetFont() );
+                    const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
+                    PhysicalFontFamily* pFontFamily = nullptr;
+
+                    pFontFamily = pFontCollection->ImplFindByGroupName(pA->GetFont().GetFamilyName());
+
+                    if (pFontFamily) {
+                        vcl::Font aFont;
+                        aFont.SetFamilyName(pFontFamily->GetFamilyName());
+                        aFont.SetFontHeight(pA->GetFont().GetFontHeight());
+                        m_rOuterFace.SetFont( aFont );
+                    } else {
+                        m_rOuterFace.SetFont( pA->GetFont() );
+                    }
                 }
                 break;
 

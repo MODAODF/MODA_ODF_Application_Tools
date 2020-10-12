@@ -112,6 +112,8 @@
 
 #include "getbasctlfunction.hxx"
 
+#include <unotools/resmgr.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -513,11 +515,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL(officecfg::Office::Common::Menus::SendFeedbackURL::get() + //officecfg/registry/data/org/openoffice/Office/Common.xcu => https://hub.libreoffice.org/send-feedback/
-                "?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-                "&LOlocale=" + utl::ConfigManager::getUILocale() +
-                "&LOmodule=" + module.subView(module.lastIndexOf('.') + 1 )  );
+            OUString sURL(Translate::ExpandVariables("%FEEDBACKURL"));
             sfx2::openUriExternally(sURL, false);
             break;
         }

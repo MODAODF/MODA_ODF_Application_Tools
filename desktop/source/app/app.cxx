@@ -141,6 +141,8 @@
 #endif
 
 #include <strings.hxx>
+#define STR_FEEDBACK_URL    "https://www.ossii.com.tw/"
+#define STR_UPDATEINFO_URL  "https://www.ndc.gov.tw/cp.aspx?n=32A75A78342B669D"
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -401,6 +403,14 @@ OUString ReplaceStringHookProc( const OUString& rStr )
     {
         const static OUString sOOOVendor = utl::ConfigManager::getVendor();
         sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
+    }
+
+    if ( sRet.indexOf( "%FEEDBACKURL" ) != -1 )
+    {
+        if ( sBrandName.indexOf( "NDC" ) != -1 )
+            sRet = sRet.replaceAll("%FEEDBACKURL", STR_UPDATEINFO_URL);
+        else
+            sRet = sRet.replaceAll("%FEEDBACKURL", STR_FEEDBACK_URL);
     }
 
     return sRet;

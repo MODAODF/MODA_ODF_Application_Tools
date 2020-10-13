@@ -37,6 +37,9 @@
     <prop oor:name="ooSetupExtension">
       <value>${PRODUCTEXTENSION}</value>
     </prop>
+    <prop oor:name="ooBaseonVersion">
+      <value>${BASEONVERSION}</value>
+    </prop>
   </node>
   <node oor:name="Office">
     <node oor:name="Factories">

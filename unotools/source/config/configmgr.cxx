@@ -109,6 +109,10 @@ OUString utl::ConfigManager::getVendor() {
     return officecfg::Setup::Product::ooVendor::get();
 }
 
+OUString utl::ConfigManager::getBaseonVersion() {
+    return officecfg::Setup::Product::ooBaseonVersion::get();
+}
+
 void utl::ConfigManager::storeConfigItems() {
     getConfigManager().doStoreConfigItems();
 }

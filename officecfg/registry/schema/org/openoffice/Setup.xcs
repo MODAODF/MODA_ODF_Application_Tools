@@ -295,6 +295,12 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
+      <prop oor:name="ooBaseonVersion" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the version number that HelpIndex.</desc>
+        </info>
+        <value/>
+      </prop>
       <prop oor:name="LastTimeGetInvolvedShown" oor:type="xs:long" oor:nillable="false">
           <info>
               <desc>The last time when the Get Involved infobar was shown.</desc>

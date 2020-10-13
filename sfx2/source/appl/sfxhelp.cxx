@@ -281,7 +281,7 @@ void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
     rURL.append("&System=");
     rURL.append(SvtHelpOptions().GetSystem());
     rURL.append("&Version=");
-    rURL.append(utl::ConfigManager::getProductVersion());
+    rURL.append(utl::ConfigManager::getBaseonVersion());
 }
 
 static bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )

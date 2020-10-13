@@ -55,6 +55,8 @@ public:
 
     static OUString getVendor();
 
+    static OUString getBaseonVersion();
+
     static void storeConfigItems();
 
     SAL_DLLPRIVATE static ConfigManager & getConfigManager();

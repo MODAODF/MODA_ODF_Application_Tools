@@ -561,6 +561,7 @@ postprocess_main_SED := \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
 	-e 's,$${PRODUCTEXTENSION},,g' \
+	-e 's,$${BASEONVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR),g' \
 	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_INFO_URL},http://www.openoffice.com.tw/,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \

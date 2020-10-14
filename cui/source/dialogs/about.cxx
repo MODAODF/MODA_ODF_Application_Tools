@@ -117,6 +117,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   }
 
   // Links
+#if 0  // hide credits,website,releasenote link
   m_pCreditsButton->set_uri(CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL));
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
@@ -128,6 +129,10 @@ AboutDialog::AboutDialog(weld::Window *pParent)
          "?LOvers=" + utl::ConfigManager::getProductVersion() + "&LOlocale=" +
          LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
   m_pReleaseNotesButton->set_uri(sURL);
+#endif
+  m_pCreditsButton->hide();
+  m_pWebsiteButton->hide();
+  m_pReleaseNotesButton->hide();
 
   // Handler
   m_pCopyButton->connect_clicked(LINK(this, AboutDialog, HandleClick));
@@ -263,7 +268,7 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
           comphelper::getProcessComponentContext());
 
   OUString sInfo = "Version: " + m_pVersionLabel->get_label() + "\n" // version
-                   "Build ID: " + GetBuildString() + "\n" + // build id
+                   /*"Build ID: " + GetBuildString() + "\n"*/ + // build id
                    Application::GetHWOSConfInfo(0,false) + "\n" // env+UI
                    "Locale: " + GetLocaleString(false) + "\n" + // locale
                    GetMiscString(); // misc

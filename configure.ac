@@ -518,6 +518,14 @@ else
 fi
 AC_SUBST(OXO_VERSION_MINOR)
 
+AC_MSG_CHECKING([for defined of oxoffice micro version])
+if test -n "$with_oxo_version_micro" -a "$with_oxo_version_micro" != "yes" ; then
+    OXO_VERSION_MICRO="$with_oxo_version_micro"
+else
+    OXO_VERSION_MICRO="1"
+fi
+AC_SUBST(OXO_VERSION_MICRO)
+
 AC_MSG_CHECKING([for defined of oxoffice patch version])
 if test -n "$with_oxo_version_patch" -a "$with_oxo_version_patch" != "yes" ; then
     OXO_VERSION_PATCH="$with_oxo_version_patch"
@@ -548,7 +556,7 @@ AC_SUBST(PACKAGEREQUIRES_HUNSPELL)
 AC_SUBST(PACKAGEREQUIRES_HUNSPELL_EN)
 
 AC_MSG_CHECKING([for product extension])
-PRODUCTEXTENSION="$USERDIRPRODUCTVERSION.$OXO_VERSION_MINOR.$OXO_VERSION_PATCH-$LIBO_VERSION_PATCH"
+PRODUCTEXTENSION="$USERDIRPRODUCTVERSION.$OXO_VERSION_MINOR.$OXO_VERSION_MICRO-$LIBO_VERSION_PATCH"
 AC_MSG_RESULT([$PRODUCTEXTENSION])
 AC_SUBST(PRODUCTEXTENSION)
 
@@ -1889,6 +1897,16 @@ AC_ARG_WITH(oxo-version-minor,
                           Usage:     --with-oxo-version-minor="2"
     ],
     with_oxo_version_minor=$withval ,
+)
+
+AC_ARG_WITH(oxo-version-micro,
+    AS_HELP_STRING([--with-oxo-version-micro],
+        [Allows the builder to add a custom version tag that will appear in the
+         Help/About box for QA purposes.])
+    [
+                          Usage:     --with-oxo-version-micro="2"
+    ],
+    with_oxo_version_micro=$withval ,
 )
 
 AC_ARG_WITH(oxo-version-patch,

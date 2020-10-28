@@ -34,7 +34,7 @@ PIDTemplate	12345<###-%%%%%%%>@@@@@
 ProductCode	PRODUCTCODETEMPLATE
 ProductID	none
 ProductLanguage	PRODUCTLANGUAGETEMPLATE
-ProductName	PRODUCTNAMETEMPLATE
+ProductName	PRODUCTNAMETEMPLATE PRODUCTVERSIONTEMPLATE
 ProductVersion	PRODUCTVERSIONTEMPLATE
 ProgressType0	install
 ProgressType1	Installing

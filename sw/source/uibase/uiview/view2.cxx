@@ -482,7 +482,10 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         // else this would reset the current setting for the frame holding the graphic
         if ( !bReplaceMode && rSh.IsFrameSelected() )
         {
-            SwFrameFormat* pFormat = pDoc->FindFrameFormatByName( sGraphicFormat );
+            SwFrameFormat* pFormat = nullptr;
+            if (!comphelper::LibreOfficeKit::isActive())
+                pFormat = pDoc->FindFrameFormatByName( sGraphicFormat );
+
             if(!pFormat)
                 pFormat = pDoc->MakeFrameFormat(sGraphicFormat,
                                         pDocShell->GetDoc()->GetDfltFrameFormat(),

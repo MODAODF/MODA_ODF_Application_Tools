@@ -4549,10 +4549,14 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsNoTextNode( const SwPosit
     SwFlyFrameFormat *pFormat = nullptr;
     if( pNode )
     {
-        pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, RndStdIds::FLY_AT_PARA,
-                                pFlyAttrSet, pFrameFormat );
-        if( pGrfAttrSet )
+        if ( pGrfAttrSet ) {
+            pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, RndStdIds::FLY_AT_PARA,
+                        pFlyAttrSet, pFrameFormat );
             pNode->SetAttr( *pGrfAttrSet );
+        } else {
+            pFormat = m_rDoc.MakeFlySection_( rPos, *pNode, RndStdIds::FLY_AS_CHAR,
+                        pFlyAttrSet, pFrameFormat );
+        }
     }
     return pFormat;
 }

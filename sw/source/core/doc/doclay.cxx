@@ -218,7 +218,11 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
                 aAnch.SetType( eRequestId );
             }
 
-            eAnchorId = aAnch.GetAnchorId();
+            if( eRequestId == RndStdIds::FLY_AS_CHAR )
+                eAnchorId = RndStdIds::FLY_AS_CHAR;
+            else
+                eAnchorId = aAnch.GetAnchorId();
+
             if ( RndStdIds::FLY_AT_PAGE != eAnchorId || !pAnchor || aAnch.GetPageNum() == 0)
             {
                 aAnch.SetAnchor( &rAnchPos );

@@ -234,10 +234,6 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
             }
 
             eAnchorId = aAnch.GetAnchorId();
-
-            // default use FLY_AS_CHAR
-            eAnchorId = RndStdIds::FLY_AS_CHAR;
-
             if ( RndStdIds::FLY_AT_PAGE != eAnchorId || !pAnchor || aAnch.GetPageNum() == 0)
             {
                 aAnch.SetAnchor( &rAnchPos );

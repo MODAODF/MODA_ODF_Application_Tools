@@ -65,6 +65,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <config_folders.h>
 
@@ -953,7 +954,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                             catch ( uno::Exception& )
                             {
-                                OSL_FAIL( "SfxEventHintId::SaveDoc: caught exception" );
+                                TOOLS_WARN_EXCEPTION( "sc", "SfxEventHintId::SaveDoc" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try

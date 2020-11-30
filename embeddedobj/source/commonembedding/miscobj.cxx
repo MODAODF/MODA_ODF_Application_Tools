@@ -36,6 +36,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "persistence.hxx"
 
@@ -348,7 +349,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "Exception on request to resize!" );
+            TOOLS_WARN_EXCEPTION( "embeddedobj", "Exception on request to resize!" );
         }
     }
 }

@@ -48,6 +48,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <swunohelper.hxx>
 #include <unotools/pathoptions.hxx>
+#include <tools/diagnose_ex.h>
 #include <svl/urihelper.hxx>
 #include <strings.hrc>
 #include <view.hxx>
@@ -271,7 +272,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
     }
     catch (const Exception&)
     {
-        OSL_FAIL("exception caught in SwAddressListDialog::FilterHdl_Impl");
+        TOOLS_WARN_EXCEPTION( "sw", "exception caught in SwAddressListDialog::FilterHdl_Impl");
     }
 }
 
@@ -560,7 +561,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
     catch (const Exception&)
     {
-        OSL_FAIL("exception caught in SwAddressListDialog::DetectTablesAndQueries");
+        TOOLS_WARN_EXCEPTION( "sw", "exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_xOK->set_sensitive(false);
     }
 }

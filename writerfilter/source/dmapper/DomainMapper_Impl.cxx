@@ -2072,7 +2072,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         }
         catch(const lang::IllegalArgumentException&)
         {
-            OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::finishParagraph" );
         }
         catch(const uno::Exception&)
         {
@@ -2230,11 +2230,11 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     }
     catch(const lang::IllegalArgumentException&)
     {
-        OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::appendTextPortion" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::appendTextPortion" );
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL( "Exception in DomainMapper_Impl::appendTextPortion" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "DomainMapper_Impl::appendTextPortion" );
     }
 }
 
@@ -2373,7 +2373,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "Exception in creation of OLE object" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "in creation of OLE object" );
     }
 
 }
@@ -2428,7 +2428,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "Exception in creation of StarMath object" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "in creation of StarMath object" );
     }
 }
 
@@ -2722,7 +2722,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
     }
     catch( const uno::Exception & )
     {
-        OSL_FAIL( "Exception in makeRedline" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "in makeRedline" );
     }
 }
 
@@ -6478,11 +6478,11 @@ void DomainMapper_Impl::PopFieldContext()
             }
             catch(const lang::IllegalArgumentException&)
             {
-                OSL_FAIL( "IllegalArgumentException in PopFieldContext()" );
+                TOOLS_WARN_EXCEPTION( "writerfilter", "PopFieldContext()" );
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL( "exception in PopFieldContext()" );
+                TOOLS_WARN_EXCEPTION( "writerfilter", "PopFieldContext()" );
             }
         }
 

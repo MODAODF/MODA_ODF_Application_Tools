@@ -62,6 +62,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdxcgv.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -672,9 +673,9 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
             }
             catch( ... )
             {
+                TOOLS_WARN_EXCEPTION( "filter.svg", "" );
                 delete mpSVGDoc;
                 mpSVGDoc = nullptr;
-                OSL_FAIL( "Exception caught" );
             }
 
             delete mpSVGWriter;

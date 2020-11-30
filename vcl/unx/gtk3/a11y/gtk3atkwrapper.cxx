@@ -44,6 +44,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/toolkit/unowrap.hxx>
@@ -422,7 +423,7 @@ wrapper_get_n_children( AtkObject *atk_obj )
             n = obj->mpContext->getAccessibleChildCount();
         }
         catch(const uno::Exception&) {
-            OSL_FAIL("Exception in getAccessibleChildCount()" );
+            TOOLS_WARN_EXCEPTION( "vcl", "Exception" );
         }
     }
 
@@ -461,7 +462,7 @@ wrapper_ref_child( AtkObject *atk_obj,
             child = atk_object_wrapper_ref( xAccessible );
         }
         catch(const uno::Exception&) {
-            OSL_FAIL("Exception in getAccessibleChild");
+            TOOLS_WARN_EXCEPTION( "vcl", "getAccessibleChild");
         }
     }
 

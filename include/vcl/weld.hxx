@@ -1330,6 +1330,8 @@ public:
 
 class VCL_DLLPUBLIC Button : virtual public Container
 {
+    friend class ::LOKTrigger;
+
 protected:
     Link<Button&, void> m_aClickHdl;
 

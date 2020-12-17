@@ -76,8 +76,7 @@
 #include <window.h>
 #include <wizdlg.hxx>
 #include <salvtables.hxx>
-
-#include <boost/property_tree/ptree.hpp>
+#include <comphelper/lok.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
@@ -6974,7 +6973,7 @@ void SalInstanceWindow::help()
 {
     //show help for widget with keyboard focus
     vcl::Window* pWidget = ImplGetSVData()->mpWinData->mpFocusWin;
-    if (!pWidget)
+    if (!pWidget || comphelper::LibreOfficeKit::isActive())
         pWidget = m_xWindow;
     OString sHelpId = pWidget->GetHelpId();
     while (sHelpId.isEmpty())

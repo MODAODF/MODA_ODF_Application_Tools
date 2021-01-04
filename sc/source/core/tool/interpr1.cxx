@@ -9607,6 +9607,8 @@ void ScInterpreter::ScMid()
     OUString aStr = GetString().getString();
     if ( nStart < 1 || nSubLen < 0 )
         PushIllegalArgument();
+    else if (nStart > kScInterpreterMaxStrLen || nSubLen > kScInterpreterMaxStrLen)
+        PushError(FormulaError::StringOverflow);
     else
     {
         sal_Int32 nLen = aStr.getLength();

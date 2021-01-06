@@ -2255,7 +2255,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         }
 
         // Check for cell protection attribute.
-        ScTableProtection* pProtect = rDoc.GetTabProtection( nTab );
+        const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         bool bEditAllowed = true;
         if ( pProtect && pProtect->isProtected() )
         {

@@ -1267,7 +1267,7 @@ void ScTabView::MoveCursorRel( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
     SCTAB nTab = aViewData.GetTabNo();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
-    ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     if ( pProtect && pProtect->isProtected() )
     {
         bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);

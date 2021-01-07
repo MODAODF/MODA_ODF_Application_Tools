@@ -105,6 +105,7 @@ rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window
 void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 {
     OUString aFileName;
+    OUString aFilterName;
     Graphic aGraphic;
 
     bool bAsLink = false;
@@ -118,13 +119,21 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     {
         aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-        OUString aFilterName;
         if ( pArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
             aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
+        nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+    }
+    else if ( comphelper::LibreOfficeKit::isActive() && pArgs &&
+         pArgs->GetItemState( SID_OX_CHANGE_PICTURE, true, &pItem ) == SfxItemState::SET )
+    {
+        aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        INetURLObject aURL;
+        aURL.SetSmartURL( aFileName );
+        aFilterName = aURL.getExtension();
         nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
     }
     else

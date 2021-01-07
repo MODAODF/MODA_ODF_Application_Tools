@@ -198,6 +198,7 @@
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1420,6 +1421,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_OX_SAVE_GRAPHIC:
         case SID_SAVE_GRAPHIC:
         {
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
@@ -1450,7 +1452,18 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     else if (nState == RET_NO)
                     {
                         const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
-                        GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), "");
+                        if (comphelper::LibreOfficeKit::isActive()) {
+                            OUString sGrfNm;
+                            const SfxStringItem* oName = rReq.GetArg<SfxStringItem>(SID_OX_SAVE_GRAPHIC);
+                            if (oName) {
+                                sGrfNm = oName->GetValue();
+                                GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), sGrfNm);
+                            } else {
+                                break;
+                            }
+                        } else {
+                            GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), "");
+                        }
                     }
                 }
             }
@@ -1607,10 +1620,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_OX_CHANGE_PICTURE:
         case SID_CHANGE_PICTURE:
         case SID_INSERT_GRAPHIC:
         {
-            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq,
+            if (comphelper::LibreOfficeKit::isActive())
+                SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq,
+                                                         nSId == SID_OX_CHANGE_PICTURE ) );
+            else
+                 SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq,
                                                          nSId == SID_CHANGE_PICTURE ) );
             Cancel();
             rReq.Ignore ();

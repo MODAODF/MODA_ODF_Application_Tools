@@ -12497,3 +12497,37 @@ SdrMetricItem SoftEdgeRadius SID_ATTR_SOFTEDGE_RADIUS
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Document;
 ]
+
+SfxVoidItem OxSaveGraphic SID_OX_SAVE_GRAPHIC
+(SfxStringItem FileName SID_OX_SAVE_GRAPHIC)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxVoidItem OxChangePicture SID_OX_CHANGE_PICTURE
+(SfxStringItem FileName SID_OX_CHANGE_PICTURE)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Graphic;
+]

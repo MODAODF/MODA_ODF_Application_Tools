@@ -373,7 +373,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 #if HAVE_FEATURE_DESKTOP
         || ERRCODE_NONE == pFileDlg->Execute()
 #endif
-        )
+        || comphelper::LibreOfficeKit::isActive())
     {
 
         OUString aFileName, aFilterName;
@@ -383,6 +383,14 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             const SfxStringItem* pFilter = rReq.GetArg<SfxStringItem>(FN_PARAM_FILTER);
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
+        } else if (comphelper::LibreOfficeKit::isActive()) {
+            // use uno filename args
+            const SfxStringItem* oName = rReq.GetArg<SfxStringItem>(SID_OX_CHANGE_PICTURE);
+            if ( oName )
+                aFileName = oName->GetValue();
+            else
+                return bReturn;
+            aFilterName = "<所有影像>";
         }
 #if HAVE_FEATURE_DESKTOP
         else
@@ -475,7 +483,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         ErrCode nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
 
         // format not equal to current filter (with autodetection)
-        if( nError == ERRCODE_GRFILTER_FORMATERROR )
+        if( nError == ERRCODE_GRFILTER_FORMATERROR || comphelper::LibreOfficeKit::isActive())
             nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter() );
 
         // #i123922# no new FrameFormat for replace mode, only when new object was created,

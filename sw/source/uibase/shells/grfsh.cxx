@@ -62,6 +62,7 @@
 #include <swabstdlg.hxx>
 #include <unocrsr.hxx>
 #include <memory>
+#include <comphelper/lok.hxx>
 
 #define TOOLBOX_NAME "colorbar"
 
@@ -135,6 +136,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             break;
         }
 
+        case SID_OX_SAVE_GRAPHIC:
         case SID_SAVE_GRAPHIC:
         {
             GraphicAttr aGraphicAttr;
@@ -161,8 +163,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 {
                     Graphic aGraphic = pGraphicObj->GetTransformedGraphic(pGraphicObj->GetPrefSize(), pGraphicObj->GetPrefMapMode(), aGraphicAttr);
                     OUString sGrfNm;
-                    OUString sFilterNm;
-                    rSh.GetGrfNms( &sGrfNm, &sFilterNm );
+                    if (comphelper::LibreOfficeKit::isActive()) {
+                        const SfxStringItem* oName = rReq.GetArg<SfxStringItem>(SID_OX_SAVE_GRAPHIC);
+                        if (oName) {
+                            sGrfNm = oName->GetValue();
+                        } else {
+                            break;
+                        }
+                    }
                     GraphicHelper::ExportGraphic(GetView().GetFrameWeld(), aGraphic, sGrfNm);
                 }
             }
@@ -239,6 +247,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case SID_OX_CHANGE_PICTURE:
         case SID_CHANGE_PICTURE:
         case SID_INSERT_GRAPHIC:
         {

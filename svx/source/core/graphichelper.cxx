@@ -48,6 +48,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <map>
+#include <comphelper/lok.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -139,7 +140,14 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
         if( xFilterDialog.is() && xFilterProperties.is() )
         {
             xFilterProperties->setPropertyValues( rPropsForDialog );
-            if( xFilterDialog->execute() )
+
+            bool run = false;
+            if (comphelper::LibreOfficeKit::isActive())
+                run = true;
+            else
+                run = xFilterDialog->execute();
+
+            if( run )
             {
                 bStatus = true;
                 const Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
@@ -230,11 +238,27 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     {
         xFilePicker->setCurrentFilter( rGraphicFilter.GetExportFormatName( nDefaultFilter ) ) ;
 
-        if( aDialogHelper.Execute() == ERRCODE_NONE )
+        bool run = false;
+        if (comphelper::LibreOfficeKit::isActive())
+            run = true;
+        else
+            run = aDialogHelper.Execute() == ERRCODE_NONE? true: false;
+
+        if( run )
         {
-            OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
+            OUString sPath = "";
+            if (!comphelper::LibreOfficeKit::isActive()) {
+                sPath = xFilePicker->getFiles().getConstArray()[0];
+            } else {
+                // get file filter
+                sal_uInt16 oFilter = rGraphicFilter.GetExportFormatNumber( xFilePicker->getCurrentFilter() );
+                OUString cFilter( rGraphicFilter.GetExportFormatShortName( oFilter ) );
+                sPath = rGraphicName + "." + cFilter;
+            }
+            
+
             // remember used path - please don't optimize away!
-            aPath.SetSmartURL( sPath);
+            aPath.SetSmartURL(sPath);
             sGraphicsPath = aPath.GetPath();
 
             if( !rGraphicName.isEmpty() &&

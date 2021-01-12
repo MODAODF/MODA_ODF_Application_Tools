@@ -5570,9 +5570,9 @@ PlaceholderShape.prototype.init = function()
                     }
                 }
             }
-            this.element = aTextFieldElement;
             this.textElement = aPlaceholderElement;
         }
+        this.element = aTextFieldElement;
     }
 };
 
@@ -5813,9 +5813,10 @@ MasterPageView.prototype.initTextFieldHandler =
     function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
               aDefsElement, aTextFieldHandlerSet, sMasterSlideId )
 {
+    var sRefId = null;
     var aTextFieldHandler = null;
-    if( aPlaceholderShapeSet[sClassName] &&
-        aPlaceholderShapeSet[sClassName].isValid()
+    var aPlaceholderShape = aPlaceholderShapeSet[sClassName];
+    if( aPlaceholderShape  && aPlaceholderShape.isValid()
         && aTextFieldContentProviderSet[sClassName] )
     {
         var sTextFieldContentProviderId = aTextFieldContentProviderSet[sClassName].sId;
@@ -5824,7 +5825,7 @@ MasterPageView.prototype.initTextFieldHandler =
         if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] )
         {
             aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] =
-                new TextFieldHandler( aPlaceholderShapeSet[sClassName],
+                new TextFieldHandler( aPlaceholderShape,
                                       aTextFieldContentProviderSet[sClassName] );
             aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
             aTextFieldHandler.update();
@@ -5834,13 +5835,22 @@ MasterPageView.prototype.initTextFieldHandler =
         {
             aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
         }
+        sRefId = aTextFieldHandler.sId;
+    }
+    else if( aPlaceholderShape && aPlaceholderShape.element && aPlaceholderShape.element.firstElementChild
+        && !aPlaceholderShape.textElement && !aTextFieldContentProviderSet[sClassName] )
+    {
+        sRefId = aPlaceholderShape.element.firstElementChild.getAttribute('id');
+    }
 
+    if( sRefId )
+    {
         // We create a <use> element referring to the cloned text field and
         // append it to the field group element.
-        var aTextFieldElement = document.createElementNS( NSS['svg'], 'use' );
-        aTextFieldElement.setAttribute( 'class', sClassName );
-        setNSAttribute( 'xlink', aTextFieldElement,
-                        'href', '#' + aTextFieldHandler.sId );
+        var aTextFieldElement = document.createElementNS(NSS['svg'], 'use');
+        aTextFieldElement.setAttribute('class', sClassName);
+        setNSAttribute('xlink', aTextFieldElement,
+            'href', '#' + sRefId);
         // node linking
         this.aBackgroundObjectsElement.appendChild( aTextFieldElement );
     }

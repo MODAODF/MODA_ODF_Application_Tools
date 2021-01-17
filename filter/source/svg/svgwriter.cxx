@@ -1131,9 +1131,9 @@ bool SVGTextWriter::nextTextPortion()
 {
     mrCurrentTextPortion.clear();
     mbIsURLField = false;
-    mbIsPlaceholderShape = false;
     if( mrTextPortionEnumeration.is() && mrTextPortionEnumeration->hasMoreElements() )
     {
+        mbIsPlaceholderShape = false;
         Reference< XPropertySet > xPortionPropSet( mrTextPortionEnumeration->nextElement(), UNO_QUERY );
         Reference< XPropertySetInfo > xPortionPropInfo( xPortionPropSet->getPropertySetInfo() );
         Reference < XTextRange > xPortionTextRange( xPortionPropSet, UNO_QUERY);
@@ -1149,6 +1149,7 @@ bool SVGTextWriter::nextTextPortion()
             }
 #endif
             msPageCount = "";
+            msDateTimeType = "";
             if( xPortionTextRange.is() )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -1195,6 +1196,31 @@ bool SVGTextWriter::nextTextPortion()
 #if OSL_DEBUG_LEVEL > 0
                         sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ false ) + "; ";
 #endif
+                        // This case handle Date or Time text field inserted by the user
+                        // on both page/master page. It doesn't handle the standard Date/Time field.
+                        if( sFieldName == "DateTime" )
+                        {
+                            Reference<XPropertySet> xTextFieldPropSet(xTextField, UNO_QUERY);
+                            if( xTextFieldPropSet.is() )
+                            {
+                                Reference<XPropertySetInfo> xPropSetInfo = xTextFieldPropSet->getPropertySetInfo();
+                                if( xPropSetInfo.is() )
+                                {
+                                    // The standard Date/Time field has no property.
+                                    // Trying to get a property value on such field would cause a runtime exception.
+                                    // So the hasPropertyByName check is needed.
+                                    bool bIsFixed = true;
+                                    if( xPropSetInfo->hasPropertyByName("IsFixed") && ( ( xTextFieldPropSet->getPropertyValue( "IsFixed" ) ) >>= bIsFixed ) && !bIsFixed )
+                                    {
+                                        bool bIsDate = true;
+                                        if( xPropSetInfo->hasPropertyByName("IsDate") && ( ( xTextFieldPropSet->getPropertyValue( "IsDate" ) ) >>= bIsDate ) )
+                                        {
+                                            msDateTimeType = OUString::createFromAscii( bIsDate ? "<date>" : "<time>" );
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if( sFieldName == "DateTime" || sFieldName == "Header"
                                 || sFieldName == "Footer" || sFieldName == "PageNumber" )
                         {
@@ -1727,6 +1753,13 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PageCount" );
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( msPageCount );
+    }
+    // This case handle Date or Time text field inserted by the user
+    // on both page/master page. It doesn't handle the standard Date/Time field.
+    else if ( !msDateTimeType.isEmpty() )
+    {
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+        mrExport.GetDocHandler()->characters( msDateTimeType );
     }
     else
     {

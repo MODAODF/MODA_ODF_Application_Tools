@@ -135,7 +135,7 @@ static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
     }
 }
 
-bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
+bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
@@ -157,7 +157,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     Fraction aOne(1,1);
 
     sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
-    bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
+    bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab, bApi);
     // tdf#76183: recalculate objects' positions
     if (bChanged)
     {
@@ -650,7 +650,7 @@ bool ScDocFunc::DeleteContents(
             std::move(pUndoDoc), nFlags, pDataSpans, bMulti, bDrawUndo);
     }
 
-    if (!AdjustRowHeight( aExtendedRange ))
+    if (!AdjustRowHeight( aExtendedRange, true, bApi ))
         rDocShell.PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
         lcl_PaintAbove( rDocShell, aExtendedRange );    // for lines above the range
@@ -717,7 +717,7 @@ bool ScDocFunc::DeleteCell(
             nFlags, pDataSpans, false, bDrawUndo);
     }
 
-    if (!AdjustRowHeight(rPos))
+    if (!AdjustRowHeight(rPos, true, true))
         rDocShell.PostPaint(
             rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
             PaintPartFlags::Grid, nExtFlags);
@@ -778,7 +778,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
 
     rDoc.TransliterateText( aMultiMark, nType );
 
-    if (!AdjustRowHeight( aMarkRange ))
+    if (!AdjustRowHeight( aMarkRange, true, true ))
         rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid );
 
     aModificator.SetDocumentModified();
@@ -834,7 +834,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     }
 
     if ( bEditDeleted || rDoc.HasAttrib( ScRange(rPos), HasAttrFlags::NeedHeight ) )
-        AdjustRowHeight( ScRange(rPos) );
+        AdjustRowHeight( ScRange(rPos), true, bApi );
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -878,7 +878,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos);
+        AdjustRowHeight(rPos, true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -949,7 +949,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos);
+        AdjustRowHeight(rPos, true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -984,7 +984,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos);
+        AdjustRowHeight(rPos, true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1048,7 +1048,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     }
 
     if (bHeight)
-        AdjustRowHeight(rPos);
+        AdjustRowHeight(rPos, true, !bInteraction);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1474,7 +1474,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
         if ( !bImportingXML )
             rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
 
-        if (!AdjustRowHeight( aMultiRange ))
+        if (!AdjustRowHeight( aMultiRange, true, bApi ))
             rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
         else if (nExtFlags & SC_PF_LINES)
             lcl_PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
@@ -1547,7 +1547,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
 
     rDoc.ApplySelectionStyle( *pStyleSheet, rMark );
 
-    if (!AdjustRowHeight( aMultiRange ))
+    if (!AdjustRowHeight( aMultiRange, true, bApi ))
         rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid );
 
     aModificator.SetDocumentModified();
@@ -2196,8 +2196,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 nScenarioCount ++;
 
             bool bAdjusted = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER ) ?
-                        AdjustRowHeight(ScRange(0, nStartRow, i, rDoc.MaxCol(), nEndRow, i+nScenarioCount )) :
-                        AdjustRowHeight(ScRange(0, nPaintStartRow, i, rDoc.MaxCol(), nPaintEndRow, i+nScenarioCount ));
+                        AdjustRowHeight(ScRange(0, nStartRow, i, rDoc.MaxCol(), nEndRow, i+nScenarioCount ), true, bApi) :
+                        AdjustRowHeight(ScRange(0, nPaintStartRow, i, rDoc.MaxCol(), nPaintEndRow, i+nScenarioCount ), true, bApi);
             if (bAdjusted)
             {
                 //  paint only what is not done by AdjustRowHeight
@@ -2808,7 +2808,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nScenarioCount ++;
 
         //  delete entire rows: do not adjust
-        if ( eCmd == DelCellCmd::Rows || !AdjustRowHeight(ScRange( 0, nPaintStartRow, rTab, rDoc.MaxCol(), nPaintEndRow, rTab+nScenarioCount )) )
+        if ( eCmd == DelCellCmd::Rows || !AdjustRowHeight(ScRange( 0, nPaintStartRow, rTab, rDoc.MaxCol(), nPaintEndRow, rTab+nScenarioCount ), true, bApi) )
             rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, rTab, nPaintEndCol, nPaintEndRow, rTab+nScenarioCount, nPaintFlags,  nExtFlags );
         else
         {
@@ -3034,7 +3034,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                 return false;
             }
 
-        bSourceHeight = AdjustRowHeight( rSource, false );
+        bSourceHeight = AdjustRowHeight( rSource, false, bApi );
     }
 
     ScRange aPasteDest( nDestCol, nDestRow, nDestTab, nDestEndCol, nDestEndRow, nDestEndTab );
@@ -3059,7 +3059,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     bool bDestHeight = AdjustRowHeight(
                             ScRange( 0,nDestRow,nDestTab, rDoc.MaxCol(),nDestEndRow,nDestEndTab ),
-                            false );
+                            false, bApi );
 
     /*  Paste drawing objects after adjusting formula references
         and row heights. There are no cell notes or drawing objects, if the
@@ -3724,7 +3724,7 @@ bool ScDocFunc::SetWidthOrHeight(
                 Fraction aOne(1,1);
                 sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
                 aCxt.setForceAutoSize(bAll);
-                rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);
+                rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, bApi);
 
                 if (bAll)
                     rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
@@ -4280,7 +4280,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                     break;
 
                 bool bAdj = AdjustRowHeight( ScRange(nStartCol, nStartRow, rTab,
-                                                    nEndCol, nEndRow, rTab), false );
+                                                     nEndCol, nEndRow, rTab), false, bApi );
                 if (bAdj)
                     rDocShell.PostPaint( 0,nStartRow,rTab, rDoc.MaxCol(),rDoc.MaxRow(),rTab,
                                         PaintPartFlags::Grid | PaintPartFlags::Left );
@@ -4626,7 +4626,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
         rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                 aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
                 aMark, nCount, eDir, FILL_SIMPLE );
-        AdjustRowHeight(aRange);
+        AdjustRowHeight(aRange, true, bApi);
 
         if ( bRecord )      // only now is Draw-Undo available
         {
@@ -4757,7 +4757,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
                         aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
                         aMark, nCount, eDir, eCmd, eDateCmd, fStep, fMax );
-            AdjustRowHeight(rRange);
+            AdjustRowHeight(rRange, true, bApi);
 
             rDocShell.PostPaintGridAll();
             aModificator.SetDocumentModified();
@@ -4904,7 +4904,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
             aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
             aMark, nCount, eDir, eCmd, eDateCmd, fStep, fMax );
 
-    AdjustRowHeight(aDestArea);
+    AdjustRowHeight(aDestArea, true, bApi);
 
     if ( bRecord )      // only now is Draw-Undo available
     {
@@ -5005,7 +5005,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
             rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxVerJustifyItem( SvxCellVerJustify::Center, ATTR_VER_JUSTIFY ) );
         }
 
-        if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, rDoc.MaxCol(),nEndRow,nTab ) ) )
+        if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, rDoc.MaxCol(),nEndRow,nTab ), true, bApi ) )
             rDocShell.PostPaint( nStartCol, nStartRow, nTab,
                                  nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
         if (bNeedContents || rOption.mbCenter)
@@ -5101,7 +5101,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, Sc
 
         rDoc.ExtendMerge( aRefresh, true );
 
-        if ( !AdjustRowHeight( aExtended ) )
+        if ( !AdjustRowHeight( aExtended, true, true ) )
             rDocShell.PostPaint( aExtended, PaintPartFlags::Grid );
 
         bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Circles );
@@ -5452,7 +5452,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                                 std::move(pUndoDoc), std::move(pRedoDoc) ) );
             }
 
-            if (!AdjustRowHeight(ScRange(0,nStartRow,nTab,rDoc.MaxCol(),nEndRow,nTab)))
+            if (!AdjustRowHeight(ScRange(0,nStartRow,nTab,rDoc.MaxCol(),nEndRow,nTab), true, true))
                 rDocShell.PostPaint( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, PaintPartFlags::Grid );
 
             aModificator.SetDocumentModified();

@@ -1280,7 +1280,7 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
             rDoc.MaxRow(), rViewData.GetPPTX(), rViewData.GetPPTY(), rViewData.GetZoomX(), rViewData.GetZoomY(),
             pVirtDev);
 
-        if (rDoc.SetOptimalHeight(aCxt, aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab()))
+        if (rDoc.SetOptimalHeight(aCxt, aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab(), true))
         {
             // tdf#76183: recalculate objects' positions
             rDoc.SetDrawPageSize(aRange.aStart.Tab());
@@ -2282,7 +2282,7 @@ void ScUndoRemoveMerge::Undo()
             if ( pViewShell )
             {
                 pViewShell->SetTabNo(rTab);
-                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow);
+                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow, true);
             }
             if (!bDidPaint)
                 ScUndoUtil::PaintMore(pDocShell, aRange);
@@ -2328,7 +2328,7 @@ void ScUndoRemoveMerge::Redo()
             if ( pViewShell )
             {
                 pViewShell->SetTabNo(nTab);
-                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow);
+                bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow, true);
             }
             if (!bDidPaint)
                 ScUndoUtil::PaintMore(pDocShell, aRange);

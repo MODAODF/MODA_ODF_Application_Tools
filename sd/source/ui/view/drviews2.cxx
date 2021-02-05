@@ -1282,6 +1282,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         rReq.Done ();
         break;
 
+        case SID_FORMAT_RESET:
         case SID_SET_DEFAULT:
         {
             std::unique_ptr<SfxItemSet> pSet;

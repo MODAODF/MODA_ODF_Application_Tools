@@ -505,6 +505,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_FORMAT_RESET:
             case SID_SET_DEFAULT:
             {
                 if( !mpDrawView->GetMarkedObjectList().GetMarkCount() ||

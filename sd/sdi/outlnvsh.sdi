@@ -271,6 +271,11 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_FORMAT_RESET // ole : no, status : ?
+    [
+        ExecMethod = FuTemporaryModify ;
+        StateMethod = GetMenuState ;
+    ]
     SID_SET_DEFAULT // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;

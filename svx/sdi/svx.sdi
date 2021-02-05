@@ -7620,8 +7620,24 @@ SfxVoidItem SendToBack SID_FRAME_TO_BOTTOM
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem SetDefault SID_FORMAT_RESET
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
-SfxVoidItem SetDefault SID_SET_DEFAULT
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem ResetAttributes SID_SET_DEFAULT
 ()
 [
     AutoUpdate = FALSE,

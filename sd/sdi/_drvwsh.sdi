@@ -1568,6 +1568,11 @@ interface DrawView
         StateMethod = GetAttrState ;
         GroupId = SfxGroupId::Document ;
     ]
+    SID_FORMAT_RESET // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
     SID_SET_DEFAULT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

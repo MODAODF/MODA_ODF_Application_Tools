@@ -322,7 +322,11 @@ void SfxLokHelper::setDeviceFormFactor(const OUString& rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
-static OString lcl_escapeQuotes(const OString &rStr)
+/*
+* Used for putting a whole JSON string into a string value
+* e.g { key: "{JSON}" }
+*/
+static OString lcl_sanitizeJSONAsValue(const OString &rStr)
 {
     if (rStr.getLength() < 1)
         return rStr;
@@ -332,7 +336,9 @@ static OString lcl_escapeQuotes(const OString &rStr)
     {
         if (rStr[i] == '"' || rStr[i] == '\\')
             aBuf.append('\\');
-        aBuf.append(rStr[i]);
+
+        if (rStr[i] != '\n')
+            aBuf.append(rStr[i]);
     }
     return aBuf.makeStringAndClear();
 }

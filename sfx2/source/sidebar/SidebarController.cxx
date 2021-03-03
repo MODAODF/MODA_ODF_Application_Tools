@@ -938,9 +938,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
         mxFrame);
 
     // Create the XUIElement.
-    Reference<awt::XWindowPeer> xPeer(pPanel->GetElementParentWindow(), UNO_QUERY);
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
-            xPeer,
+            pPanel->GetElementParentWindow(),
             xPanelDescriptor->msImplementationURL,
             xPanelDescriptor->mbWantsCanvas,
             rContext));
@@ -958,7 +957,7 @@ VclPtr<Panel> SidebarController::CreatePanel (
 }
 
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
-    const Reference<awt::XWindowPeer>& rxWindow,
+    const Reference<awt::XWindow>& rxWindow,
     const OUString& rsImplementationURL,
     const bool bWantsCanvas,
     const Context& rContext)

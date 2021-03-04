@@ -1,0 +1,14 @@
+diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
+--- misc/epm-3.7/deb.c	2020-12-08 17:59:01.425956000 +0800
++++ misc/build/epm-3.7/deb.c	2020-12-08 18:05:55.880178032 +0800
+@@ -142,7 +142,9 @@
+     fprintf(fp, "Version: %s-%d\n", dist->version, dist->relnumber);
+   else
+     fprintf(fp, "Version: %s\n", dist->version);
+-  fprintf(fp, "Maintainer: %s\n", dist->vendor);
++  fprintf(fp, "Maintainer: %s\n", "OxOffice");
++  fprintf(fp, "Section: %s\n", "application");
++  fprintf(fp, "Priority: %s\n", "optional");
+ 
+  /*
+   * The Architecture attribute needs to match the uname info

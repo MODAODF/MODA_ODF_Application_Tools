@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,epm,$(EPM_TARBALL),,epm))
 $(eval $(call gb_UnpackedTarball_add_patches,epm,\
 	external/epm/epm-3.7.patch \
 	external/epm/asan.patch.0 \
+	external/epm/deb_add_info.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

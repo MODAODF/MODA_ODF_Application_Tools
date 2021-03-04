@@ -88,12 +88,11 @@ enum eFillStyle
 }
 
 SlideBackground::SlideBackground(
-    Window * pParent,
+    weld::Widget* pParent,
     ViewShellBase& rBase,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings
-     ) :
-    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
+    SfxBindings* pBindings) :
+    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui" ),
     mrBase( rBase ),
     mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("paperformat"))),
     mxPaperOrientation(m_xBuilder->weld_combo_box("orientation")),
@@ -161,11 +160,6 @@ SlideBackground::SlideBackground(
 
     addListener();
     Initialize();
-}
-
-SlideBackground::~SlideBackground()
-{
-    disposeOnce();
 }
 
 bool SlideBackground::IsDraw()
@@ -280,7 +274,7 @@ void SlideBackground::DumpAsPropertyTree(::tools::JsonWriter& rJsonWriter)
         mpBindings->Update(SID_ATTR_PAGE_SIZE);
     }
 
-    Control::DumpAsPropertyTree(rJsonWriter);
+    PanelLayout::DumpAsPropertyTree(rJsonWriter);
 }
 
 void SlideBackground::HandleContextChange(
@@ -349,9 +343,9 @@ void SlideBackground::HandleContextChange(
             mxInsertImage->hide();
 
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
-        sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
-        if(pPanel)
-            pPanel->TriggerDeckLayouting();
+        if (m_xPanel)
+            m_xPanel->TriggerDeckLayouting();
+
     }
     else if ( IsDraw() )
     {
@@ -693,7 +687,7 @@ void SlideBackground::updateMasterSlideSelection()
     }
 }
 
-void SlideBackground::dispose()
+SlideBackground::~SlideBackground()
 {
     removeListener();
 
@@ -737,7 +731,6 @@ void SlideBackground::dispose()
     mpBitmapItem.reset();
     mpPageLRMarginItem.reset();
     mpPageULMarginItem.reset();
-    PanelLayout::dispose();
 }
 
 void SlideBackground::ExecuteMarginLRChange(const ::tools::Long mnPageLeftMargin, const ::tools::Long mnPageRightMargin)
@@ -821,11 +814,6 @@ OUString const & SlideBackground::GetPatternSetOrDefault()
     }
 
     return mpBitmapItem->GetName();
-}
-
-void SlideBackground::DataChanged (const DataChangedEvent& /*rEvent*/)
-{
-
 }
 
 void SlideBackground::NotifyItemUpdate(

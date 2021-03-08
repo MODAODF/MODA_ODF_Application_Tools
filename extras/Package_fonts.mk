@@ -21,4 +21,6 @@ $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truety
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/TW-Sung-98_1.ttf,source/truetype/symbol/TW-Sung-98_1.ttf)) \
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/TW-Sung-Ext-B-98_1.ttf,source/truetype/symbol/TW-Sung-Ext-B-98_1.ttf)) \
 
+$(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/wingdings2.ttf,source/truetype/symbol/wingdings2.ttf)) \
+
 # vim: set noet sw=4 ts=4:

@@ -91,4 +91,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_cns11643_fonts \
 ))
 
+$(eval $(call gb_Module_add_targets,extras,\
+	CustomTarget_wingdings2_fonts \
+))
+
 # vim: set noet sw=4 ts=4:

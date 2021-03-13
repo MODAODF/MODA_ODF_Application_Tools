@@ -558,6 +558,11 @@ bool Application::IsInExecute()
     return ImplGetSVData()->maAppData.mbInAppExecute;
 }
 
+bool Application::IsQuit()
+{
+    return ImplGetSVData()->maAppData.mbAppQuit;
+}
+
 bool Application::IsInModalMode()
 {
     return (ImplGetSVData()->maAppData.mnModalMode != 0);

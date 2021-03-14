@@ -6007,6 +6007,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     }
 
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    pViewShell->UpdateInputHandler();
     OString sBoundingBoxString = "EMPTY";
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();

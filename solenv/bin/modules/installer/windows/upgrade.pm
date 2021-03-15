@@ -44,7 +44,7 @@ sub create_upgrade_table
     }
     my $upgradever ="";
     # for ndc edition
-    if ( $allvariableshashref->{'PRODUCTNAME'} eq "NDC ODF Application Tools" )
+    if ( index($allvariableshashref->{'PRODUCTNAME'}, "NDC") != -1 )
     {
         # ndc tools version since 6.3 begin
         my $mainver = 6;

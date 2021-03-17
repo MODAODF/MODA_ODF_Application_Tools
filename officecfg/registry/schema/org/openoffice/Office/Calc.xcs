@@ -103,6 +103,16 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ZeroToMinus" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: Calc/Contents/Display -->
+          <!-- OldLocation: Soffice.cfg -->
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
+          <info>
+            <desc>Indicates whether numbers containing the 0 value are shown.</desc>
+            <label>Zero to minus</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="NoteTag" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Calc/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->

@@ -170,6 +170,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mbShowFormulas( false ),
     bShowSpellErrors( false ),
     bMarkClipped( false ), // sal_False for printer/metafile etc.
+    mbShowZeroToMinus( false ),
     bSnapPixel( false ),
     bAnyClipped( false ),
     mpTargetPaintWindow(nullptr), // #i74769# use SdrPaintWindow direct
@@ -240,6 +241,11 @@ void ScOutputData::SetGridColor( const Color& rColor )
 void ScOutputData::SetMarkClipped( bool bSet )
 {
     bMarkClipped = bSet;
+}
+
+void ScOutputData::SetShowZeroToMinus( bool bSet )
+{
+    mbShowZeroToMinus = bSet;
 }
 
 void ScOutputData::SetShowNullValues( bool bSet )

@@ -36,12 +36,12 @@ public:
     static void GetString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
         const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bNullVals = true,
-        bool bFormula  = false, bool bUseStarFormat = false );
+        bool bFormula  = false, bool bUseStarFormat = false, bool bZeroToMinus = false );
 
     static OUString GetString(
         ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat,
         const Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
-        bool bFormula  = false );
+        bool bFormula  = false, bool bZeroToMinus = false );
 
     static void GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter,

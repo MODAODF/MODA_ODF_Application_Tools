@@ -1695,6 +1695,10 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
         sOutString.clear();
         return;
     }
+    if (sOutString.equals("-") && fOutNumber == 0.0)
+    {
+        return;
+    }
     SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry( nFIndex ));
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);

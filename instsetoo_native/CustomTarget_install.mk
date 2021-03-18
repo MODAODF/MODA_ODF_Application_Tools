@@ -67,7 +67,7 @@ PRODUCTNAME_no_spaces := $(subst $(WHITESPACE),,$(PRODUCTNAME))
 ifneq (,$(findstring LibreOffice,$(PRODUCTNAME_no_spaces)))
 	BINARY_PATH := Binary
 else
-	BINARY_PATH := $(PRODUCTNAME_no_space)_Binary
+	BINARY_PATH := $(PRODUCTNAME_no_spaces)_Binary
 endif
 
 ifeq (WNT,$(OS))

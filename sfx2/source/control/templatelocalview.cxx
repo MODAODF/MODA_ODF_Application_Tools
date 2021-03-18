@@ -46,6 +46,7 @@
 	#if defined(_WIN32)
 		#include <direct.h>
 		#include <systools/win32/uwinapi.h>
+		#include <config_folders.h>
 	#else
 		#include <rtl/bootstrap.hxx>
 		#include <osl/file.h>

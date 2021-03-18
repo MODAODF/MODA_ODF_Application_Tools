@@ -581,6 +581,24 @@ struct StyleComparator
 
 }
 
+#if defined(_WIN32)
+OUString impastpl_getCacheFolder()
+{
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+
+    rtl::Bootstrap::expandMacros(url);
+
+    OUString aSysPath;
+    if( url.startsWith( "file://" ) )
+    {
+        OUString aSysPath;
+        if( osl_getSystemPathFromFileURL( url.pData, &aSysPath.pData ) == osl_File_E_None )
+            url = aSysPath;
+    }
+    return url;
+}
+#endif
+
 void SvXMLAutoStylePoolP_Impl::exportXML(
         XmlStyleFamily nFamily,
         const SvXMLAutoStylePoolP *pAntiImpl) const

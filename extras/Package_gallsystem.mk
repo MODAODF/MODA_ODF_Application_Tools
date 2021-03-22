@@ -15,11 +15,11 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/galler
     $(addsuffix .sdg,$(system_galleries)) \
     $(addsuffix .sdv,$(system_galleries)) \
     $(addsuffix .thm,$(system_galleries)) \
-    country.str \
-    odf_icons.str \
-    hospital.str \
-    forbidden.str \
-    fileformat.str \
+    $(country.str,$(system_galleries)) \
+    $(odf_icons.str,$(system_galleries)) \
+    $(hospital.str,$(system_galleries)) \
+    $(forbidden.str,$(system_galleries)) \
+    $(fileformat.str,$(system_galleries)) \
 ))
 
 # vim: set noet sw=4 ts=4:

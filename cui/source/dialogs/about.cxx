@@ -107,14 +107,14 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBrandImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
+  /*if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pAboutImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
     m_pVirDev->DrawBitmapEx(Point(0, 0), aBackgroundBitmap);
     m_pAboutImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
-  }
+  }*/
 
   // Links
 #if 0  // hide credits,website,releasenote link

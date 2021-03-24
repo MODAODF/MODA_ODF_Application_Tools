@@ -1325,7 +1325,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
 
                 //what's new infobar
-                OUString sSetupVersion = utl::ConfigManager::getProductVersion();
+                /*OUString sSetupVersion = utl::ConfigManager::getProductVersion();
                 sal_Int32 iCurrent = sSetupVersion.getToken(0,'.').toInt32() * 10 + sSetupVersion.getToken(1,'.').toInt32();
                 OUString sLastVersion
                     = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
@@ -1343,7 +1343,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                     officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
                     batch->commit();
-                }
+                }*/
                 // add switch notebookbar msgbox
                 const bool bTipFirstRun = officecfg::Office::Common::Misc::TipFirstRun::get();
                 if (bTipFirstRun && !Application::IsHeadlessModeEnabled() && !bIsUITest)

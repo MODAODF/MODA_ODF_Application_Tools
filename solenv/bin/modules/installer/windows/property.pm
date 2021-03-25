@@ -132,13 +132,20 @@ sub get_productname_for_property_table($$)
 
     my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
+    my $lableversion = $allvariables->{'LPRODUCTVERSION'};
     my $productname = $name;
 
     my $productextension = "";
     if ( $allvariables->{'PRODUCTEXTENSION'} )
     {
-        $productextension = $allvariables->{'PRODUCTEXTENSION'};
-        $productname = $productname . $productextension;
+        # for ndc and ossii edition
+        if ( index($productname, "NDC") != -1 || index($productname, "OxOffice") != -1)
+        {
+            $productname = $productname . " " . $lableversion;
+        } else {
+            $productextension = $allvariables->{'PRODUCTEXTENSION'};
+            $productname = $productname . $productextension;
+        }
     }
 
     my $postversionextension = "";

@@ -292,8 +292,11 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     }
 }
 
-void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage)
+void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
 {
+    // bMergeCover : Draw lines in sheet bgcolor to cover lok client grid lines in merged cell areas.
+    // (Used when scNoGridBackground is set in lok mode.)
+
     SCCOL nX;
     SCROW nY;
     tools::Long nPosX;
@@ -329,11 +332,12 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     // break all the drawing by one change.
     // So until that happens, we need to special case.
     bool bWorksInPixels = bMetaFile;
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aSheetBGColor = rColorCfg.GetColorValue(::svtools::DOCCOLOR).nColor;
 
     if ( eType == OUTTYPE_WINDOW )
     {
         bWorksInPixels = true;
-        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
         aPageColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
         aManualColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor;
     }
@@ -355,7 +359,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
     tools::Long nSignedOneX = nOneX * nLayoutSign;
 
-    rRenderContext.SetLineColor(aGridColor);
+    if (bGrid)
+        rRenderContext.SetLineColor(aGridColor);
+    else if (bMergeCover)
+        rRenderContext.SetLineColor(aSheetBGColor);
+
     ScGridMerger aGrid(&rRenderContext, nOneX, nOneY);
 
     // vertical lines
@@ -397,9 +405,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else
+                    else if (bGrid)
                     {
                         rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+                    else if (bMergeCover)
+                    {
+                        rRenderContext.SetLineColor(aSheetBGColor);
                         bDashed = false;
                     }
 
@@ -407,7 +420,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE; // simple grid only if set that way
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = false; //! get into Fillinfo !!!!!
@@ -457,14 +470,18 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                             }
                         }
 
-                        if (pThisRowInfo->bChanged && !bHOver)
+                        if (pThisRowInfo->bChanged && !bHOver && bGrid)
+                        {
+                            aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
+                        }
+                        else if (bHOver && bMergeCover)
                         {
                             aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
                         }
                         nPosY = nNextY;
                     }
                 }
-                else
+                else if (bGrid)
                 {
                     aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY, bDashed);
                 }
@@ -514,9 +531,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else
+                    else if (bGrid)
                     {
                         rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+                    else if (bMergeCover)
+                    {
+                        rRenderContext.SetLineColor(aSheetBGColor);
                         bDashed = false;
                     }
 
@@ -524,7 +546,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE;    // simple grid only if set so
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover;    // simple grid only if set so
 
             bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
             bSingle = !bNextYisNextRow;             // Hidden
@@ -562,7 +584,12 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                             ->IsVerOverlapped();
                                     //! nVisY from Array ??
                             }
-                            if (!bVOver)
+
+                            if (!bVOver && bGrid)
+                            {
+                                aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
+                            }
+                            else if (bVOver && bMergeCover)
                             {
                                 aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
                             }
@@ -570,7 +597,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                         nPosX = nNextX;
                     }
                 }
-                else
+                else if (bGrid)
                 {
                     aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY, bDashed);
                 }

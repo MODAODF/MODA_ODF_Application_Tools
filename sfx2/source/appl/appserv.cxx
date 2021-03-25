@@ -581,12 +581,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
         {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-            {
-                pHelp->Start(".uno:HelpIndex", Application::GetDefDialogParent()); // show start page
-                bDone = true;
-            }
+            OUString sURL(Translate::ExpandVariables("%HELPINDEX"));
+            sfx2::openUriExternally(sURL, false);
             break;
         }
 

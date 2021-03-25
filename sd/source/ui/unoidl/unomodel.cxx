@@ -2313,13 +2313,13 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     return OUString::fromUtf8(aStream.str().c_str()).trim();
 }
 
-void SdXImpressDocument::setPart( int nPart )
+void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return;
 
-    pViewSh->SwitchPage( nPart );
+    pViewSh->SwitchPage( nPart, bAllowChangeFocus );
 }
 
 int SdXImpressDocument::getParts()

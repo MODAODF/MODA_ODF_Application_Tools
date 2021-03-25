@@ -47,7 +47,7 @@ sub create_upgrade_table
     if ( index($allvariableshashref->{'PRODUCTNAME'}, "NDC") != -1 )
     {
         # ndc tools version since 6.3 begin
-        my $mainver = 6;
+        my $mainver = $1 + 4;
         my $secver = ($2 * 100) + $3 + 2;
         $upgradever = $mainver . "\." . $secver;
     }

@@ -1376,7 +1376,16 @@ sub set_global_code_variables
 
     # Adding both variables into the variables array
 
-    $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
+    # for ndc edition
+    my $productname = $allvariableshashref->{'PRODUCTNAME'};
+    if ( index($productname, "NDC") != -1 ) {
+        $installer::globals::upgradecode = "{47de8145-2a11-4851-80a0-c0017d166b63}";
+    }
+    elsif ( index($productname, "OxOffice") != -1 ) {
+        $installer::globals::upgradecode = "{08ec5376-4474-4323-a568-7f367473c69a}";
+    } else {
+        $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
+    }
     $allvariableshashref->{'UPGRADECODE'} = $installer::globals::upgradecode;
 
     $infoline = "Defined variable PRODUCTCODE: $installer::globals::productcode \n";

@@ -38,7 +38,7 @@ Globals
     }
 }
 
-@PRODUCTNAME@
+@PRODUCTNAME_WITHOUT_SPACES@
 {
     Settings
     {

@@ -56,7 +56,13 @@ char const maximalVersionOpenOfficeOrg[] =
     "OpenOffice.org-maximal-version";
 
 OUString getLibreOfficeMajorMinorMicro() {
-    return utl::ConfigManager::getAboutBoxProductVersion();
+    OUString productname = utl::ConfigManager::getProductName();
+    if ( productname.indexOf( "NDC" ) != -1 || productname.indexOf( "OxOffice" ) != -1 )
+    {
+        return utl::ConfigManager::getBaseonVersion();
+    } else {
+        return utl::ConfigManager::getAboutBoxProductVersion();
+    }
 }
 
 OUString getReferenceOpenOfficeOrgMajorMinor() {

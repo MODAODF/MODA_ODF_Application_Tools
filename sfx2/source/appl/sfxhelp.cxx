@@ -717,10 +717,22 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink = officecfg::Office::Common::Help::HelpRootURL::get();
-    OUString aTarget = OUString::Concat("Target=") + rURL.subView(aInternal.getLength());
-    aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
-    aHelpLink += aTarget;
+    OUString aHelpLink =  "";
+    if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
+    {
+        aHelpLink = "https://www.ndc.gov.tw/cp.aspx?n=D6D0A9E658098CA2&s=CDA642B408087E65";
+    }
+    else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
+    {
+        aHelpLink = "https://www.ossii.com.tw/odf";
+    }
+    else
+    {
+        aHelpLink = officecfg::Office::Common::Help::HelpRootURL::get();
+        OUString aTarget = "Target=" + rURL.copy(aInternal.getLength());
+        aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
+        aHelpLink += aTarget;
+    }
 
     if (comphelper::LibreOfficeKit::isActive())
     {

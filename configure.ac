@@ -478,13 +478,9 @@ else
 fi
 AC_SUBST(PRODUCTNAME)
 
-AC_MSG_CHECKING([for product name with space])
-if test -n "$with_product_name_with_space" -a "$with_product_name_with_space" != "yes" ; then
-    PRODUCTNAME_WITH_SPACE="$with_product_name_with_space"
-else
-    PRODUCTNAME_WITH_SPACE="OxOffice"
-fi
-AC_SUBST(PRODUCTNAME_WITH_SPACE)
+AC_MSG_CHECKING([for lower case product name])
+LOWER_PRODUCTNAME=`echo $PRODUCTNAME | awk '{print tolower($0)}'`
+AC_SUBST(LOWER_PRODUCTNAME)
 
 AC_MSG_CHECKING([for about box version])
 if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then

@@ -478,6 +478,18 @@ else
 fi
 AC_SUBST(PRODUCTNAME)
 
+AC_MSG_CHECKING([for is oxoffice])
+if test "$PRODUCTNAME" == "OxOffice" ; then
+    ISOXOFFICE="TRUE"
+    REGISTERPRODUCTNAME="OSSIntegralInstitute.OxOffice"
+    AC_SUBST(ISOXOFFICE)
+    AC_SUBST(REGISTERPRODUCTNAME)
+else
+    REGISTERPRODUCTNAME="NationalDevelopmentCouncil.NdcOffice"
+    AC_SUBST(REGISTERPRODUCTNAME)
+fi
+AC_MSG_RESULT([$ISOXOFFICE])
+
 AC_MSG_CHECKING([for lower case product name])
 LOWER_PRODUCTNAME=`echo $PRODUCTNAME | awk '{print tolower($0)}'`
 AC_SUBST(LOWER_PRODUCTNAME)

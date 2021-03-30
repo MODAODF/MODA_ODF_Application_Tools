@@ -59,6 +59,7 @@
 #include <salsys.hxx>
 
 #include <desktop/crashreport.hxx>
+#include <unotools/configmgr.hxx>
 
 #if defined _MSC_VER
 #ifndef min
@@ -970,7 +971,13 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
             if ( !sApplicationName.isEmpty() )
             {
-                OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplicationName);
+                OUString sApplicationID;
+                if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
+                    sApplicationID = "NationalDevelopmentCouncil.NdcOffice." + sApplicationName;
+                else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
+                    sApplicationID = "OSSIntegralInstitute.OxOffice." + sApplicationName;
+                else
+                    sApplicationID = "TheDocumentFoundation.LibreOffice." + sApplicationName;
 
                 SHARDAPPIDINFO info;
                 info.psi = pShellItem;

@@ -280,14 +280,25 @@ End
         REG_VALUE_LNG(disp_name) \
     End
 
+#ifdef ISOXOFFICE
 #define REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_AppUserModelID) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT2(OxOffice.,name)); \
         Name = STRING(AppUserModelID); \
-        Value = STRING(CONCAT2(TheDocumentFoundation.OxOffice.,doc_type)); \
+        Value = STRING(CONCAT2(OSSIntegralInstitute.OxOffice.,doc_type)); \
     End
+#else
+#define REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_AppUserModelID) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = modid; \
+        Subkey = STRING(CONCAT2(OxOffice.,name)); \
+        Name = STRING(AppUserModelID); \
+        Value = STRING(CONCAT2(NationalDevelopmentCouncil.NdcOffice.,doc_type)); \
+    End
+#endif
 
 #define REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Defaulticon) \

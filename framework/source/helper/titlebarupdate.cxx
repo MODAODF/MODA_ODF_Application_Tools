@@ -138,8 +138,13 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         else
             sDesktopName = "Startcenter";
 #if defined(_WIN32)
-        // We use a hardcoded product name matching the registry keys so applications can be associated with file types
-        sApplicationID = "TheDocumentFoundation.LibreOffice." + sDesktopName;
+        if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
+            sApplicationID = "NationalDevelopmentCouncil.NdcOffice." + sDesktopName;
+        else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
+            sApplicationID = "OSSIntegralInstitute.OxOffice." + sDesktopName;
+        else
+            // We use a hardcoded product name matching the registry keys so applications can be associated with file types
+            sApplicationID = "TheDocumentFoundation.LibreOffice." + sDesktopName;
 #else
         sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase() + "-" + sDesktopName.toAsciiLowerCase();
 #endif

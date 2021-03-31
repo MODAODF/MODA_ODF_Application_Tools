@@ -973,7 +973,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
             {
                 OUString sApplicationID;
                 if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
-                    sApplicationID = "NationalDevelopmentCouncil.NdcOffice." + sApplicationName;
+                    sApplicationID = "NationalDevelopmentCouncil.NDCODFApplicationTools." + sApplicationName;
                 else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
                     sApplicationID = "OSSIntegralInstitute.OxOffice." + sApplicationName;
                 else

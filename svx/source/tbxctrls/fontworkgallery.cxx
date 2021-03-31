@@ -441,6 +441,12 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
 {
     svt::PopupWindowController::initialize( aArguments );
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
@@ -714,6 +720,12 @@ VclPtr<vcl::Window> FontworkCharacterSpacingControl::createVclPopupWindow( vcl::
 void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;

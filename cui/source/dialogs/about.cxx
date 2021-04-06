@@ -99,7 +99,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
                                            .IsDark()
                                        ? "shell/logo_inverted"
                                        : "shell/logo",
-                                   aBackgroundBitmap, nWidth * 0.8)) {
+                                   aBackgroundBitmap, nWidth * 1.5)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pBrandImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());

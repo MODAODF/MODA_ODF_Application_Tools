@@ -347,6 +347,10 @@ public:
         m_xWidget->Fill(pList);
         nFtCount = pList->GetFontNameCount();
     }
+    void            Sort()
+    {
+        m_xWidget->make_sorted();
+    }
 
     void SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
 
@@ -1447,8 +1451,10 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
     // Fill the FontBox, also the new list if necessary
     if ( pBox && bChanged )
     {
-        if ( *ppFontList )
+        if ( *ppFontList ) {
             pBox->Fill( *ppFontList );
+            pBox->Sort();
+        }
         else
             pBox->Clear();
     }

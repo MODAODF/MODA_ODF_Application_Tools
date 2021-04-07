@@ -380,6 +380,7 @@ public:
     void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
     int get_max_mru_count() const { return m_xComboBox->get_max_mru_count(); }
     void set_max_mru_count(int nCount) { m_xComboBox->set_max_mru_count(nCount); }
+    void make_sorted() { m_xComboBox->make_sorted(); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     void set_entry_font(const vcl::Font& rFont) { m_xComboBox->set_entry_font(rFont); }

@@ -83,9 +83,15 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_opensymbol \
 ))
 
+ifneq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,extras,\
+	CustomTarget_sourcehansans_fonts_ttc \
+))
+else
 $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_sourcehansans_fonts \
 ))
+endif
 
 $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_cns11643_fonts \

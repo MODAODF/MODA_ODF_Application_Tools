@@ -1212,6 +1212,11 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
 
 static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
                                    const char* pArguments);
+
+// Added By Firefly<firefly@ossii.com.tw>
+static void doc_initUnoStatus(LibreOfficeKitDocument* pThis,
+                              const char* pCommands);
+//---------------------------------------
 } // extern "C"
 
 namespace {
@@ -1331,6 +1336,10 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->completeFunction = doc_completeFunction;
 
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
+
+        // Added By Firefly<firefly@ossii.com.tw>
+        m_pDocumentClass->initUnoStatus = doc_initUnoStatus;
+        // -------------------------------------------------
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5971,6 +5980,55 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
 
     pDoc->executeFromFieldEvent(aMap);
 }
+
+// Added by Firefly<firefly@ossii.com.tw>
+static void doc_initUnoStatus(LibreOfficeKitDocument* /*pThis*/, const char* pCommands)
+{
+    comphelper::ProfileZone aZone("doc_initUnoStaus");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+
+    if (!pViewShell && !pViewFrame)
+    {
+        SAL_WARN("lok", "initUnoStaus: No Frame-Controller created.");
+        return;
+    }
+
+    if (!xContext.is())
+    {
+        SAL_WARN("lok", "initUnoStaus: Component context is not available");
+        return;
+    }
+
+    // 以逗號分隔的 uno 指令
+   const std::vector<OUString> aUnoCmds = comphelper::string::split(OUString(pCommands, strlen(pCommands), RTL_TEXTENCODING_UTF8), ',');
+
+    util::URL aCommandURL;
+    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
+
+    for (auto &it : aUnoCmds)
+    {
+        aCommandURL.Complete = it;
+        xParser->parseStrict(aCommandURL);
+        const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
+
+        if (pSlot)
+        {
+            // Initialize slot to dispatch .uno: Command.
+            pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
+        }
+        else
+        {
+            std::cerr << "'" << aCommandURL.Complete << "':Does not support status acquisition\n";
+        }
+    }
+}
+//--------------------------------------------
 
 static char* lo_getError (LibreOfficeKit *pThis)
 {

@@ -6024,7 +6024,7 @@ static void doc_initUnoStatus(LibreOfficeKitDocument* /*pThis*/, const char* pCo
         }
         else
         {
-            std::cerr << "'" << aCommandURL.Complete << "':Does not support status acquisition\n";
+            SAL_WARN("lok_StateChange", aCommandURL.Complete << "':Does not support status acquisition.");
         }
     }
 }
@@ -6682,7 +6682,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 Application::ReleaseSolarMutex();
             }
 
+            /* Modified by Firefly <firefly@ossii.com.tw>
+            沒有必要在 OxOffice 初始化階段強制設定英語語系及地區
             setLanguageAndLocale("en-US");
+             */
         }
 
         if (eStage != PRE_INIT)

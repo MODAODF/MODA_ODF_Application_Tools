@@ -37,6 +37,7 @@
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
 
 #include <unicode/uclean.h>
 #include <unicode/ucsdet.h>
@@ -325,8 +326,11 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
             m_xDialog->set_title(mxAltTitle->get_label());
             break;
         case SC_IMPORTFILE:
-            aName += " - [" + aDatName + "]";
-            m_xDialog->set_title(aName);
+            if (!comphelper::LibreOfficeKit::isActive())
+            {
+                aName += " - [" + aDatName + "]";
+                m_xDialog->set_title(aName);
+            }
             break;
         default:
             break;

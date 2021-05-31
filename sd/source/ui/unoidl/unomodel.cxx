@@ -2280,19 +2280,26 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
 
 OUString SdXImpressDocument::getPartInfo(int nPart)
 {
-    DrawViewShell* pViewSh = GetViewShell();
-    if (!pViewSh)
+    // 從 SdPage 取得的資料才準確
+    SdPage* pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+    if (!pPage)
         return OUString();
 
-    const bool bIsVisible = pViewSh->IsVisible(nPart);
-    const bool bIsSelected = pViewSh->IsSelected(nPart);
+    boost::property_tree::ptree aJson;
+    aJson.put("part", nPart); // 編號
+    aJson.put("name", pPage->GetName()); // 投影片名稱
+    aJson.put("visible", static_cast<unsigned int>(!pPage->IsExcluded())); // 是否隱藏
+    aJson.put("selected", static_cast<unsigned int>(pPage->IsSelected())); // 是否選取
+    aJson.put("autoLayout", pPage->GetAutoLayout()); // 自動版面配置編號
+    aJson.put("transitionType", pPage->getTransitionType()); // 轉場動畫類別 0 表示沒有
+    aJson.put("transitionSubtype", pPage->getTransitionSubtype()); // 轉場動畫子類別(變化)
+    aJson.put("transitionDuration", pPage->getTransitionDuration()); // 轉場動畫時間
+    aJson.put("hasAnimationNode", static_cast<unsigned int>(pPage->hasAnimationNode())); // 是否有互動動畫
+    aJson.put("hashCode", pPage->GetHashCode()); // hash code
 
-    OUString aPartInfo = "{ \"visible\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsVisible)) +
-        "\", \"selected\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsSelected)) +
-        "\" }";
-    return aPartInfo;
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aJson, false/*不要排版*/);
+    return OUString::fromUtf8(aStream.str().c_str()).trim();
 }
 
 void SdXImpressDocument::setPart( int nPart )

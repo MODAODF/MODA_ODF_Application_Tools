@@ -606,17 +606,32 @@ int ScModelObj::getPart()
 
 OUString ScModelObj::getPartInfo( int nPart )
 {
-    ScViewData* pViewData = ScDocShell::GetViewData();
-    const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
-    //FIXME: Implement IsSelected().
-    const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
+    const ScDocument& pDoc = ScDocShell::GetViewData()->GetDocument();
+    const bool bIsVisible = pDoc.IsVisible(nPart);
+    const bool bIsSelected = false; // FIXME: Implement IsSelected(nPart).
+    OUString aTabName;
+    pDoc.GetName(nPart, aTabName);
+    const Color aTabBgColor = pDoc.GetTabBgColor(nPart);
+    const bool bProtected = pDoc.IsTabProtected(nPart);
+    bool bProtectedWithPass = false;
+    if (bProtected)
+    {
+        bProtectedWithPass = pDoc.GetTabProtection(nPart)->isProtectedWithPass();
+    }
 
-    OUString aPartInfo = "{ \"visible\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsVisible)) +
-        "\", \"selected\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsSelected)) +
-        "\" }";
-    return aPartInfo;
+    boost::property_tree::ptree aJson;
+    aJson.put("part", nPart); // 工作表編號
+    aJson.put("name", aTabName); // 工作表名稱
+    aJson.put("visible", static_cast<unsigned int>(bIsVisible)); // 是否可見
+    aJson.put("selected", static_cast<unsigned int>(bIsSelected)); // 被選取
+    aJson.put("bgColor", static_cast<sal_Int32>(aTabBgColor)); // 標籤顏色，-1：透明
+    aJson.put("bgIsDark", aTabBgColor.GetLuminance() < 128 ? 1 : 0); // // 標籤顏色是否偏暗
+    aJson.put("protected", static_cast<unsigned int>(bProtected)); // 是否保護
+    aJson.put("protectedWithPass", static_cast<unsigned int>(bProtectedWithPass)); // 是否以密碼保護
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aJson, false/*不要排版*/);
+    return OUString::fromUtf8(aStream.str().c_str()).trim();
 }
 
 OUString ScModelObj::getPartName( int nPart )

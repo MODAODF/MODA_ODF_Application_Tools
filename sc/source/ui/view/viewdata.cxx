@@ -2327,7 +2327,8 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 
 ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) ||
+        !maTabData[nTabIndex])
     {
         return nullptr;
     }
@@ -2336,7 +2337,8 @@ ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
 
 ScPositionHelper* ScViewData::GetLOKHeightHelper(SCTAB nTabIndex)
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) ||
+        !maTabData[nTabIndex])
     {
         return nullptr;
     }

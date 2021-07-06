@@ -139,4 +139,17 @@ End
 
 #endif
 
+/* ** VRTNETWORKEQUIPMENT ** */
+
+#ifdef WITH_EXTENSION_VRTNETWORKEQUIPMENT
+
+File gid_File_Oxt_VRTNETWORKEQUIPMENT
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "VrtNetworkEquipment.filelist";
+End
+
+#endif
+
 #endif

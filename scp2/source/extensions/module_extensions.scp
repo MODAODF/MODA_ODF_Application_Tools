@@ -201,4 +201,19 @@ Module gid_Module_Optional_Extensions_CPMLIBRE
 End
 #endif
 
+/* ** VRTNETWORKEQUIPMENT ** */
+
+#ifdef WITH_EXTENSION_VRTNETWORKEQUIPMENT
+Module gid_Module_Optional_Extensions_VRTNETWORKEQUIPMENT
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_VRTNETWORKEQUIPMENT);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_VRTNETWORKEQUIPMENT );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+
 #endif

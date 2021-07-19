@@ -1357,7 +1357,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 } //bShowTipOfTheDay
 
                 // inform about the community involvement
-                const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
+                /*const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
                 const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
                 const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
                 bool bUpdateLastTimeGetInvolvedShown = false;
@@ -1384,10 +1384,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                     officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
                     batch->commit();
-                }
+                }*/
 
                 // inform about donations
-                const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
+                /*const sal_Int64 nLastDonateShown = officecfg::Setup::Product::LastTimeDonateShown::get();
                 bool bUpdateLastTimeDonateShown = false;
 
                 if (nLastDonateShown == 0)
@@ -1411,7 +1411,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                     officecfg::Setup::Product::LastTimeDonateShown::set(nNow, batch);
                     batch->commit();
-                }
+                }*/
 
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;

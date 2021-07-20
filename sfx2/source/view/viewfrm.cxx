@@ -22,6 +22,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
@@ -1343,7 +1344,20 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
                     batch->commit();
                 }
-
+                // add switch notebookbar msgbox
+                const bool bTipFirstRun = officecfg::Office::Common::Misc::TipFirstRun::get();
+                if (bTipFirstRun && !Application::IsHeadlessModeEnabled() && !bIsUITest)
+                {
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                              VclMessageType::Info, VclButtonsType::Ok,
+                                                              SfxResId(STR_TIP_SWITCHMENUBAR)));
+                    xInfoBox->run();
+                    // set TipFirstRun false
+                    std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Common::Misc::TipFirstRun::set(false, batch);
+                    batch->commit();
+                }
                 // show tip-of-the-day dialog
                 const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
                 if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {

@@ -113,6 +113,19 @@ End
 
 #endif
 
+/* ** NDCHelp ** */
+
+#ifdef WITH_EXTENSION_NDCHELP
+
+File gid_File_Oxt_NDCHELP
+       TXT_FILE_BODY;
+       Styles = (PACKED, FILELIST);
+       Dir = FILELIST_DIR;
+       Name = "NDCHelp.filelist";
+End
+
+#endif
+
 /* ** CPMLIBRE ** */
 
 #ifdef WITH_EXTENSION_CPMLIBRE

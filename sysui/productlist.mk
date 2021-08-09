@@ -7,15 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-PRODUCTLIST := libreoffice oxoffice ndcodfsys libreofficedev
+PRODUCTLIST := libreoffice oxoffice ndcodfsys libreofficedev ndcodfapplicationtools
 PKGVERSION := $(USERDIRPRODUCTVERSION).$(OXO_VERSION_MINOR)
 PKGVERSIONSHORT := $(USERDIRPRODUCTVERSION)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.oxoffice := OxOffice
+PRODUCTNAME.ndcodfapplicationtools := NDCODFApplicationTools
 PRODUCTNAME.ndcodfsys := NDCODFSYS
 PRODUCTNAME.libreofficedev := LibreOfficeDev
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.oxoffice := oxoffice
+UNIXFILENAME.ndcodfapplicationtools := ndcodfapplicationtools
 UNIXFILENAME.ndcodfsys := ndcodfsys
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
 

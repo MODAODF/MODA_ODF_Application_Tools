@@ -38,6 +38,7 @@
 #include <iostream>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/pngread.hxx>
 #if defined(_WIN32)
 #include <direct.h>
 #include <systools/win32/uwinapi.h>
@@ -92,7 +93,7 @@ WaitWindow_Impl::WaitWindow_Impl(sal_uInt16 first_run) : WorkWindow(nullptr, WB_
     SetOutputSizePixel(aRect.GetSize());
 
     Show();
-    Update();
+    PaintImmediately();
     Flush();
 }
 

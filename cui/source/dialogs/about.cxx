@@ -71,7 +71,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pVersionLabel->set_label(GetVersionString());
 
   OUString sbuildId = GetBuildString();
-  if (IsStringValidGitHash(sbuildId)) {
+  // if (IsStringValidGitHash(sbuildId)) {
+  if (0) {
     const tools::Long nMaxChar = 25;
     m_pBuildLabel->set_uri("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h="
                            + sbuildId);
@@ -159,7 +160,7 @@ OUString AboutDialog::GetVersionString() {
   sVersion += " (x86)";
 #endif
 
-#if HAVE_FEATURE_COMMUNITY_FLAVOR
+#if 0
   sVersion += " / LibreOffice Community";
 #endif
 

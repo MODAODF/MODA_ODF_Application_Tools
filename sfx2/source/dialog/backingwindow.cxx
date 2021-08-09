@@ -87,9 +87,9 @@ public:
 
     void LoadImageForWidth(int nWidth)
     {
-        mbIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
+        /*mbIsDark = Application::GetSettings().GetStyleSettings().GetDialogColor().IsDark();
         SfxApplication::loadBrandSvg(mbIsDark ? "shell/logo-sc_inverted" : "shell/logo-sc",
-                                    maBrandImage, nWidth);
+                                    maBrandImage, nWidth);*/
     }
 
     void ConfigureForWidth(int nWidth)

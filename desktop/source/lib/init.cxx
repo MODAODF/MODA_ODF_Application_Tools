@@ -5260,99 +5260,177 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    OString aSearchedFontName(pFontName);
-    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8));
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
-
+    vcl::Font aFont;
     const int nDefaultFontSize = 25;
 
-    if ( pList )
+    OUString aSearchedFontName(OStringToOUString(pFontName, RTL_TEXTENCODING_UTF8).trim());
+    OUString aText(OStringToOUString(pChar, RTL_TEXTENCODING_UTF8).trim());
+
+    if (aSearchedFontName.startsWith("{") && aSearchedFontName.endsWith("}"))
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(pFontName);
+        boost::property_tree::read_json(aStream, aTree);
+
+        // 字型名稱
+        OUString aFamilyName = OUString::fromUtf8(aTree.get<std::string>("familyname", "Liberation Sans").c_str());
+        aFont = vcl::Font(aFamilyName, Size(0, nDefaultFontSize));
+        // 顏色
+        Color aColor(aTree.get<unsigned long>("color", 0));
+        aFont.SetColor(aColor);
+        // 粗體
+        aFont.SetWeight(aTree.get<bool>("bold", false) ? WEIGHT_BOLD : WEIGHT_NORMAL);
+        // 斜體
+        aFont.SetItalic(aTree.get<bool>("italic", false) ? ITALIC_NORMAL : ITALIC_NONE);
+        // 是否浮雕字
+        std::string aRelief = aTree.get<std::string>("relief", "");
+        if (aRelief == "embossed") // 浮凸
         {
-            const FontMetric& rFontMetric = pList->GetFontName(i);
-            const OUString& aFontName = rFontMetric.GetFamilyName();
-            if (aSearchedFontName != aFontName.toUtf8())
-                continue;
+            aFont.SetRelief(FontRelief::Embossed);
+        }
+        else if (aRelief == "engraved") // 雕刻
+        {
+             aFont.SetRelief(FontRelief::Engraved);
+        }
+        else // 未指定浮雕字
+        {
+            aFont.SetOutline(aTree.get<bool>("outline", false)); // 輪廓(中空)
+            aFont.SetShadow(aTree.get<bool>("shadow", false)); // 陰影
+        }
+        // TODO:
+        // aTree.get<std::string>("underline", "");
+        // aFont.SetUnderline( FontLineStyle ); // 底線
 
-            if (aText.isEmpty())
-                aText = rFontMetric.GetFamilyName();
+        // aTree.get<std::string>("overline", "");
+        // aFont.SetOverline( FontLineStyle ); // 頂線
 
-            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-            ::tools::Rectangle aRect;
-            vcl::Font aFont(rFontMetric);
-            aFont.SetFontSize(Size(0, nDefaultFontSize));
-            aFont.SetOrientation(Degree10(pOrientation));
-            aDevice->SetFont(aFont);
-            aDevice->GetTextBoundRect(aRect, aText);
-            if (aRect.IsEmpty())
-                break;
+        // aTree.get<std::string>("strikeout", "");
+        // aFont.SetStrikeout( FontStrikeout ); // 刪除線
+    }
+    else
+    {
+        SfxObjectShell* pDocSh = SfxObjectShell::Current();
+        const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
+        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+        const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
+        if (!pFonts)
+            return nullptr;
 
-            int nFontWidth = aRect.BottomRight().X() + 1;
-            int nFontHeight = aRect.BottomRight().Y() + 1;
-
-            if (nFontWidth <= 0 || nFontHeight <= 0)
-                break;
-
-            if (*pFontWidth > 0 && *pFontHeight > 0)
+        sal_uInt16 nFontCount = pList->GetFontNameCount();
+        sal_uInt16 nItFont = 0;
+        for (; nItFont < nFontCount; ++nItFont)
+        {
+            const FontMetric& rFontMetric = pList->GetFontName(nItFont);
+            if (aSearchedFontName == rFontMetric.GetFamilyName())
             {
-                double fScaleX = *pFontWidth / static_cast<double>(nFontWidth) / 1.5;
-                double fScaleY = *pFontHeight / static_cast<double>(nFontHeight) / 1.5;
-
-                double fScale = std::min(fScaleX, fScaleY);
-
-                if (fScale >= 1.0)
-                {
-                    int nFontSize = fScale * nDefaultFontSize;
-                    aFont.SetFontSize(Size(0, nFontSize));
-                    aDevice->SetFont(aFont);
-                }
-
-                aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
-
-                nFontWidth = *pFontWidth;
-                nFontHeight = *pFontHeight;
-
-            }
-
-            unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
-            if (!pBuffer)
+                aFont = rFontMetric;
                 break;
-
-            memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
-            aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-            aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
-                        Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
-                        pBuffer);
-
-            if (*pFontWidth > 0 && *pFontHeight > 0)
-            {
-                DrawTextFlags const nStyle =
-                        DrawTextFlags::Center
-                        | DrawTextFlags::VCenter
-                        | DrawTextFlags::MultiLine
-                        | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
-
-                aDevice->DrawText(aRect, aText, nStyle);
             }
-            else
-            {
-                *pFontWidth = nFontWidth;
-                *pFontHeight = nFontHeight;
+        }
 
-                aDevice->DrawText(Point(0,0), aText);
-            }
+        // 沒找到指定字型就結束
+        if (aFont.GetFamilyName().isEmpty())
+        {
+            return nullptr;
+        }
 
-
-            return pBuffer;
+        // 沒有指定顯示文字就以字型名稱當作顯示文字
+        if (aText.isEmpty())
+        {
+            aText = aSearchedFontName;
         }
     }
-    return nullptr;
-}
+
+    // 設定角度
+    aFont.SetOrientation(Degree10(pOrientation));
+    // 設定字型預設大小
+    aFont.SetFontSize(Size(0, nDefaultFontSize));
+
+    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+    aDevice->SetFont(aFont);
+
+    int nFontWidth;
+    int nFontHeight;
+    tools::Rectangle aRect;
+    if (*pFontWidth > 0 && *pFontHeight > 0)
+    {
+
+        tools::Rectangle aTmpRect;
+        // 文字允許多行，各行以 \n 分隔
+        std::vector<OUString> aLines = comphelper::string::split(aText, '\n');
+        for (auto &aTmpText : aLines)
+        {
+            aDevice->GetTextBoundRect(aTmpRect, aTmpText);
+            // 找出最寬的文字
+            if (aRect.IsEmpty() || aTmpRect.GetWidth() > aRect.GetWidth())
+            {
+                aRect = aTmpRect;
+            }
+        }
+
+        double fScaleX = *pFontWidth / static_cast<double>(aRect.BottomRight().X() + 1) / 1.3;
+        double fScaleY = *pFontHeight / static_cast<double>(aRect.BottomRight().Y() + 1) / 1.3;
+        double fScale = std::min(fScaleX, fScaleY);
+        // 重新縮訪文字大小
+        aFont.SetFontSize(Size(0, fScale * nDefaultFontSize));
+        aDevice->SetFont(aFont);
+
+        aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
+
+        nFontWidth = *pFontWidth;
+        nFontHeight = *pFontHeight;
+
+    }
+    // 未指定寬高，就計算實際顯示文字的寬高
+    else
+    {
+        aDevice->GetTextBoundRect(aRect, aText);
+        if (aRect.IsEmpty())
+        {
+            return nullptr;
+        }
+
+        nFontWidth = aRect.BottomRight().X() + 1;
+        nFontHeight = aRect.BottomRight().Y() + 1;
+
+        if (nFontWidth <= 0 || nFontHeight <= 0)
+        {
+            return nullptr;
+        }
+    }
+
+    unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
+    if (!pBuffer)
+    {
+        return nullptr;
+    }
+
+    memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
+    aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
+                Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
+                pBuffer);
+
+    if (*pFontWidth > 0 && *pFontHeight > 0)
+    {
+        DrawTextFlags const nStyle =
+                DrawTextFlags::Center
+                | DrawTextFlags::VCenter
+                | DrawTextFlags::MultiLine
+                | DrawTextFlags::WordBreak;// | DrawTextFlags::WordBreakHyphenation ;
+
+        aDevice->DrawText(aRect, aText, nStyle);
+    }
+    else
+    {
+        *pFontWidth = nFontWidth;
+        *pFontHeight = nFontHeight;
+
+        aDevice->DrawText(Point(0,0), aText);
+    }
+
+    return pBuffer;
+ }
 
 
 static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,

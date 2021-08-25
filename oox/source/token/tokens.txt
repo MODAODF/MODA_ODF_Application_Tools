@@ -1654,6 +1654,7 @@ dataValidation
 dataValidations
 database
 databaseField
+datalabelsRange
 datastoreItem
 date
 date1904
@@ -1869,6 +1870,7 @@ dkTurquoise
 dkUpDiag
 dkVert
 dkViolet
+dlblRangeCache
 dllVersion
 dm
 dn
@@ -4640,6 +4642,7 @@ showComments
 showDLblsOverMax
 showDataAs
 showDataDropDown
+showDataLabelsRange
 showDataTips
 showDrill
 showDropDown

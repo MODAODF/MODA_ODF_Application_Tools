@@ -242,6 +242,16 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( Physica
             else
                 pFallbackData = pFontCollection->FindFontFamily("EUDC");
         }
+        if (nFallbackLevel == 2) {
+            if (rFontSelData.maSearchName.equals(atwsungextb)) {
+                pFallbackData = pFontCollection->FindFontFamily("eudcming");
+            }
+            else if (rFontSelData.maSearchName.equals(atwkaiextb)) {
+                pFallbackData = pFontCollection->FindFontFamily("eudckai");
+            }
+            else
+                pFallbackData = pFontCollection->FindFontFamily("EUDC");
+        }
         if (!pFallbackData)
             pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, pFontInstance, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates

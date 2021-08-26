@@ -63,6 +63,9 @@
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 
+#include <cppuhelper/findsofficepath.h>
+#define MAX_KEY_LENGTH 255
+
 using namespace vcl;
 
 static FIXED FixedFromDouble( double d )
@@ -1183,6 +1186,186 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
     return true;
 }
 
+static void splitPath( OUString& rPath, OUString& rDir, OUString& rBase)
+{
+    sal_Int32 nIndex = rPath.lastIndexOf( '\\' );
+
+    if( nIndex > 0 )
+        rDir = rPath.copy( 0, nIndex+1 );
+    else if( nIndex == 0 ) // root dir
+        rDir = rPath.copy( 0, 1 );
+    if( rPath.getLength() > nIndex+1 )
+        rBase = rPath.copy( nIndex+1 );
+}
+
+static wchar_t* getPathFromRegistryKey( HKEY hroot, const wchar_t* subKeyName, const wchar_t* subValueName)
+{
+    HKEY hkey;
+    DWORD type;
+    wchar_t* data = NULL;
+    DWORD size;
+
+    /* open the specified registry key */
+    if ( RegOpenKeyExW( hroot, subKeyName, 0, KEY_READ, &hkey ) != ERROR_SUCCESS )
+    {
+        return NULL;
+    }
+
+    /* find the type and size of the specified value */
+    if ( RegQueryValueExW( hkey, subValueName, NULL, &type, NULL, &size) != ERROR_SUCCESS )
+    {
+        RegCloseKey( hkey );
+        return NULL;
+    }
+
+    /* get memory to hold the specified value */
+    data = (wchar_t*) malloc( size + sizeof(wchar_t) );
+
+    /* read the specified value */
+    if ( RegQueryValueExW( hkey, subValueName, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
+    {
+        RegCloseKey( hkey );
+        free( data );
+        return NULL;
+    }
+
+    // According to https://msdn.microsoft.com/en-us/ms724911, If the data has the REG_SZ,
+    // REG_MULTI_SZ or REG_EXPAND_SZ type, the string may not have been stored with the
+    // proper terminating null characters
+    data[size / sizeof(wchar_t)] = 0;
+
+    /* release registry key handle */
+    RegCloseKey( hkey );
+
+    return data;
+}
+
+static void SetUserFont( OUString aOrgPath )
+{
+    OUString aDir;
+    OUString aBase;
+    splitPath(aOrgPath,aDir,aBase);
+    aDir = aDir.replace('\\','/');
+    aDir = OUString("file:///") + aDir;
+    OUString aTarget = aDir + aBase;
+    osl::Directory bFontDir(aDir);
+    osl::FileBase::RC brcOSL = bFontDir.open();
+
+    SalData* pSalData = GetSalData();
+    assert(pSalData);
+
+    if( brcOSL == osl::FileBase::E_None )
+    {
+        //~ AddTempDevFont( pFontCollection, aTarget, "" );
+        lcl_AddFontResource(*pSalData, aTarget, true);
+    }
+}
+
+static void getsubkeys(HKEY hKey, OUString const & aKeyName)
+{
+    HKEY hCurKey;
+
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, o3tl::toW(aKeyName.getStr()),
+                        0, KEY_READ, &hCurKey) == ERROR_SUCCESS)
+    {
+        DWORD nSubKeys = 0;
+        DWORD nValues = 0;
+        DWORD nLongestValueNameLen, nLongestValueLen;
+        // Query the number of subkeys
+        RegQueryInfoKeyW(hCurKey, nullptr, nullptr, nullptr, &nSubKeys, nullptr, nullptr, &nValues, &nLongestValueNameLen, &nLongestValueLen, nullptr, nullptr);
+        if(nSubKeys)
+        {
+            //Look for subkeys in this key
+            for(DWORD i = 0; i < nSubKeys; i++)
+            {
+                wchar_t buffKeyName[MAX_KEY_LENGTH];
+                buffKeyName[0] = '\0';
+                DWORD buffSize=MAX_KEY_LENGTH;
+                OUString aSubkeyName;
+                //Get subkey name
+                RegEnumKeyExW(hCurKey, i, buffKeyName, &buffSize, nullptr, nullptr, nullptr, nullptr);
+
+                //Make up full key name
+                if(aKeyName.isEmpty())
+                    aSubkeyName = aKeyName + OUString(o3tl::toU(buffKeyName));
+                else
+                    aSubkeyName = aKeyName + "\\" + OUString(o3tl::toU(buffKeyName));
+
+                //Recursion, until no more subkeys are found
+                getsubkeys(hKey, aSubkeyName);
+            }
+        }
+        else if(nValues)
+        {
+            // No more subkeys, we are at a leaf
+            auto pValueName = std::unique_ptr<wchar_t[]>(
+                new wchar_t[nLongestValueNameLen + 1]);
+            auto pValue = std::unique_ptr<wchar_t[]>(
+                new wchar_t[nLongestValueLen/sizeof(wchar_t) + 1]);
+
+            bool bFinal = false;
+            bool bExternal = false;
+            bool bNil = false;
+            OUString aValue;
+            OUString aType;
+            OUString aExternalBackend;
+
+            for(DWORD i = 0; i < nValues; ++i)
+            {
+                DWORD nValueNameLen = nLongestValueNameLen + 1;
+                DWORD nValueLen = nLongestValueLen + 1;
+
+                RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue.get()), &nValueLen);
+
+                wchar_t* path = getPathFromRegistryKey( hKey, o3tl::toW(aKeyName.getStr()) ,pValueName.get());
+                if ( path != NULL )
+                {
+                    SetUserFont(OUString(o3tl::toU(path)));
+                    free(path);
+                }
+
+                if (!wcscmp(pValueName.get(), L"Value"))
+                    aValue = o3tl::toU(pValue.get());
+                else if (!wcscmp(pValueName.get(), L"Type"))
+                    aType = o3tl::toU(pValue.get());
+                else if (!wcscmp(pValueName.get(), L"Final"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bFinal = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"Nil"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bNil = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"External"))
+                {
+                    if (*reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                        bExternal = true;
+                }
+                else if (!wcscmp(pValueName.get(), L"ExternalBackend"))
+                    aExternalBackend = o3tl::toU(pValue.get());
+            }
+            if (bExternal)
+            {
+                // type and external are mutually exclusive
+                aType.clear();
+
+                // Prepend backend, like in
+                // "com.sun.star.configuration.backend.LdapUserProfileBe company"
+                if (!aExternalBackend.isEmpty())
+                    aValue = aExternalBackend + " " + aValue;
+            }
+        }
+        RegCloseKey(hCurKey);
+    }
+}
+
+static void AddUserFont( HKEY hKey, OUString const & aKeyName)
+{
+    getsubkeys(hKey, aKeyName);
+}
+
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     // make sure all LO shared fonts are registered temporarily
@@ -1221,6 +1404,8 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
         // collect fonts in font path that could not be registered
         registerFontsIn(aPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype");
+
+        AddUserFont(HKEY_CURRENT_USER, OUString("EUDC\\950"));
 
         return true;
     });

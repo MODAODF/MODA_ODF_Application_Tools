@@ -4,8 +4,8 @@
 	branch = libreoffice-7-1-5
 [submodule "helpcontent2"]
 	path = helpcontent2
-	url = ../help
-	branch = .
+	url = https://gerrit.libreoffice.org/help
+	branch = libreoffice-7-1-5
 [submodule "translations"]
 	path = translations
 	url = https://github.com/NDCODF/translations

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -1175,82 +1178,151 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 
 void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
-    OUString watermark = msTiledWatermark;
-    // Maximum number of characters in one line.
-    // it is set to 21 to make it look like tiled watermarks as online in secure view
-    const int lineLength = 21;
-    vcl::Font aFont( "Liberation Sans", Size( 0, 40 ) );
-    aFont.SetItalic( ITALIC_NONE );
-    aFont.SetWidthType( WIDTH_NORMAL );
-    aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetAlignment( ALIGN_BOTTOM );
-    aFont.SetFontHeight(40);
-    aFont.SetOrientation(Degree10(450));
+    const int nHoriWatermark = ((rPageSize.Width()) / 200) + 1; // 橫向浮水印總數
+    const tools::Long nTileWidth = rPageSize.Width() / nHoriWatermark; // 每塊拼貼寬度
+    const tools::Long nTextWidth = nTileWidth * 0.9; // 文字寬度是拼貼大小的 9/10
+    const Size aTileSize(nTileWidth, nTileWidth); // 每個拼貼區域大小
+    const Size aTextSize(nTextWidth, nTextWidth); // 每個文字區域大小
+    const Point aTextOffset((nTileWidth - nTextWidth) / 2, (nTileWidth - nTextWidth) / 2); // 文字區域在拼貼區域置中偏移值
+    const int nTileVertCount = rPageSize.Height() / aTileSize.Height(); // 垂直浮水印總數
+    // 拼貼區域相對頁面的偏移值
+    const Point aPageOffset((rPageSize.Width() - (nHoriWatermark * aTileSize.Width())) / 2,
+                            (rPageSize.Height() - (nTileVertCount * aTileSize.Height())) / 2);
 
-    OutputDevice* pDev = rWriter.GetReferenceDevice();
-    pDev->SetFont(aFont);
-    pDev->Push();
-    pDev->SetFont(aFont);
-    pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
-    int w = 0;
-    int watermarkcount = ((rPageSize.Width()) / 200)+1;
-    tools::Long nTextWidth = rPageSize.Width() / (watermarkcount*1.5);
-    OUString oneLineText = watermark;
-
-    if(watermark.getLength() > lineLength)
-        oneLineText = watermark.copy(0, lineLength);
-
-    while((w = pDev->GetTextWidth(oneLineText)) > nTextWidth)
+    // 沒有製作過浮水印 bitmap
+    if (maTiledWatermarkBmp.IsEmpty())
     {
-        if(w==0)
-            break;
+        const tools::Long nDefaultFontSize = 40; // 預設字型大小
+        OUString watermark = msTiledWatermark.trim();
+        OUString aText = watermark;
+        sal_uInt32 nAngle = 450; // 預設角度
 
-        tools::Long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
-        aFont.SetFontHeight(nNewHeight);
-        pDev->SetFont( aFont );
+        vcl::Font aFont;
+        // 如果浮水印是 JSON 格式的話
+        if (watermark.startsWith("{") && watermark.endsWith("}"))
+        {
+            boost::property_tree::ptree aTree;
+            std::stringstream aStream(watermark.toUtf8().getStr());
+            boost::property_tree::read_json(aStream, aTree);
+
+            // 浮水印文字
+            aText = OUString::fromUtf8(aTree.get<std::string>("text", "").c_str());
+            // 沒有指定浮水印文字就結束
+            if (aText.isEmpty())
+            {
+                return;
+            }
+
+            // 字型名稱
+            OUString aFamilyName = OUString::fromUtf8(aTree.get<std::string>("familyname", "Liberation Sans").c_str());
+            aFont = vcl::Font(aFamilyName, Size(0, nDefaultFontSize));
+
+            // 角度
+            nAngle = aTree.get<sal_uInt32>("angle", 45) * 10;
+            // 不透明度
+            double nOpacity = aTree.get<double>("opacity", 0.2);
+            // 轉成透明度%
+            mnTiledWatermarkTransparency = (1 - nOpacity) * 100;
+            // 顏色
+            //aFont.SetColor(Color(aTree.get<tools::Long>("color", 0)));
+            aFont.SetColor(Color::STRtoRGB(OUString::fromUtf8(aTree.get<std::string>("color", "#000000").c_str())));
+            // 粗體
+            aFont.SetWeight(aTree.get<bool>("bold", false) ? WEIGHT_BOLD : WEIGHT_NORMAL);
+            // 斜體
+            aFont.SetItalic(aTree.get<bool>("italic", false) ? ITALIC_NORMAL : ITALIC_NONE);
+            // 是否浮雕字
+            std::string aRelief = aTree.get<std::string>("relief", "");
+            if (aRelief == "embossed") // 浮凸
+            {
+                aFont.SetRelief(FontRelief::Embossed);
+            }
+            else if (aRelief == "engraved") // 雕刻
+            {
+                aFont.SetRelief(FontRelief::Engraved);
+            }
+            else // 未指定浮雕字
+            {
+                aFont.SetOutline(aTree.get<bool>("outline", false)); // 輪廓(中空)
+                aFont.SetShadow(aTree.get<bool>("shadow", false)); // 陰影
+            }
+        }
+        // 採用預設的浮水印字型設定
+        else
+        {
+            aFont = vcl::Font("Liberation Sans", Size(0, nDefaultFontSize));
+            aFont.SetItalic(ITALIC_NONE);
+            aFont.SetWidthType(WIDTH_NORMAL);
+            aFont.SetWeight(WEIGHT_NORMAL);
+            aFont.SetAlignment(ALIGN_BOTTOM);
+            aFont.SetColor(COL_LIGHTGREEN);
+            mnTiledWatermarkTransparency = 80;
+        }
+
+        // 浮水印 bitmap 大小，此 szie 產生的圖較大，畫在 pdf 上，縮放時不致產生肉眼可見的失真
+        const tools::Long nBmpWidth = 512;
+        const Size aBmpSize(nBmpWidth, nBmpWidth);
+        const tools::Rectangle aTextRect(Point(0, 0), aBmpSize); // 文字繪製範圍
+        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::BITMASK));
+        aDevice->SetFont(aFont);
+        aDevice->SetOutputSizePixel(aBmpSize);
+        // 文字允許多行，各行以 \n 分隔
+        std::vector<OUString> aLines = comphelper::string::split(aText, '\n');
+        // 找出最長行
+        sal_Int32 nFontWidth = 0;
+        for (auto &aTmpText : aLines)
+        {
+            const tools::Long nTmpWidth = aDevice->GetTextWidth(aTmpText);
+            // 找出最寬的文字
+            if (nTmpWidth > nFontWidth)
+            {
+                nFontWidth = nTmpWidth;
+            }
+        }
+        // 重新縮放字型大小
+        aFont.SetFontHeight(nDefaultFontSize * (nBmpWidth / static_cast<double>(nFontWidth) / 1.05));
+        aDevice->SetFont(aFont); // 重設字型
+        aDevice->SetBackground(COL_TRANSPARENT); // 透明背景
+        // 繪製文字
+        aDevice->DrawText(aTextRect, aText,
+                        DrawTextFlags::Center
+                        | DrawTextFlags::VCenter
+                        | DrawTextFlags::MultiLine
+                        | DrawTextFlags::WordBreak);
+        // 保存點陣圖資料
+        maTiledWatermarkBmp = aDevice->GetBitmapEx(Point(0, 0), aBmpSize);
+        // 空的就結束
+        if (maTiledWatermarkBmp.IsEmpty())
+        {
+            return;
+        }
+        else
+        {
+            // 旋轉角度
+            if (nAngle)
+            {
+                maTiledWatermarkBmp.Rotate(Degree10(nAngle), COL_TRANSPARENT);
+            }
+        }
     }
-    // maximum number of watermark count for the width
-    if(watermarkcount > 8)
-        watermarkcount = 8;
-
-    pDev->Pop();
 
     rWriter.Push();
-    rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
-    rWriter.SetFont(aFont);
-    rWriter.SetTextColor( Color(19,20,22) );
-    // center watermarks horizontally
-    Point aTextPoint( (rPageSize.Width()/2) - (((nTextWidth*watermarkcount)+(watermarkcount-1)*nTextWidth)/2),
-                      pDev->GetTextHeight());
-
-    for( int i = 0; i < watermarkcount; i ++)
+    rWriter.SetMapMode(MapMode(MapUnit::MapPoint));
+    // 繪製整頁浮水印
+    for (sal_Int32 w = 0; w < nHoriWatermark; w ++)
     {
-        while(aTextPoint.getY()+pDev->GetTextHeight()*3 <= rPageSize.Height())
+        for (sal_Int32 h = 0 ; h < nTileVertCount; h++)
         {
-            tools::Rectangle aTextRect(aTextPoint, Size(nTextWidth*2,pDev->GetTextHeight()*4));
-
-            pDev->Push();
+            // 計算拼貼區域定位點
+            const Point aTextPoint((w * aTileSize.Width()) + aPageOffset.X(),
+                             (h * aTileSize.Height()) + aPageOffset.Y());
+            // 文字區域在拼貼區域的定位點
+            const tools::Rectangle aTextRect(aTextPoint + aTextOffset, aTextSize);
             rWriter.SetClipRegion();
             rWriter.BeginTransparencyGroup();
-            rWriter.SetTextColor( Color(19,20,22) );
-            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter|DrawTextFlags::WordBreak|DrawTextFlags::Bottom);
-            rWriter.EndTransparencyGroup( aTextRect, 50 );
-            pDev->Pop();
-
-            pDev->Push();
-            rWriter.SetClipRegion();
-            rWriter.BeginTransparencyGroup();
-            rWriter.SetTextColor( Color(236,235,233) );
-            rWriter.DrawText(aTextRect, watermark, DrawTextFlags::MultiLine|DrawTextFlags::Center|DrawTextFlags::VCenter|DrawTextFlags::WordBreak|DrawTextFlags::Bottom);
-            rWriter.EndTransparencyGroup( aTextRect, 50 );
-            pDev->Pop();
-
-            aTextPoint.Move(0, pDev->GetTextHeight()*3);
+            rWriter.DrawBitmapEx(aTextPoint + aTextOffset, aTextSize, maTiledWatermarkBmp);
+            rWriter.EndTransparencyGroup(aTextRect, mnTiledWatermarkTransparency);
         }
-        aTextPoint=Point( aTextPoint.getX(), pDev->GetTextHeight() );
-        aTextPoint.Move( nTextWidth*1.5, 0 );
     }
-
     rWriter.Pop();
 }
 

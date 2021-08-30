@@ -80,6 +80,8 @@ private:
 
     OUString            msWatermark;
     OUString            msTiledWatermark;
+    sal_Int32           mnTiledWatermarkTransparency;
+    BitmapEx            maTiledWatermarkBmp;
 
     // these variable are here only to have a location in filter/pdf to set the default
     // to be used by the macro (when the FilterData are set by the macro itself)

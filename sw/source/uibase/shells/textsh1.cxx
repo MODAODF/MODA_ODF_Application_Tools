@@ -2046,7 +2046,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
 
             case FN_NUM_NUMBERING_ON:
-                rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON,rSh.SelectionHasNumber()));
+                // Cancel the display effect of pressing the menubar
+                if (rSh.IsUseMenuBarNum())
+                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON,rSh.SelectionHasNumber()));
             break;
 
             case FN_NUM_BULLET_ON:

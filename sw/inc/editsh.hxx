@@ -561,6 +561,9 @@ public:
     bool SelectionHasNumber() const;
     bool SelectionHasBullet() const;
 
+    bool IsUseMenuBarNum() const;
+    bool SetUseMenuBarNum( bool enable );
+
     OUString GetUniqueNumRuleName() const;
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
@@ -1010,6 +1013,7 @@ private:
      * arises. */
     bool m_bNbspRunNext;    ///< NO-BREAK SPACE state flag passed to and maintained by SvxAutoCorrect::DoAutoCorrect()
     bool m_bDoParagraphSignatureValidation; ///< Prevent nested calls of ValidateParagraphSignatures.
+    bool m_bUseMenuBarNum = false;
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const

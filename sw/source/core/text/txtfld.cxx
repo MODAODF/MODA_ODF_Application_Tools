@@ -723,9 +723,17 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
-                    pRet = new SwNumberPortion( aText, std::move(pNumFnt),
-                                                bLeft, bCenter, nMinDist,
-                                                bLabelAlignmentPosAndSpaceModeActive );
+                    const SwDoc* pDoc = pTextNd->GetDoc();
+                    SwWrtShell *pWSh = rInf.GetVsh()->GetDoc()->GetDocShell()->GetWrtShell();
+                    if (pWSh->IsUseMenuBarNum())
+                    {
+                        pRet = new SwNumberPortion( aText, std::move(pNumFnt),
+                                                    bLeft, bCenter, nMinDist,
+                                                    bLabelAlignmentPosAndSpaceModeActive );
+                    } else {
+                        // Cancel the real effect of pressing the menubar
+                        pWSh->NumOrBulletOff();
+                    }
                 }
             }
         }

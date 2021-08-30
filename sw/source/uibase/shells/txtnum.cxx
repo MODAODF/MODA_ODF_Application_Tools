@@ -42,6 +42,9 @@
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
+    // set UseMenuBarNum true
+    GetShell().SetUseMenuBarNum(true);
+
     //Because the record before any shell exchange.
     switch(rReq.GetSlot())
     {
@@ -252,6 +255,9 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
             const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSlot);
             if ( pItem != nullptr )
             {
+                // set UseMenuBarNum true
+                GetShell().SetUseMenuBarNum(true);
+
                 const sal_uInt16 nChosenItemIdx = pItem->GetValue();
                 svx::sidebar::NBOType nNBOType = svx::sidebar::NBOType::Bullets;
                 if ( nSlot == FN_SVX_SET_NUMBER )

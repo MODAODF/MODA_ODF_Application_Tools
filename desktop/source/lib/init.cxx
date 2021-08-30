@@ -5276,7 +5276,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
         OUString aFamilyName = OUString::fromUtf8(aTree.get<std::string>("familyname", "Liberation Sans").c_str());
         aFont = vcl::Font(aFamilyName, Size(0, nDefaultFontSize));
         // 顏色
-        Color aColor(aTree.get<unsigned long>("color", 0));
+        Color aColor = Color::STRtoRGB(OUString::fromUtf8(aTree.get<std::string>("color", "#000000").c_str()));
         aFont.SetColor(aColor);
         // 粗體
         aFont.SetWeight(aTree.get<bool>("bold", false) ? WEIGHT_BOLD : WEIGHT_NORMAL);

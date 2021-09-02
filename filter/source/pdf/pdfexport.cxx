@@ -1178,13 +1178,13 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
 
 void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize )
 {
-    const int nHoriWatermark = ((rPageSize.Width()) / 200) + 1; // 橫向浮水印總數
+    const sal_Int32 nHoriWatermark = ((rPageSize.Width()) / 200) + 1; // 橫向浮水印總數
     const tools::Long nTileWidth = rPageSize.Width() / nHoriWatermark; // 每塊拼貼寬度
     const tools::Long nTextWidth = nTileWidth * 0.9; // 文字寬度是拼貼大小的 9/10
     const Size aTileSize(nTileWidth, nTileWidth); // 每個拼貼區域大小
     const Size aTextSize(nTextWidth, nTextWidth); // 每個文字區域大小
     const Point aTextOffset((nTileWidth - nTextWidth) / 2, (nTileWidth - nTextWidth) / 2); // 文字區域在拼貼區域置中偏移值
-    const int nTileVertCount = rPageSize.Height() / aTileSize.Height(); // 垂直浮水印總數
+    const sal_Int32 nTileVertCount = rPageSize.Height() / aTileSize.Height(); // 垂直浮水印總數
     // 拼貼區域相對頁面的偏移值
     const Point aPageOffset((rPageSize.Width() - (nHoriWatermark * aTileSize.Width())) / 2,
                             (rPageSize.Height() - (nTileVertCount * aTileSize.Height())) / 2);
@@ -1196,6 +1196,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         OUString watermark = msTiledWatermark.trim();
         OUString aText = watermark;
         sal_uInt32 nAngle = 450; // 預設角度
+        sal_uInt8 nTransparency = 80; // 預設透明度
 
         vcl::Font aFont;
         // 如果浮水印是 JSON 格式的話
@@ -1222,9 +1223,8 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
             // 不透明度
             double nOpacity = aTree.get<double>("opacity", 0.2);
             // 轉成透明度%
-            mnTiledWatermarkTransparency = (1 - nOpacity) * 100;
+            nTransparency = (1 - nOpacity) * 255;
             // 顏色
-            //aFont.SetColor(Color(aTree.get<tools::Long>("color", 0)));
             aFont.SetColor(Color::STRtoRGB(OUString::fromUtf8(aTree.get<std::string>("color", "#000000").c_str())));
             // 粗體
             aFont.SetWeight(aTree.get<bool>("bold", false) ? WEIGHT_BOLD : WEIGHT_NORMAL);
@@ -1255,7 +1255,6 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
             aFont.SetWeight(WEIGHT_NORMAL);
             aFont.SetAlignment(ALIGN_BOTTOM);
             aFont.SetColor(COL_LIGHTGREEN);
-            mnTiledWatermarkTransparency = 80;
         }
 
         // 浮水印 bitmap 大小，此 szie 產生的圖較大，畫在 pdf 上，縮放時不致產生肉眼可見的失真
@@ -1297,6 +1296,8 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         }
         else
         {
+            // 轉換透明度
+            maTiledWatermarkBmp.AdjustTransparency(nTransparency);
             // 旋轉角度
             if (nAngle)
             {
@@ -1313,14 +1314,10 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         for (sal_Int32 h = 0 ; h < nTileVertCount; h++)
         {
             // 計算拼貼區域定位點
-            const Point aTextPoint((w * aTileSize.Width()) + aPageOffset.X(),
-                             (h * aTileSize.Height()) + aPageOffset.Y());
-            // 文字區域在拼貼區域的定位點
-            const tools::Rectangle aTextRect(aTextPoint + aTextOffset, aTextSize);
-            rWriter.SetClipRegion();
-            rWriter.BeginTransparencyGroup();
-            rWriter.DrawBitmapEx(aTextPoint + aTextOffset, aTextSize, maTiledWatermarkBmp);
-            rWriter.EndTransparencyGroup(aTextRect, mnTiledWatermarkTransparency);
+            const Point aBmpPoint(
+                (w * aTileSize.Width()) + aPageOffset.X() + aTextOffset.X(),
+                (h * aTileSize.Height()) + aPageOffset.Y() + aTextOffset.Y());
+            rWriter.DrawBitmapEx(aBmpPoint, aTextSize, maTiledWatermarkBmp);
         }
     }
     rWriter.Pop();

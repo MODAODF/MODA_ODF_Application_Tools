@@ -213,3 +213,18 @@ description = "VRTNETWORKEQUIPMENT extension for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
+
+Start
+module = "gid_Module_Optional_Extensions_FORMATCHECK"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-formatcheck"
+solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-formatcheck"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
+linuxpatchrequires = ""
+copyright = "OSSII"
+solariscopyright = "solariscopyrightfile"
+vendor = "%OOOVENDOR"
+description = "FORMATCHECK extension for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End

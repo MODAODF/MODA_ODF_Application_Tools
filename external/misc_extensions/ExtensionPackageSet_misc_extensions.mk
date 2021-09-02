@@ -33,4 +33,8 @@ ifeq ($(VRTNETWORKEQUIPMENT_EXTENSION_PACK),yes)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,VrtNetworkEquipment,vrtnetworkequipment.oxt))
 endif
 
+ifeq ($(FORMATCHECK_EXTENSION_PACK),yes)
+$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,FormatCheck,FormatCheck.oxt))
+endif
+
 # vim: set noet sw=4 ts=4:

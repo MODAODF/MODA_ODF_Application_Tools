@@ -216,4 +216,19 @@ Module gid_Module_Optional_Extensions_VRTNETWORKEQUIPMENT
 End
 #endif
 
+/* ** FORMATCHECK ** */
+
+#ifdef WITH_EXTENSION_FORMATCHECK
+Module gid_Module_Optional_Extensions_FORMATCHECK
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_FORMATCHECK);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_FORMATCHECK );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+
 #endif

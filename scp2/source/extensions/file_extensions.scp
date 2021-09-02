@@ -152,4 +152,17 @@ End
 
 #endif
 
+/* ** FORMATCHECK ** */
+
+#ifdef WITH_EXTENSION_FORMATCHECK
+
+File gid_File_Oxt_FORMATCHECK
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "FormatCheck.filelist";
+End
+
+#endif
+
 #endif

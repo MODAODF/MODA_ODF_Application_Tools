@@ -794,6 +794,12 @@ $(eval $(call gb_Helper_register_packages_for_install,extensions_VRTNETWORKEQUIP
 ))
 endif
 
+ifeq ($(FORMATCHECK_EXTENSION_PACK),yes)
+$(eval $(call gb_Helper_register_packages_for_install,extensions_FormatCheck,\
+	formatcheck \
+))
+endif
+
 $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
 	active_java \

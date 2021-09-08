@@ -74,6 +74,8 @@
 #include <svl/itempool.hxx>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 
 #include <memory>
@@ -1185,6 +1187,18 @@ void SlotManager::ChangeSlideExclusionState (
     rBindings.Invalidate(SID_HIDE_SLIDE);
     rBindings.Invalidate(SID_SHOW_SLIDE);
     mrSlideSorter.GetModel().GetDocument()->SetChanged();
+
+    // Add by Firefly <firefly@ossii.com.tw>
+    // 通知所有共編使用者，更新文件狀態
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+    }
 }
 
 sal_Int32 SlotManager::GetInsertionPosition() const

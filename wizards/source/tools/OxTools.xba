@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="OxTools" script:language="StarBasic">REM  *****  BASIC  *****
+
+
+Function SetDefaultParaStyle()
+&apos;----------------------------------------------------------------------
+rem define variables
+dim document   as object
+dim dispatcher as object
+&apos;----------------------------------------------------------------------
+rem get access to the document
+document   = ThisComponent.CurrentController.Frame
+dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+
+&apos;----------------------------------------------------------------------
+dim args1(1) as new com.sun.star.beans.PropertyValue
+args1(0).Name = &quot;Template&quot;
+args1(0).Value = &quot;預設段落樣式&quot;
+args1(1).Name = &quot;Family&quot;
+args1(1).Value = 2
+
+dispatcher.executeDispatch(document, &quot;.uno:StyleApply&quot;, &quot;&quot;, 0, args1())
+End Function
+
+Function _IsDefaultParaStyle() as Boolean
+&apos;----------------------------------------------------------------------
+	Dim vDoc as object
+    Dim oViewCursor as object
+    Dim parastyle as string
+&apos;---------------------------------------------------------------------- 
+    if isNull(vDoc) then
+    	vDoc = ThisComponent
+    end if
+
+    oViewCursor = vDoc.CurrentController.getViewCursor()
+    parastyle = oViewCursor.ParaStyleName 
+    if parastyle &lt;&gt; &quot;Standard&quot; then
+    	_IsDefaultParaStyle = False
+    else
+    	_IsDefaultParaStyle = True
+    end if
+End Function
+
+Function ChkDragRuler as Boolean
+	Dim oDlg As Object
+   	Dim oClick As Boolean
+
+	&apos;oDlg = createunodialog(DialogLibraries.Tools.ChkDragRulerDlg)
+    oDlg = LoadDialog(&quot;Tools&quot;, &quot;ChkDragRulerDlg&quot;)
+	oClick = oDlg.execute()
+	If oClick = 0 Then Exit Function
+  	'
+	ChkDragRuler = oDlg.getControl("CheckBox1").State
+
+End Function
+
+</script:module>

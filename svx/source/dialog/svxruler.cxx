@@ -3026,8 +3026,66 @@ void SvxRuler::CalcMinMax()
     }
 }
 
+void SetDefaultParaStyle()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools.SetDefaultParaStyle?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+}
+
+bool IsDefaultParaStyle()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools._IsDefaultParaStyle?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = true;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool _ChkDragRuler()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools.ChkDragRuler?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = true;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool dragtip = true;
 bool SvxRuler::StartDrag()
 {
+
+    // custom ParaStyle check Ruler is drag
+    if (dragtip)
+    {
+        if (!IsDefaultParaStyle())
+        {
+            if (_ChkDragRuler())
+                dragtip = false;
+        }
+    }
+
     /*
        Beginning of a drag operation (SV-handler) evaluates modifier and
        calculated values

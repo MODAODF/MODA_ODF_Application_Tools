@@ -38,6 +38,9 @@
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 namespace sd {
 
@@ -109,6 +112,9 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
             pSlideSorterViewShell->GetSlideSorter().GetController().PageNameHasChanged(
                 maTabControl->GetPagePos(nPageId), rName);
         }
+        // Add by Firefly <firefly@ossii.com.tw>
+        // 通知所有共編使用者，更新文件狀態
+        SfxLokHelper::notifyAllViews(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 
     return bSuccess;

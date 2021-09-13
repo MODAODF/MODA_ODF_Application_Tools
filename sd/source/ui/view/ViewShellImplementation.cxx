@@ -45,6 +45,9 @@
 #include <basic/sberrors.hxx>
 #include <xmloff/autolayout.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <undo/undoobjects.hxx>
 
@@ -271,6 +274,10 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, Page
 
     // Forward the call with the new arguments.
     ProcessModifyPageSlot( aRequest, pPage, pPage->GetPageKind());
+
+    // Add by Firefly <firefly@ossii.com.tw>
+    // 通知所有共編使用者，更新文件狀態
+    SfxLokHelper::notifyAllViews(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
 }
 
 SfxInterfaceId ViewShell::Implementation::GetViewId() const

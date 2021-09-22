@@ -2754,7 +2754,11 @@ void SdrObjEditView::DisposeUndoManager()
 {
     if (pTextEditOutliner)
     {
-        pTextEditOutliner->SetUndoManager(nullptr);
+        if (typeid(pTextEditOutliner->GetUndoManager()) != typeid(EditUndoManager))
+        {
+            // Non-owning pointer, clear it.
+            pTextEditOutliner->SetUndoManager(nullptr);
+        }
     }
 
     mpOldTextEditUndoManager = nullptr;

@@ -646,7 +646,7 @@ typedef enum
      *
      * Payload is optional. When payload is empty, Online gets string from selected text.
      * Payload format is JSON.
-     * Example: { "mimeType": "string", "content": "some content" }
+     * Example: { "mimeType": "text/plain", "content": "some content" }
      */
     LOK_CALLBACK_CLIPBOARD_CHANGED = 38,
 
@@ -772,6 +772,35 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+    /**
+     * Show a message on the editor's screen.
+     *
+     * The payload example:
+     * {
+     *     "type": "warning" or "error" or "info" or "question" or "success",
+     *     "text": "message text"
+     * }
+     */
+    LOK_CALLBACK_MSGBOX = 1000,
+
+    /**
+     * When launch auto filter or data select menu.
+     *
+     * The payload example:
+     * {
+     *      "type": "DataSelect" or "AutoFilter"
+     *      "part": number of sheet
+     *      "row":  number of row
+     *      "column" : number of column
+     *      "address": cell address(e.g. $A$1)
+     *      "isRTL": ture(Text from right to left) or not
+     *      "left", "top": cell position(pixel)
+     *      "width", "height": cell size(pixel)
+     *      "list": [ {"item": "item 1", "checked": boolean}, ... ]
+     * }
+     */
+    LOK_CALLBACK_LAUNCH_MENU = 1001,
 }
 LibreOfficeKitCallbackType;
 
@@ -904,6 +933,10 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_MSGBOX:
+        return "LOK_CALLBACK_MSGBOX";
+    case LOK_CALLBACK_LAUNCH_MENU:
+        return "LOK_CALLBACK_LAUNCH_MENU";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

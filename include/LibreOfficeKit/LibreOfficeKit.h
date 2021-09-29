@@ -110,6 +110,11 @@ struct _LibreOfficeKitClass
                      LibreOfficeKitPollCallback pPollCallback,
                      LibreOfficeKitWakeCallback pWakeCallback,
                      void* pData);
+
+    /// @see lok::Office::sendDialogEvent
+    void (*sendDialogEvent) (LibreOfficeKit* pThis,
+                            unsigned long long int nLOKWindowId,
+                            const char* pArguments);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -449,6 +454,12 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::sendFormFieldEvent
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
+
+    /// Added by Firefly<firefly@ossii.com.tw>
+    /// @see lok::Document::initUnoStatus
+    void (*initUnoStatus) (LibreOfficeKitDocument* pThis,
+                           const char* pCommands);
+    ///---------------------------------------
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };

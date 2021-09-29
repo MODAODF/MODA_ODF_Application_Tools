@@ -787,6 +787,19 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
+    // Added by Firefly <firefly@ossii.com.tw>
+    /**
+     * Let OxOffice report the status of the specified UNO command.
+     * 讓 OxOffice 回報指定的 UNO 命令狀態
+     *
+     * @param pCommands Uno commands separated by commas.
+     */
+    void initUnoStatus(const char* pCommands)
+    {
+        mpDoc->pClass->initUnoStatus(mpDoc, pCommands);
+    }
+    //-----------------------------------------
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
@@ -978,6 +991,17 @@ public:
                  void* pData)
     {
         mpThis->pClass->runLoop(mpThis, pPollCallback, pWakeCallback, pData);
+    }
+
+    /**
+     * Posts a dialog event for the window with given id
+     *
+     * @param nWindowId id of the window to notify
+     * @param pArguments arguments of the event.
+     */
+    void sendDialogEvent(unsigned long long int nWindowId, const char* pArguments = NULL)
+    {
+        mpThis->pClass->sendDialogEvent(mpThis, nWindowId, pArguments);
     }
 };
 

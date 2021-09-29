@@ -5003,6 +5003,24 @@ SfxVoidItem SortDescending SID_SORT_DESCENDING
 ]
 
 
+SfxVoidItem AutoFilterAction SID_AUTOFILTER_ACTION
+(SfxStringItem Mode SID_AUTOFILTER_ACTION, SfxUInt16Item Column FN_PARAM_1, SfxUInt16Item Row FN_PARAM_2, SfxUnoAnyItem Entry FN_PARAM_3)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 SfxVoidItem SplitCell FID_MERGE_OFF
 ()
 [

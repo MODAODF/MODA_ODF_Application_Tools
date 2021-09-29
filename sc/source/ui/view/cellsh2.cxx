@@ -31,6 +31,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -414,6 +415,159 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     rReq.Done();
                 }
+            }
+            break;
+
+        // Added by Firefly <firefly@ossii.com.tw>
+        // .uno:AutoFilterAction?Mode:string=MODE&Column=0&Row=0
+        case SID_AUTOFILTER_ACTION:
+            {
+                if (pReqArgs)
+                {
+                    const SfxPoolItem* pItem;
+
+                    OUString aMode; // 接收 uno 指令參數 Mode=xxx
+                    if (pReqArgs->GetItemState(nSlotId, true, &pItem) == SfxItemState::SET)
+                    {
+                        aMode = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    }
+
+                    SCCOL nCol = -1; // 參數 Column=n
+                    if (pReqArgs->GetItemState(FN_PARAM_1, true, &pItem) == SfxItemState::SET)
+                        nCol = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+                    SCROW nRow = -1; // 參數 Row=n
+                    if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SfxItemState::SET)
+                        nRow = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+
+                    // 參數 Entry
+                    const SfxUnoAnyItem* pAny = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
+
+                    // 參數未指定 Mode、Column、Row 就結束
+                    if (aMode.isEmpty() || nCol == -1 || nRow == -1)
+                    {
+                        rReq.Done();
+                        break;
+                    }
+
+                    ScDocument& rDoc = GetViewData()->GetDocument();
+                    SCTAB nTab  = GetViewData()->GetTabNo(); // 目前工作表編號
+                    // 取得指定位置篩選範圍資料
+                    ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+
+                    // 由小到大/由大到小排序
+                    if (aMode == "SortAscending" || aMode == "SortDescending")
+                    {
+                        ScSortParam aSortParam;
+                        pDBData->GetSortParam(aSortParam);
+
+                        if ( nCol < aSortParam.nCol1 )
+                            nCol = aSortParam.nCol1;
+                        else if( nCol > aSortParam.nCol2 )
+                            nCol = aSortParam.nCol2;
+
+                        aSortParam.bHasHeader = pDBData->HasHeader();
+                        aSortParam.bByRow = true;
+                        aSortParam.bCaseSens = false;
+                        aSortParam.bNaturalSort = false;
+                        aSortParam.bIncludeComments = false;
+                        aSortParam.bIncludeGraphicObjects = true;
+                        aSortParam.bIncludePattern = true;
+                        aSortParam.bInplace = true;
+                        aSortParam.maKeyState[0].bDoSort = true;
+                        aSortParam.maKeyState[0].nField = nCol;
+                        aSortParam.maKeyState[0].bAscending = (aMode == "SortAscending");
+
+                        for (size_t i = 1; i < aSortParam.GetSortKeyCount(); ++i)
+                            aSortParam.maKeyState[i].bDoSort = false;
+
+                        pTabViewShell->UISort(aSortParam);
+                    }
+                    // 執行標準篩選
+                    else if (aMode == "Custom")
+                    {
+                        ScRange aRange;
+                        pDBData->GetArea(aRange);
+                        GetViewData()->GetView()->MarkRange(aRange);
+                        GetViewData()->GetView()->SetCursor(nCol, nRow);
+                        GetViewData()->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
+                    }
+                    else
+                    {
+                        ScQueryParam aParam;
+                        pDBData->GetQueryParam(aParam);
+                        ScQueryEntry* pEntry = aParam.FindEntryByField(nCol, true);
+
+                        if (pEntry &&
+                            !ScTabViewShell::isAnyEditViewInRange(
+                            GetViewData()->GetViewShell(), /*bColumns*/ false, aParam.nRow1, aParam.nRow2))
+                        {
+                            svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
+                            pEntry->bDoQuery = true;
+                            pEntry->nField = nCol;
+                            pEntry->eConnect = SC_AND;
+                            bool bRightMode = true;
+                            // 依據條目篩選
+                            if (aMode == "Normal" && pAny)
+                            {
+                                pEntry->eOp = SC_EQUAL;
+                                ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+                                rItems.clear();
+
+                                uno::Sequence< uno::Any > aListSeq;
+                                pAny->GetValue() >>= aListSeq;
+                                for (const uno::Any& rData : aListSeq)
+                                {
+                                    if (rData.getValueType() == cppu::UnoType<css::beans::NamedValue>::get())
+                                    {
+                                        beans::NamedValue aNamedValue;
+                                        bool isDate = false;
+                                        rData >>= aNamedValue;
+                                        aNamedValue.Value >>= isDate;
+
+                                        ScQueryEntry::Item aNew;
+                                        aNew.maString = rPool.intern(aNamedValue.Name);
+                                        aNew.meType = isDate ? ScQueryEntry::ByDate : ScQueryEntry::ByString;
+                                        aNew.mfVal = 0.0;
+                                        rItems.push_back(aNew);
+                                    }
+                                    else
+                                    {
+                                        bRightMode = false;
+                                    }
+                                }
+                            }
+                            // 顯示前 10 筆
+                            else if (aMode == "Top10")
+                            {
+                                pEntry->eOp = SC_TOPVAL;
+                                pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
+                                pEntry->GetQueryItem().maString = rPool.intern("10");
+                            }
+                            // 顯示空白
+                            else if (aMode == "Empty")
+                            {
+                                pEntry->SetQueryByEmpty();
+                            }
+                            // 顯示非空白
+                            else if (aMode == "NonEmpty")
+                            {
+                                pEntry->SetQueryByNonEmpty();
+                            }
+                            else
+                            {
+                                bRightMode = false;
+                            }
+
+                            if (bRightMode)
+                            {
+                                GetViewData()->GetView()->Query(aParam, nullptr, true);
+                                pDBData->SetQueryParam(aParam);
+                            }
+                        }
+                    }
+                }
+                rReq.Done();
             }
             break;
 

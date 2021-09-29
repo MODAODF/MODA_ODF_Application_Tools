@@ -42,6 +42,7 @@ interface CellSelection
     // database operations {
     SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SORT_DESCENDING     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_AUTOFILTER_ACTION   [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_REIMPORT_DATA       [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_REFRESH_DBAREA      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_SBA_BRW_INSERT      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]

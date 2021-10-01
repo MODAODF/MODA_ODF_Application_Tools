@@ -73,6 +73,24 @@ using namespace vcl;
 #define EXTRAITEMHEIGHT     4
 #define SPACE_AROUND_TITLE  4
 
+#include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+
+// add oxt-menuitems need checkmark
+std::vector< OUString > CheckMarkList =
+{
+     "FormatCheckEvent",
+};
+
+// oxt-menuitems default checkmark
+std::vector< OUString > DefaultMarkList =
+{
+     "FormatCheckEvent",
+};
+
+bool oxtchecked = true;
+
 static bool ImplAccelDisabled()
 {
     // display of accelerator strings may be suppressed via configuration
@@ -330,6 +348,21 @@ void Menu::Deactivate()
 void Menu::ImplSelect()
 {
     MenuItemData* pData = GetItemList()->GetData( nSelectedId );
+
+    // oxt-menuitems checkmark
+    int checkmark = 0;
+    for(int i=0; i<CheckMarkList.size(); i++)
+    {
+        checkmark = pData->aCommandStr.indexOf(CheckMarkList[i]);
+        if (checkmark > 1)
+        {
+            if (pData->bChecked)
+                CheckItem( pData->nId, false );
+            else
+                CheckItem( pData->nId, true );
+        }
+    }
+
     if ( pData && (pData->nBits & MenuItemBits::AUTOCHECK) )
     {
         bool bChecked = IsItemChecked( nSelectedId );
@@ -1853,6 +1886,42 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                 aOuterCheckRect.AdjustRight( -1 );
                 aOuterCheckRect.AdjustTop(1 );
                 aOuterCheckRect.AdjustBottom( -1 );
+
+                // for FormatCheck oxt
+                if (pData->aCommandStr.indexOf("FormatCheckEvent") > 1)
+                {
+                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
+                        css::frame::theGlobalEventBroadcaster::get(xContext);
+                    bool hasbyname = xModelCollection->getEvents()->hasByName("OnLoadFinished");
+                    if (hasbyname)
+                    {
+                        OUString sScriptValue;
+                        Sequence < PropertyValue > aProps;
+                        Any aAny = xModelCollection->getEvents()->getByName("OnLoadFinished");
+                        aAny >>= aProps;
+                        const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [](const PropertyValue& rProp) { return rProp.Name == "Script"; });
+                        if (pProp != aProps.end())
+                            pProp->Value >>= sScriptValue;
+                        if(!sScriptValue.isEmpty())
+                            oxtchecked = true;
+                        else
+                            oxtchecked = false;
+                    }
+                }
+                // oxt default checked
+                if (oxtchecked)
+                {
+                    for(int i=0; i<DefaultMarkList.size(); i++)
+                    {
+                        if (pData->aCommandStr.indexOf(DefaultMarkList[i]) > 1)
+                        {
+                            pData->bChecked = true;
+                            break;
+                        }
+                    }
+                }
 
                 // CheckMark
                 if (!bLayout && !IsMenuBar() && pData->HasCheck())

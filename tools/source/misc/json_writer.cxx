@@ -226,7 +226,10 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 {
     auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    // But values can be any UTF-8,
+    // see rtl_ImplGetFastUTF8ByteLen in sal/rtl/string.cxx for why a factor 3
+    // is the worst case
+    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -248,8 +251,10 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
 
 void JsonWriter::put(const char* pPropName, const OString& rPropVal)
 {
+    // we assume property names are ascii
     auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength();
+    // escaping can double the length
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
     ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
 
     addCommaBeforeField();
@@ -410,7 +415,7 @@ void JsonWriter::put(const char* pPropName, bool nPropVal)
 
 void JsonWriter::putSimpleValue(const OUString& rPropVal)
 {
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    auto nWorstCasePropValLength = rPropVal.getLength() * 3;
     ensureSpace(nWorstCasePropValLength + 4);
 
     addCommaBeforeField();

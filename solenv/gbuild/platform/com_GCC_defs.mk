@@ -185,6 +185,8 @@ gb_LTOPLUGINFLAGS := --plugin LLVMgold.so
 endif
 else
 gb_LTOFLAGS := -flto$(if $(filter-out 0,$(PARALLELISM)),=$(PARALLELISM)) -fuse-linker-plugin -O2
+# clang does not support -flto=<number>
+gb_CLANG_LTOFLAGS := -flto=thin
 endif
 endif
 

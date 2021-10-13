@@ -347,7 +347,7 @@
 
 #define STR_STYLEUSEDBY                         NC_("STR_STYLEUSEDBY", "(used by: %STYLELIST)")
 // Translators: customs tip
-#define STR_TIP_SWITCHMENUBAR                   NC_("STR_TIP_SWITCHMENUBAR", "傳統工具列可切換成分頁標籤介面\n您可以在功能列上的「檢視」- 「使用者介面」-「分頁標籤」切換。\n操作說明可參考：https://odf.nat.gov.tw/QA/web/qa_index.html  ")
+#define STR_TIP_SWITCHMENUBAR                   NC_("STR_TIP_SWITCHMENUBAR", "傳統工具列可切換成分頁標籤介面\n您可以在功能列上的「檢視」- 「使用者介面」-「分頁標籤」切換。\n操作說明可參考：\nhttps://odf.nat.gov.tw/QA/web/qa_index.html?topicid=223")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

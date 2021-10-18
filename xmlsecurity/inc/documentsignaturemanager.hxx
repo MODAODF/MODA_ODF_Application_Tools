@@ -112,6 +112,7 @@ public:
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext();
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext();
+    XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

@@ -659,13 +659,13 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if (pImport && rAttrName == "office:version" && !pImport->mpImpl->mxODFVersion)
+        if (pImport && rAttrName == "office:version" && !pImport->mpImpl->aODFVersion.isEmpty())
         {
-            pImport->mpImpl->mxODFVersion = xAttrList->getValueByIndex( i );
+            pImport->mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
             if (pImport->mpImpl->mStreamName == "content.xml"
-                && !pImport->IsODFVersionConsistent(*pImport->mpImpl->mxODFVersion))
+                && !pImport->IsODFVersionConsistent(pImport->mpImpl->aODFVersion))
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
@@ -712,7 +712,8 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
     // context, because namespace declaration apply to the element name itself.
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap(processNSAttributes(xAttrList));
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap(processNSAttributes(
+        mpNamespaceMap, this, xAttrList));
 
     // Get element's namespace and local name.
     OUString aLocalName;
@@ -885,7 +886,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 
         maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
         std::unique_ptr<SvXMLNamespaceMap> pRewindMap(
-                processNSAttributes( maNamespaceAttrList.get() ));
+                processNSAttributes( mpNamespaceMap, this, maNamespaceAttrList.get() ));
         assert( dynamic_cast<SvXMLImportContext*>( xContext.get() ) != nullptr );
         SvXMLImportContext *pContext = static_cast<SvXMLImportContext*>( xContext.get() );
         if (pRewindMap)
@@ -2240,7 +2241,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::endDocument()
 void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    mrImport->processNSAttributes(xAttrList);
+    mrImport->processNSAttributes(mrImport->mpNamespaceMap, mrImport.get(), xAttrList);
     OUString aLocalName;
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(

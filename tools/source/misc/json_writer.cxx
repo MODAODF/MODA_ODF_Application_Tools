@@ -120,21 +120,8 @@ void JsonWriter::endStruct()
     mbFirstFieldInNode = false;
 }
 
-void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
+void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
 {
-    auto nPropNameLength = strlen(pPropName);
-    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
-    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
-
-    addCommaBeforeField();
-
-    *mPos = '"';
-    ++mPos;
-    memcpy(mPos, pPropName, nPropNameLength);
-    mPos += nPropNameLength;
-    memcpy(mPos, "\": \"", 4);
-    mPos += 4;
-
     // Convert from UTF-16 to UTF-8 and perform escaping
     sal_Int32 i = 0;
     while (i < rPropVal.getLength())
@@ -152,6 +139,27 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
             *mPos = '\\';
             ++mPos;
             *mPos = static_cast<char>(ch);
+            ++mPos;
+        }
+        else if (ch == '\n')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'n';
+            ++mPos;
+        }
+        else if (ch == '\r')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'r';
+            ++mPos;
+        }
+        else if (ch == '\f')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'f';
             ++mPos;
         }
         else if (ch <= 0x7F)
@@ -187,6 +195,24 @@ void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
             ++mPos;
         }
     }
+}
+
+void JsonWriter::put(const char* pPropName, const OUString& rPropVal)
+{
+    auto nPropNameLength = strlen(pPropName);
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    ensureSpace(nPropNameLength + nWorstCasePropValLength + 8);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+    memcpy(mPos, pPropName, nPropNameLength);
+    mPos += nPropNameLength;
+    memcpy(mPos, "\": \"", 4);
+    mPos += 4;
+
+    writeEscapedOUString(rPropVal);
 
     *mPos = '"';
     ++mPos;
@@ -344,6 +370,22 @@ void JsonWriter::put(const char* pPropName, bool nPropVal)
     mPos += strlen(pVal);
 }
 
+void JsonWriter::putSimpleValue(const OUString& rPropVal)
+{
+    auto nWorstCasePropValLength = rPropVal.getLength() * 2;
+    ensureSpace(nWorstCasePropValLength + 4);
+
+    addCommaBeforeField();
+
+    *mPos = '"';
+    ++mPos;
+
+    writeEscapedOUString(rPropVal);
+
+    *mPos = '"';
+    ++mPos;
+}
+
 void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)
 {
     ensureSpace(rRawBuf.getLength() + 2);
@@ -413,7 +455,7 @@ std::string JsonWriter::extractAsStdString()
     return ret;
 }
 
-bool JsonWriter::isDataEquals(const std::string& s)
+bool JsonWriter::isDataEquals(const std::string& s) const
 {
     return s.length() == static_cast<size_t>(mPos - mpBuffer)
            && memcmp(s.data(), mpBuffer, s.length()) == 0;

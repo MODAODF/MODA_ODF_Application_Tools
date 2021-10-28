@@ -1,7 +1,7 @@
 [submodule "dictionaries"]
 	path = dictionaries
 	url = https://gerrit.libreoffice.org/dictionaries
-	branch = libreoffice-7-1-5
+	branch = libreoffice-7-1-6
 [submodule "helpcontent2"]
 	path = helpcontent2
 	url = https://gerrit.libreoffice.org/help

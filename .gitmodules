@@ -5,7 +5,7 @@
 [submodule "helpcontent2"]
 	path = helpcontent2
 	url = https://gerrit.libreoffice.org/help
-	branch = libreoffice-7-1-5
+	branch = libreoffice-7-1-6
 [submodule "translations"]
 	path = translations
 	url = https://github.com/NDCODF/translations

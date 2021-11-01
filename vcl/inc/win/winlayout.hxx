@@ -127,6 +127,10 @@ public:
 
     HFONT GetHFONT() const { return m_hFont; }
     float GetScale() const { return m_fScale; }
+    // Return true if the font is for vertical writing.
+    // I.e. the font name of the LOGFONT is prefixed with '@'.
+    bool  IsCJKVerticalFont() const { return m_bIsCJKVerticalFont; }
+    sal_Int32 GetTmDescent() const { return m_nTmDescent; }
 
     // Prevent deletion of the HFONT in the WinFontInstance destructor
     // Used for the ScopedFont handling
@@ -149,6 +153,8 @@ private:
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
+    bool  m_bIsCJKVerticalFont;
+    sal_Int32 m_nTmDescent;
     WinGlyphCache maWinGlyphCache;
 };
 

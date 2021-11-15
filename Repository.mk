@@ -1002,7 +1002,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		helpcontent2_html_static \
 	) \
 	resource_fonts \
-	extras_msvc_dlls \
 	cui \
 ))
 

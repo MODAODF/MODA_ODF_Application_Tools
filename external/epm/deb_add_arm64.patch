@@ -1,0 +1,21 @@
+diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
+--- misc/epm-3.7/deb.c	2020-12-08 17:59:01.425956000 +0800
++++ misc/build/epm-3.7/deb.c	2020-12-08 18:05:55.880178032 +0800
+@@ -101,6 +101,8 @@
+ #endif
+   else if (!strcmp(platform->machine, "ppc"))
+     platname = "powerpc";
++  else if (!strcmp(platform->machine, "aarch64"))
++    platname = "arm64";
+ 
+   if (dist->relnumber)
+   {
+@@ -165,6 +167,8 @@
+ #endif
+   else if (!strcmp(platform->machine, "ppc"))
+     fputs("Architecture: powerpc\n", fp);
++  else if (!strcmp(platform->machine, "aarch64"))
++    fputs("Architecture: arm64\n", fp);
+   else
+     fprintf(fp, "Architecture: %s\n", platform->machine);
+ 

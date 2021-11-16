@@ -943,6 +943,10 @@ EOF
 		cpu=x86_64
 		vendor=pc
 		;;
+	arm64 | aarch64)
+		cpu=aarch64
+		vendor=pc
+		;;
 	# Recognize the basic CPU types without company name.
 	*)
 		cpu=$basic_machine

@@ -3038,10 +3038,10 @@ void SetDefaultParaStyle()
     ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
 }
 
-bool IsCustomNumberingStyle()
+bool IsDefaultParaStyle()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools._IsCustomNumberingStyle?language=Basic&location=application";
+    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools._IsDefaultParaStyle?language=Basic&location=application";
     // Set up parameters
     uno::Sequence< css::uno::Any > aArgs;
     uno::Any aRet;
@@ -3076,14 +3076,13 @@ bool dragtip = true;
 bool SvxRuler::StartDrag()
 {
 
-    // custom NumberingStyle check Ruler is drag
+    // custom ParaStyle check Ruler is drag
     if (dragtip)
     {
-        if (IsCustomNumberingStyle())
+        if (!IsDefaultParaStyle())
         {
             if (_ChkDragRuler())
                 dragtip = false;
-            return false;
         }
     }
 

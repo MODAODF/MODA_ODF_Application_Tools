@@ -1283,10 +1283,40 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     }
 }
 
+bool dragtip = true;
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
         return;
+
+    // Use pending infobars
+    // TODO: update only custom-tip can use
+    if (dragtip /*|| sometip*/)
+    {
+        std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
+        while (!aPendingInfobars.empty())
+        {
+            InfobarData& aInfobarData = aPendingInfobars.back();
+            // TODO: update better judgment
+            if (aInfobarData.msId.compareTo("tipdragruler") != 0)
+                break;
+            VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                          aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                          aInfobarData.mbShowCloseButton);
+            if (pInfoBar)
+            {
+                weld::Button& xButton = pInfoBar->addButton();
+                // TODO: update use switch-case or others
+                if (aInfobarData.msId.compareTo("tipdragruler") == 0)
+                {
+                    xButton.set_tooltip_text(aInfobarData.msId);
+                    xButton.set_label(SfxResId(STR_TIP_DRAGRULER_CHECK));
+                }
+                xButton.connect_clicked(LINK(this, SfxViewFrame, TipHandler));
+            }
+            aPendingInfobars.pop_back();
+        }
+    }
 
     // we know only SfxEventHint or simple SfxHint
     if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
@@ -1557,6 +1587,15 @@ IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, weld::Button&, void)
 IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_DONATION);
+}
+
+IMPL_LINK(SfxViewFrame, TipHandler, weld::Button&, rButton, void)
+{
+    // TODO: can use more tip
+    if (rButton.get_tooltip_text().compareTo("tipdragruler") == 0)
+        dragtip = false;
+
+    RemoveInfoBar(rButton.get_tooltip_text());
 }
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)

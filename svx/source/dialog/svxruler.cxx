@@ -46,6 +46,10 @@
 #include "rlrcitem.hxx"
 #include <memory>
 
+#include <sfx2/infobar.hxx>
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
+
 #define CTRL_ITEM_COUNT 14
 #define GAP 10
 #define OBJECT_BORDER_COUNT 4
@@ -1988,8 +1992,38 @@ tools::Long SvxRuler::RoundToCurrentMapMode(tools::Long lValue) const
     return OutputDevice::LogicToLogic(Size(lNewValue, 0), GetCurrentMapMode(), pEditWin->GetMapMode()).Width();
 }
 
+bool IsCustomNumberingStyle()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools._IsCustomNumberingStyle?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = true;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool dragtip = true;
 void SvxRuler::ApplyIndents()
 {
+    if (dragtip)
+    {
+        if (IsCustomNumberingStyle())
+        {
+            SfxObjectShell* pShell = SfxObjectShell::Current();
+            if (pShell)
+            {
+                pShell->AppendInfoBarWhenReady(
+                    "tipdragruler", SfxResId(STR_TIP_DRAGRULER),"",InfobarType::WARNING);
+            }
+        }
+    }
     /* Applying paragraph settings; changed by dragging. */
 
     tools::Long nLeftFrameMargin  = GetLeftFrameMargin();
@@ -3026,66 +3060,8 @@ void SvxRuler::CalcMinMax()
     }
 }
 
-void SetDefaultParaStyle()
-{
-    SfxObjectShell* pShell = SfxObjectShell::Current();
-    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools.SetDefaultParaStyle?language=Basic&location=application";
-    // Set up parameters
-    uno::Sequence< css::uno::Any > aArgs;
-    uno::Any aRet;
-    uno::Sequence< sal_Int16 > aOutArgsIndex;
-    uno::Sequence< uno::Any > aOutArgs;
-    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
-}
-
-bool IsDefaultParaStyle()
-{
-    SfxObjectShell* pShell = SfxObjectShell::Current();
-    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools._IsDefaultParaStyle?language=Basic&location=application";
-    // Set up parameters
-    uno::Sequence< css::uno::Any > aArgs;
-    uno::Any aRet;
-    uno::Sequence< sal_Int16 > aOutArgsIndex;
-    uno::Sequence< uno::Any > aOutArgs;
-    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
-
-    bool bReturn = true;
-    aRet >>= bReturn;
-
-    return bReturn;
-}
-
-bool _ChkDragRuler()
-{
-    SfxObjectShell* pShell = SfxObjectShell::Current();
-    OUString sUrl = "vnd.sun.Star.script:Tools.OxTools.ChkDragRuler?language=Basic&location=application";
-    // Set up parameters
-    uno::Sequence< css::uno::Any > aArgs;
-    uno::Any aRet;
-    uno::Sequence< sal_Int16 > aOutArgsIndex;
-    uno::Sequence< uno::Any > aOutArgs;
-    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
-
-    bool bReturn = true;
-    aRet >>= bReturn;
-
-    return bReturn;
-}
-
-bool dragtip = true;
 bool SvxRuler::StartDrag()
 {
-
-    // custom ParaStyle check Ruler is drag
-    if (dragtip)
-    {
-        if (!IsDefaultParaStyle())
-        {
-            if (_ChkDragRuler())
-                dragtip = false;
-        }
-    }
-
     /*
        Beginning of a drag operation (SV-handler) evaluates modifier and
        calculated values

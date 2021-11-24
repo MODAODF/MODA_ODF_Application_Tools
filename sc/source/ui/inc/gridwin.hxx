@@ -55,6 +55,7 @@ class FloatingWindow;
 class SdrHdlList;
 class ScTransferObj;
 struct SpellCallbackInfo;
+class ScLokRTLContext;
 
         //  mouse status (nMouseStatus)
 
@@ -401,7 +402,8 @@ public:
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
                                 tools::Long nDimIndex, ScDPObject* pDPObj);
 
-    void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev);
+    void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev,
+                     ScLokRTLContext* pLokRTLContext);
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,

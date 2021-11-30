@@ -296,7 +296,7 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
 void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
 {
     // bMergeCover : Draw lines in sheet bgcolor to cover lok client grid lines in merged cell areas.
-    // (Used when scNoGridBackground is set in lok mode.)
+    // When scNoGridBackground is set in lok mode, bMergeCover is set to true and bGrid to false.
 
     SCCOL nX;
     SCROW nY;
@@ -360,10 +360,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
     tools::Long nSignedOneX = nOneX * nLayoutSign;
 
-    if (bGrid)
-        rRenderContext.SetLineColor(aGridColor);
-    else if (bMergeCover)
-        rRenderContext.SetLineColor(aSheetBGColor);
+    rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
 
     ScGridMerger aGrid(&rRenderContext, nOneX, nOneY);
 
@@ -406,14 +403,9 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else if (bGrid)
+                    else
                     {
-                        rRenderContext.SetLineColor( aGridColor );
-                        bDashed = false;
-                    }
-                    else if (bMergeCover)
-                    {
-                        rRenderContext.SetLineColor(aSheetBGColor);
+                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
                         bDashed = false;
                     }
 
@@ -471,18 +463,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                             }
                         }
 
-                        if (pThisRowInfo->bChanged && !bHOver && bGrid)
-                        {
-                            aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
-                        }
-                        else if (bHOver && bMergeCover)
+                        if ((pThisRowInfo->bChanged && !bHOver && !bMergeCover) || (bHOver && bMergeCover))
                         {
                             aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
                         }
                         nPosY = nNextY;
                     }
                 }
-                else if (bGrid)
+                else if (!bMergeCover)
                 {
                     aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY, bDashed);
                 }
@@ -532,14 +520,9 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else if (bGrid)
+                    else
                     {
-                        rRenderContext.SetLineColor( aGridColor );
-                        bDashed = false;
-                    }
-                    else if (bMergeCover)
-                    {
-                        rRenderContext.SetLineColor(aSheetBGColor);
+                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
                         bDashed = false;
                     }
 
@@ -586,11 +569,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                     //! nVisY from Array ??
                             }
 
-                            if (!bVOver && bGrid)
-                            {
-                                aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
-                            }
-                            else if (bVOver && bMergeCover)
+                            if ((!bVOver && !bMergeCover) || (bVOver && bMergeCover))
                             {
                                 aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
                             }
@@ -598,7 +577,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                         nPosX = nNextX;
                     }
                 }
-                else if (bGrid)
+                else if (!bMergeCover)
                 {
                     aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY, bDashed);
                 }

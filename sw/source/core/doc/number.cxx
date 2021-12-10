@@ -407,7 +407,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIncludeUpperLevels( 1 );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
-            pFormat->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+            pFormat->SetLabelFollowedBy( SvxNumberFormat::NOTHING ); // use NOTHING
             pFormat->SetListtabPos( cIndentAt[ n ] );
             pFormat->SetFirstLineIndent( cFirstLineIndent );
             pFormat->SetIndentAt( cIndentAt[ n ] );

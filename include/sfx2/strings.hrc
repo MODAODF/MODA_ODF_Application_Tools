@@ -347,7 +347,8 @@
 
 #define STR_STYLEUSEDBY                         NC_("STR_STYLEUSEDBY", "(used by: %STYLELIST)")
 // Translators: customs tip
-#define STR_TIP_SWITCHMENUBAR                   NC_("STR_TIP_SWITCHMENUBAR", "傳統工具列可切換成分頁標籤介面\n您可以在功能列上的「檢視」- 「使用者介面」-「分頁標籤」切換。\n操作說明可參考：\nhttps://odf.nat.gov.tw/QA/web/qa_index.html?topicid=223")
+#define STR_TIP_SWITCHMENUBAR                   NC_("STR_TIP_SWITCHMENUBAR", "傳統工具列可切換成分頁標籤介面，您可以在功能列上的「檢視」- 「使用者介面」-「分頁標籤」切換。")
+#define STR_LINK_QA_SWITCHMENUBAR               NC_("STR_LINK_QA_SWITCHMENUBAR", "前往QA小幫手")
 #define STR_TIP_DRAGRULER                       NC_("STR_TIP_DRAGRULER", "「該段落已套用清單樣式，若套用相關設定會與原樣式設定值不同」")
 #define STR_TIP_DRAGRULER_CHECK                 NC_("STR_TIP_DRAGRULER_CHECK", "不再顯示此提示")
 #endif

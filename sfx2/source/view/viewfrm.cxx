@@ -1378,10 +1378,14 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 const bool bTipFirstRun = officecfg::Office::Common::Misc::TipFirstRun::get();
                 if (bTipFirstRun && !Application::IsHeadlessModeEnabled() && !bIsUITest)
                 {
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
-                                                              VclMessageType::Info, VclButtonsType::Ok,
-                                                              SfxResId(STR_TIP_SWITCHMENUBAR)));
-                    xInfoBox->run();
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("tipswitchmenubar", "", SfxResId(STR_TIP_SWITCHMENUBAR), InfobarType::INFO);
+                    if (pInfoBar)
+                    {
+                        weld::Button& rQAButton = pInfoBar->addButton();
+                        rQAButton.set_label(SfxResId(STR_LINK_QA_SWITCHMENUBAR));
+                        rQAButton.connect_clicked(LINK(this, SfxViewFrame, LinkQAHandler));
+                    }
+
                     // set TipFirstRun false
                     std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
@@ -1596,6 +1600,12 @@ IMPL_LINK(SfxViewFrame, TipHandler, weld::Button&, rButton, void)
         dragtip = false;
 
     RemoveInfoBar(rButton.get_tooltip_text());
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, LinkQAHandler, weld::Button&, void)
+{
+    OUString sLink = "https://odf.nat.gov.tw/QA/web/qa_index.html?topicid=223";
+    sfx2::openUriExternally(sLink, false);
 }
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)

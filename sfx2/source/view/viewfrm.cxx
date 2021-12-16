@@ -1283,6 +1283,74 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     }
 }
 
+bool FormatCheckEvent()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:FormatCheck.FormatCheck.FormatCheckEvent?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = true;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool menuAction()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:FormatCheck.FormatCheck.menuAction?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = true;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool EnabledFormatCheck()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:FormatCheck.FormatCheck._EnabledFormatCheck?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = false;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
+bool IsRunFormatCheckInfobar()
+{
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    OUString sUrl = "vnd.sun.Star.script:FormatCheck.FormatCheck._IsRunFormatCheckInfobar?language=Basic&location=application";
+    // Set up parameters
+    uno::Sequence< css::uno::Any > aArgs;
+    uno::Any aRet;
+    uno::Sequence< sal_Int16 > aOutArgsIndex;
+    uno::Sequence< uno::Any > aOutArgs;
+    ErrCode eRet = pShell->CallXScript(sUrl, aArgs, aRet, aOutArgsIndex, aOutArgs, false);
+
+    bool bReturn = false;
+    aRet >>= bReturn;
+
+    return bReturn;
+}
+
 bool dragtip = true;
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
@@ -1374,6 +1442,20 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     officecfg::Setup::Product::ooSetupLastVersion::set(sSetupVersion, batch);
                     batch->commit();
                 }*/
+                // add FormatCheck infobar
+                if (IsRunFormatCheckInfobar() && EnabledFormatCheck())
+                {
+                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("tipformatcheck", "", SfxResId(STR_TIP_FORMATCHECK), InfobarType::WARNING);
+                    if (pInfoBar)
+                    {
+                        weld::Button& rFDButton = pInfoBar->addButton();
+                        rFDButton.set_label(SfxResId(STR_TIP_FORMATCHECK_APPLY));
+                        rFDButton.connect_clicked(LINK(this, SfxViewFrame, FormatCheckApplyHandler));
+                        weld::Button& rFAButton = pInfoBar->addButton();
+                        rFAButton.set_label(SfxResId(STR_TIP_FORMATCHECK_DISABLE));
+                        rFAButton.connect_clicked(LINK(this, SfxViewFrame, FormatCheckDisabledHandler));
+                    }
+                }
                 // add switch notebookbar msgbox
                 const bool bTipFirstRun = officecfg::Office::Common::Misc::TipFirstRun::get();
                 if (bTipFirstRun && !Application::IsHeadlessModeEnabled() && !bIsUITest)
@@ -1600,6 +1682,18 @@ IMPL_LINK(SfxViewFrame, TipHandler, weld::Button&, rButton, void)
         dragtip = false;
 
     RemoveInfoBar(rButton.get_tooltip_text());
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, FormatCheckApplyHandler, weld::Button&, void)
+{
+    menuAction();
+    RemoveInfoBar(OUString("tipformatcheck"));
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, FormatCheckDisabledHandler, weld::Button&, void)
+{
+    FormatCheckEvent();
+    RemoveInfoBar(OUString("tipformatcheck"));
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, LinkQAHandler, weld::Button&, void)

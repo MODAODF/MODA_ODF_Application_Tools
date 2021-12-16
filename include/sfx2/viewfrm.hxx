@@ -65,6 +65,8 @@ protected:
     DECL_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_LINK(SignDocumentHandler, weld::Button&, void);
     DECL_LINK(TipHandler, weld::Button&, void);
+    DECL_LINK(FormatCheckApplyHandler, weld::Button&, void);
+    DECL_LINK(FormatCheckDisabledHandler, weld::Button&, void);
     DECL_LINK(LinkQAHandler, weld::Button&, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 

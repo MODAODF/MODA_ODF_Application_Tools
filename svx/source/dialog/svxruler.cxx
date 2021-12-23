@@ -49,6 +49,9 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/objsh.hxx>
+
+using namespace css;
 
 #define CTRL_ITEM_COUNT 14
 #define GAP 10

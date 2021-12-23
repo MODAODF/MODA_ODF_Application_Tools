@@ -92,6 +92,7 @@
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <openuriexternally.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

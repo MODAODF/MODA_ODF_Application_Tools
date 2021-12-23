@@ -57,6 +57,8 @@
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 static bool lcl_IsInBody( SwFrame const *pFrame )
 {

@@ -74,6 +74,7 @@ using namespace vcl;
 #define SPACE_AROUND_TITLE  4
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <comphelper/processfactory.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 

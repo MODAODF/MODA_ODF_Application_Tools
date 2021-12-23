@@ -23,6 +23,9 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+using namespace css;
+using namespace ::com::sun::star;
+
 namespace {
 
 class NumberingToolBoxControl;

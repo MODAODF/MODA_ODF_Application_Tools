@@ -50,6 +50,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <editeng/editids.hrc>
 
 const sal_uInt16 SvxStdParagraphTabPage::pStdRanges[] =
 {
@@ -1008,6 +1009,15 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
+
+    if (!rSet.HasItem(SID_ATTR_TABSTOP_DEFAULTS) && !rSet.HasItem(SID_ATTR_TABSTOP_OFFSET))
+    {
+        m_xLastLineFT->hide();
+        m_xLastLineLB->hide();
+        m_xExpandCB->hide();
+        m_xSnapToGridCB->hide();
+    }
+
     SetExchangeSupport();
 
     SvtLanguageOptions aLangOptions;

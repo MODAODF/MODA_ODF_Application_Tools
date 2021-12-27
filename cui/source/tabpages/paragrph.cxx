@@ -1010,7 +1010,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
 
-    if (!rSet.HasItem(SID_ATTR_TABSTOP_DEFAULTS) && !rSet.HasItem(SID_ATTR_TABSTOP_OFFSET))
+    if (!rSet.HasItem(SID_ATTR_TABSTOP_DEFAULTS) && !rSet.HasItem(SID_ATTR_TABSTOP_POS))
     {
         m_xLastLineFT->hide();
         m_xLastLineLB->hide();

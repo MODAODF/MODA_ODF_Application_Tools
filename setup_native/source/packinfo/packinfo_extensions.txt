@@ -36,9 +36,9 @@
 
 Start
 module = "gid_Module_Optional_Extensions_MEDIAWIKI"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-mediawiki-publisher"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%BRANDPACKAGEVERSION-extension-mediawiki-publisher"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-mediawiki-publisher"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-mediawiki-publisher"
 #requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2021 The Document Foundation"
@@ -51,8 +51,8 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_NumberText"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-numbertext"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-numbertext"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-numbertext"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
@@ -66,8 +66,8 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_CT2N"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-ct2n"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-ct2n"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-ct2n"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
@@ -81,9 +81,9 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_NLPSolver"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-nlpsolver"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%BRANDPACKAGEVERSION-extension-nlpsolver"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-nlpsolver"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-nlpsolver"
 #requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2021 The Document Foundation"
@@ -96,8 +96,8 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_LanguageTool"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-languagetool"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-languagetool"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-languagetool"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
@@ -111,9 +111,9 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_Script_Provider_For_BS"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-beanshell-script-provider"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%BRANDPACKAGEVERSION-extension-beanshell-script-provider"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-beanshell-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-beanshell-script-provider"
 #requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2021 The Document Foundation"
@@ -126,9 +126,9 @@ End
 
 Start
 module = "gid_Module_Optional_Extensions_Script_Provider_For_JS"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-javascript-script-provider"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%BRANDPACKAGEVERSION-extension-javascript-script-provider"
+solarispackagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX-extension-javascript-script-provider"
 #requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "2021 The Document Foundation"

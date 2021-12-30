@@ -1354,6 +1354,35 @@ void SwView::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
         }
         break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            if (pArgs && pArgs->Count() >= 3)
+            {
+                SdrView *pSdrView = m_pWrtShell->HasDrawView() ? m_pWrtShell->GetDrawView() : nullptr;
+                if (pSdrView == nullptr)
+                    break;
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+                const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
+
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = newPosXTwips->GetValue();
+                const sal_uLong newPosY = newPosYTwips->GetValue();
+                const Point mPoint(newPosX, newPosY);
+                const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
+                if (!handle)
+                {
+                    break;
+                }
+
+                if (handle->GetKind() == SdrHdlKind::Anchor || handle->GetKind() == SdrHdlKind::Anchor_TR)
+                    m_pWrtShell->FindAnchorPos(mPoint, /*bMoveIt=*/true);
+                else
+                    pSdrView->MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
+            }
+            break;
+        }
 
         default:
             OSL_ENSURE(false, "wrong dispatcher");

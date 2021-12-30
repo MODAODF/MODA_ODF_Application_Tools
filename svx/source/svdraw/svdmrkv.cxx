@@ -62,6 +62,8 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/optional/optional.hpp>
+#include <tools/UnitConversion.hxx>
 
 using namespace com::sun::star;
 
@@ -589,7 +591,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor::Default)
+        if (pObj && pObj->GetObjInventor()==SdrInventor::Default)
         {
             sal_uInt16 nIdent=pObj->GetObjIdentifier();
             if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE || nIdent==OBJ_TABLE )
@@ -681,13 +683,74 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 }
 } // anonymous namespace
 
+bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
+{
+    bool result = false;
+    if (OutputDevice* rOutDev = mpMarkedPV->GetView().GetFirstOutputDevice())
+    {
+        bool bConvertUnit = false;
+        if (rOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+            bConvertUnit = true;
+        const SdrObjList* pOL = mpMarkedPV->GetObjList();
+        if (!pOL)
+            return false;
+        const size_t nObjCount = pOL->GetObjCount();
+        boost::property_tree::ptree elements;
+        for (size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
+        {
+            SdrObject* pObj = pOL->GetObj(nObjNum);
+            if (!pObj)
+                continue;
+            if (pObj == GetMarkedObjectByIndex(0))
+                continue;
+            const SdrGluePointList* pGPL = pObj->GetGluePointList();
+            bool VertexObject = !(pGPL && pGPL->GetCount());
+            const size_t count = !VertexObject ? pGPL->GetCount() : 4;
+            boost::property_tree::ptree object;
+            boost::property_tree::ptree points;
+            for (size_t i = 0; i < count; ++i)
+            {
+                boost::property_tree::ptree node;
+                boost::property_tree::ptree point;
+                const SdrGluePoint& rGP = !VertexObject ? (*pGPL)[i] : pObj->GetVertexGluePoint(i);
+                Point rPoint = rGP.GetAbsolutePos(*pObj);
+                if (bConvertUnit)
+                    rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                point.put("x", rPoint.getX());
+                point.put("y", rPoint.getY());
+                node.add_child("point", point);
+                points.push_back(std::make_pair("", node));
+            }
+            basegfx::B2DVector aGridOffset(0.0, 0.0);
+            Point objLogicRectTopLeft = pObj->GetLogicRect().TopLeft();
+            if(getPossibleGridOffsetForPosition(aGridOffset, basegfx::B2DPoint(objLogicRectTopLeft.X(), objLogicRectTopLeft.Y()), GetSdrPageView()))
+            {
+                Point p(aGridOffset.getX(), aGridOffset.getY());
+                if (bConvertUnit)
+                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                boost::property_tree::ptree gridOffset;
+                gridOffset.put("x", p.getX());
+                gridOffset.put("y", p.getY());
+                object.add_child("gridoffset", gridOffset);
+            }
+            object.put("ordnum", pObj->GetOrdNum());
+            object.add_child("gluepoints", points);
+            elements.push_back(std::make_pair("", object));
+            result = true;
+        }
+        rTree.add_child("shapes", elements);
+    }
+    return result;
+}
+
 void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
 
     tools::Rectangle aSelection(rRect);
     bool bIsChart = false;
-
+    Point addLogicOffset(0, 0);
+    bool convertMapMode = false;
     if (!rRect.IsEmpty())
     {
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -702,6 +765,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 {
                     Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
                     Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                    addLogicOffset = aLogicOffset;
                     aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
                 }
             }
@@ -716,7 +780,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
             {
                 if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                {
                     aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    convertMapMode = true;
+                }
             }
         }
 
@@ -726,13 +793,20 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
     {
         OString sSelectionText;
+        OString sSelectionTextView;
         boost::property_tree::ptree aTableJsonTree;
+        boost::property_tree::ptree aGluePointsTree;
         bool bTableSelection = false;
+        bool bConnectorSelection = false;
 
         if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+        }
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_EDGE)
+        {
+            bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
         if (GetMarkedObjectCount())
         {
@@ -749,11 +823,32 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             }
 
             OStringBuffer aExtraInfo;
+            OString handleArrayStr;
 
             aExtraInfo.append("{\"id\":\"");
             aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
             aExtraInfo.append("\",\"type\":");
             aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
+
+            // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate
+            // In online, we have the SnapRect and we calculate it based on its TopLeft coordinate
+            // SnapRect's TopLeft and LogicRect's TopLeft match unless there is rotation
+            // but the rotation is not applied to the LogicRect. Therefore,
+            // what we calculate in online does not match with the core in case of the rotation.
+            // Here we can send the correct gridOffset in the selection callback, this way
+            // whether the shape is rotated or not, we will always have the correct gridOffset
+            // Note that the gridOffset is calculated from the first selected obj
+            basegfx::B2DVector aGridOffset(0.0, 0.0);
+            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            {
+                Point p(aGridOffset.getX(), aGridOffset.getY());
+                if (convertMapMode)
+                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                aExtraInfo.append(",\"gridOffsetX\":");
+                aExtraInfo.append(OString::number(p.getX()));
+                aExtraInfo.append(",\"gridOffsetY\":");
+                aExtraInfo.append(OString::number(p.getY()));
+            }
 
             if (bWriterGraphic)
             {
@@ -859,8 +954,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                 }
                                                 sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
 
-                                                aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
-
                                                 OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
                                                     OString::number(aSelection.GetWidth() / 100.0) +
                                                     R"elem(mm\" height=\")elem" +
@@ -885,18 +978,102 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     }
                 }
             }
-            aExtraInfo.append("}");
-
+            if (!bTableSelection && !pOtherShell && maHdlList.GetHdlCount())
+            {
+                boost::property_tree::ptree responseJSON;
+                boost::property_tree::ptree others;
+                boost::property_tree::ptree anchor;
+                boost::property_tree::ptree rectangle;
+                boost::property_tree::ptree poly;
+                boost::property_tree::ptree custom;
+                boost::property_tree::ptree nodes;
+                for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
+                {
+                    SdrHdl *pHdl = maHdlList.GetHdl(i);
+                    boost::property_tree::ptree child;
+                    boost::property_tree::ptree point;
+                    sal_Int32 kind = static_cast<sal_Int32>(pHdl->GetKind());
+                    child.put("id", pHdl->GetObjHdlNum());
+                    child.put("kind", kind);
+                    child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
+                    Point pHdlPos = pHdl->GetPos();
+                    pHdlPos.Move(addLogicOffset.getX(), addLogicOffset.getY());
+                    if (convertMapMode)
+                        pHdlPos = OutputDevice::LogicToLogic(pHdlPos, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    point.put("x", pHdlPos.getX());
+                    point.put("y", pHdlPos.getY());
+                    child.add_child("point", point);
+                    const auto node = std::make_pair("", child);
+                    boost::property_tree::ptree* selectedNode = nullptr;
+                    if (kind >= static_cast<sal_Int32>(SdrHdlKind::UpperLeft) && kind <= static_cast<sal_Int32>(SdrHdlKind::LowerRight))
+                    {
+                        selectedNode = &rectangle;
+                    }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::Poly))
+                    {
+                        selectedNode = &poly;
+                    }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::CustomShape1))
+                    {
+                        selectedNode = &custom;
+                    }
+                    else if (kind == static_cast<sal_Int32>(SdrHdlKind::Anchor) || kind == static_cast<sal_Int32>(SdrHdlKind::Anchor_TR))
+                    {
+                        if (getSdrModelFromSdrView().IsWriter())
+                            selectedNode = &anchor;
+                        else
+                            // put it to others as we dont render them except in writer
+                            selectedNode = &others;
+                    }
+                    else
+                    {
+                        selectedNode = &others;
+                    }
+                    std::string sKind = std::to_string(kind);
+                    boost::optional< boost::property_tree::ptree& > kindNode = selectedNode->get_child_optional(sKind.c_str());
+                    if (!kindNode)
+                    {
+                        boost::property_tree::ptree newChild;
+                        newChild.push_back(node);
+                        selectedNode->add_child(sKind.c_str(), newChild);
+                    }
+                    else
+                        kindNode.get().push_back(node);
+                }
+                nodes.add_child("rectangle", rectangle);
+                nodes.add_child("poly", poly);
+                nodes.add_child("custom", custom);
+                nodes.add_child("anchor", anchor);
+                nodes.add_child("others", others);
+                responseJSON.add_child("kinds", nodes);
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
+                handleArrayStr = ", \"handles\":";
+                handleArrayStr = handleArrayStr + aStream.str().c_str();
+                if (bConnectorSelection)
+                {
+                    aStream.str("");
+                    boost::property_tree::write_json(aStream, aGluePointsTree, /*pretty=*/ false);
+                    handleArrayStr = handleArrayStr + ", \"GluePoints\":";
+                    handleArrayStr = handleArrayStr + aStream.str().c_str();
+                }
+            }
             sSelectionText = aSelection.toString() +
                 ", " + OString::number(nRotAngle);
             if (!aExtraInfo.isEmpty())
             {
+                sSelectionTextView = sSelectionText + ", " + aExtraInfo.toString() + "}";
+                aExtraInfo.append(handleArrayStr);
+                aExtraInfo.append("}");
                 sSelectionText += ", " + aExtraInfo.makeStringAndClear();
             }
         }
 
         if (sSelectionText.isEmpty())
+        {
             sSelectionText = "EMPTY";
+            sSelectionTextView = "EMPTY";
+        }
 
         if (bTableSelection)
         {
@@ -911,7 +1088,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             boost::property_tree::write_json(aStream, aTableJsonTree);
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
         }
-        else
+        else if (!getSdrModelFromSdrView().IsWriter())
         {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}");
         }
@@ -921,14 +1098,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // Another shell wants to know about our existing
             // selection.
             if (pViewShell != pOtherShell)
-                SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+                SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
         else
         {
             // We have a new selection, so both pViewShell and the
             // other views want to know about it.
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
-            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
     }
 }
@@ -1046,11 +1223,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     }
 
     tools::Rectangle aRect(GetMarkedObjRect());
-
-    if (bTiledRendering && pViewShell)
-    {
-        SetMarkHandlesForLOKit(aRect, pOtherShell);
-    }
 
     if (bFrmHdl)
     {
@@ -1244,6 +1416,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     AddCustomHdl();
+
+    // moved it here to access all the handles for callback.
+    if (bTiledRendering && pViewShell)
+    {
+        SetMarkHandlesForLOKit(aRect, pOtherShell);
+    }
 
     // try to restore focus handle index from remembered values
     if(!bSaveOldFocus)

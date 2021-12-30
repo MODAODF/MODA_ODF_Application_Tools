@@ -200,6 +200,32 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                 GetView().FlipDrawRotate();
             }
             break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            if (pArgs && pArgs->Count() >= 3)
+            {
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+                const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
+
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = newPosXTwips->GetValue();
+                const sal_uLong newPosY = newPosYTwips->GetValue();
+                const Point mPoint(newPosX, newPosY);
+                const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
+                if (handle->GetKind() == SdrHdlKind::Anchor || handle->GetKind() == SdrHdlKind::Anchor_TR)
+                {
+                    rSh.FindAnchorPos(mPoint, /*bMoveIt=*/true);
+                    SdrDragView* pDragView = dynamic_cast<SdrDragView*>(pSdrView);
+                    if (pDragView != nullptr)
+                        pDragView->ModelHasChanged();
+                }
+                else
+                    pSdrView->MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
+            }
+        }
+        break;
 
         case SID_BEZIER_EDIT:
             if (GetView().IsDrawRotate())

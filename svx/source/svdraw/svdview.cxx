@@ -1439,6 +1439,51 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
+bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum)
+{
+    if (GetHdlList().IsMoveOutside())
+        return false;
+
+    if (!GetMarkedObjectList().GetMarkCount())
+        return false;
+
+    SdrHdl * pHdl = GetHdlList().GetHdl(handleNum);
+    if (pHdl == nullptr)
+        return false;
+
+    SdrDragStat& rDragStat = const_cast<SdrDragStat&>(GetDragStat());
+    // start dragging
+    BegDragObj(pHdl->GetPos(), nullptr, pHdl, 0);
+    if (!IsDragObj())
+        return false;
+
+    bool bWasNoSnap = rDragStat.IsNoSnap();
+    bool bWasSnapEnabled = IsSnapEnabled();
+
+    // switch snapping off
+    if(!bWasNoSnap)
+        rDragStat.SetNoSnap();
+    if(bWasSnapEnabled)
+        SetSnapEnabled(false);
+
+    if (aObjectOrdNum != -1)
+    {
+        rDragStat.GetGlueOptions().objectOrdNum = aObjectOrdNum;
+    }
+    MovDragObj(aEndPoint);
+    EndDragObj();
+
+    // Clear Glue Options
+    rDragStat.GetGlueOptions().objectOrdNum = -1;
+
+    if (!bWasNoSnap)
+       rDragStat.SetNoSnap(bWasNoSnap);
+    if (bWasSnapEnabled)
+        SetSnapEnabled(bWasSnapEnabled);
+
+    return true;
+}
+
 void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, ConfigurationHints nHint)
 {
     onAccessibilityOptionsChanged();

@@ -51,6 +51,8 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -1886,6 +1888,23 @@ bool SvXMLImport::IsShapePositionInHoriL2R() const
 bool SvXMLImport::IsTextDocInOOoFileFormat() const
 {
     return mpImpl->mbTextDocInOOoFileFormat;
+}
+
+bool SvXMLImport::IsSourceMicrosoft( const uno::Reference< frame::XModel >& xChartModel ) const
+{
+    uno::Reference< document::XDocumentPropertiesSupplier> xChartDocumentPropertiesSupplier(xChartModel, uno::UNO_QUERY );
+    OUString aGenerator;
+    if( xChartDocumentPropertiesSupplier.is() )
+    {
+        uno::Reference< document::XDocumentProperties > xChartDocumentProperties(
+            xChartDocumentPropertiesSupplier->getDocumentProperties());
+        if( xChartDocumentProperties.is() )
+            aGenerator =  xChartDocumentProperties->getGenerator();
+    }
+    if(aGenerator.lastIndexOf("Microsoft")>=0){
+        return true;
+    }
+    return false;
 }
 
 void SvXMLImport::initXForms()

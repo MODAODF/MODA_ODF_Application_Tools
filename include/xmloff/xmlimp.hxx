@@ -498,6 +498,8 @@ public:
 
     bool IsTextDocInOOoFileFormat() const;
 
+    bool IsSourceMicrosoft( const css::uno::Reference< com::sun::star::frame::XModel >& xChartModel) const;
+
     OUString GetBaseURL() const;
     OUString GetDocumentBase() const;
 

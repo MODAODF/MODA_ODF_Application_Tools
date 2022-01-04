@@ -27,15 +27,13 @@
 #include "XMLTextListBlockContext.hxx"
 #include <txtlists.hxx>
 #include <sal/log.hxx>
-
-
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
-
 
 // OD 2008-05-07 #refactorlists#
 // add optional parameter <bRestartNumberingAtSubList> and its handling
@@ -176,10 +174,14 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 }
             }
         }
+
         if ( msListId.isEmpty() )
         {
-            // generate a new list id for the list
-            msListId = rTextListsHelper.GenerateNewListId();
+            if(!rImport.IsSourceMicrosoft(rImport.GetModel()))
+            {
+                // generate a new list id for the list
+                msListId = rTextListsHelper.GenerateNewListId();
+            }
         }
     }
 

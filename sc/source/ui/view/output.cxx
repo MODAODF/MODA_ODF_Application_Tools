@@ -933,7 +933,7 @@ const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType 
 }
 
 void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY,
-        sc::IconSetBitmapMap & rIconSetBitmapMap)
+        sc::IconSetBitmapMap & rIconSetBitmapMap, bool bWorksInPixels)
 {
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
@@ -942,7 +942,18 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     tools::Long aHeight = 300;
 
     if (pOldIconSetInfo->mnHeight)
-        aHeight = convertTwipToMm100(pOldIconSetInfo->mnHeight);
+    {
+        if (bWorksInPixels)
+        {
+            aHeight = rRenderContext.LogicToPixel(Size(0, pOldIconSetInfo->mnHeight), MapMode(MapUnit::MapTwip)).Height();
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                aHeight *= comphelper::LibreOfficeKit::getDPIScale();
+            }
+        }
+        else
+            aHeight = convertTwipToMm100(pOldIconSetInfo->mnHeight);
+    }
 
     Size aSize = rIcon.GetSizePixel();
     double fRatio = aSize.Width() / aSize.Height();
@@ -957,7 +968,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
 void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & pColor, const SvxBrushItem* pBackground, std::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
         tools::Rectangle& rRect, tools::Long nPosX, tools::Long nLayoutSign, tools::Long nOneX, tools::Long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo,
-        sc::IconSetBitmapMap & rIconSetBitmapMap)
+        sc::IconSetBitmapMap & rIconSetBitmapMap, bool bWorksInPixels)
 {
     tools::Long nSignedOneX = nOneX * nLayoutSign;
     // need to paint if old color scale has been used and now
@@ -974,7 +985,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
         if( pOldDataBarInfo )
             drawDataBars(rRenderContext, pOldDataBarInfo, rRect, nOneX, nOneY);
         if( pOldIconSetInfo )
-            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
+            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap, bWorksInPixels);
 
         rRect.SetLeft( nPosX - nSignedOneX );
     }
@@ -994,7 +1005,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
         if( pOldDataBarInfo )
             drawDataBars(rRenderContext, pOldDataBarInfo, rRect, nOneX, nOneY);
         if( pOldIconSetInfo )
-            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap);
+            drawIconSets(rRenderContext, pOldIconSetInfo, rRect, nOneX, nOneY, rIconSetBitmapMap, bWorksInPixels);
 
         rRect.SetLeft( nPosX - nSignedOneX );
     }
@@ -1157,7 +1168,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if (bWorksInPixels)
                         nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
+                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap(), bWorksInPixels);
 
                     // extend for all merged cells
                     nMergedCols = 1;
@@ -1181,7 +1192,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                drawCells(rRenderContext, std::optional<Color>(), nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
+                drawCells(rRenderContext, std::optional<Color>(), nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap(), bWorksInPixels);
 
                 nArrY += nSkip;
             }

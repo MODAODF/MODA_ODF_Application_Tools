@@ -381,7 +381,9 @@ tools::Long HandleBasicError( StarBASIC const * pBasic )
 
     tools::Long nRet = 0;
     Shell* pShell = nullptr;
-    if ( SvtModuleOptions::IsBasicIDE() )
+
+    // disabled BasicIDE debug
+    if ( SvtModuleOptions::IsBasicIDE() && 0 )
     {
         BasicManager* pBasMgr = FindBasicManager( pBasic );
         if ( pBasMgr )

@@ -36,6 +36,7 @@ CodeCompleteOptions::CodeCompleteOptions()
     bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
     bIsCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
     bExtendedTypeDeclarationOn = officecfg::Office::BasicIDE::Autocomplete::UseExtended::get();
+    bIsBasicIdeDebugOn = officecfg::Office::BasicIDE::MarcoErrorRuntime::BasicIdeDebug::get();
 }
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
@@ -96,6 +97,16 @@ bool CodeCompleteOptions::IsAutoCorrectOn()
 void CodeCompleteOptions::SetAutoCorrectOn( bool b )
 {
     theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
+}
+
+bool CodeCompleteOptions::IsBasicIdeDebugOn()
+{
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions::get().bIsBasicIdeDebugOn;
+}
+
+void CodeCompleteOptions::SetBasicIdeDebugOn( bool b )
+{
+    theCodeCompleteOptions::get().bIsBasicIdeDebugOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

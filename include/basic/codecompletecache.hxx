@@ -43,6 +43,7 @@ private:
     bool bIsAutoCloseParenthesisOn;
     bool bIsAutoCorrectOn;
     bool bExtendedTypeDeclarationOn;
+    bool bIsBasicIdeDebugOn;
 
 public:
     CodeCompleteOptions();
@@ -64,6 +65,9 @@ public:
 
     static bool IsAutoCorrectOn();
     static void SetAutoCorrectOn( bool b );
+
+    static bool IsBasicIdeDebugOn();
+    static void SetBasicIdeDebugOn( bool b );
 };
 
 class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) CodeCompleteDataCache final

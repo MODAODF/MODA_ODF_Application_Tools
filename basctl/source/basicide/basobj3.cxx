@@ -44,6 +44,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <basic/codecompletecache.hxx>
 
 namespace basctl
 {
@@ -383,7 +384,7 @@ tools::Long HandleBasicError( StarBASIC const * pBasic )
     Shell* pShell = nullptr;
 
     // disabled BasicIDE debug
-    if ( SvtModuleOptions::IsBasicIDE() && 0 )
+    if ( SvtModuleOptions::IsBasicIDE() && CodeCompleteOptions::IsBasicIdeDebugOn() )
     {
         BasicManager* pBasMgr = FindBasicManager( pBasic );
         if ( pBasMgr )

@@ -74,5 +74,16 @@
             <value>true</value>
         </prop>
     </group>
+    <group oor:name="MarcoErrorRuntime">
+        <info>
+            <desc>Marco Error Runtime.</desc>
+        </info>
+        <prop oor:name="BasicIdeDebug" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+                <desc>Enabled/Disabled BasicIDE debug.</desc>
+            </info>
+            <value>false</value>
+        </prop>
+    </group>
     </component>
 </oor:component-schema>

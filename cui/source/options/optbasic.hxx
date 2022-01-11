@@ -30,6 +30,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xAutocloseQuotesChk;
     std::unique_ptr<weld::CheckButton> m_xAutoCorrectChk;
     std::unique_ptr<weld::CheckButton> m_xUseExtendedTypesChk;
+    std::unique_ptr<weld::CheckButton> m_xBasicIdeDebugChk;
 
     void LoadConfig();
 

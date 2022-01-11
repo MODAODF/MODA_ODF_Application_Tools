@@ -29,6 +29,7 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(weld::Container* pPage, weld::Dia
     , m_xAutocloseQuotesChk(m_xBuilder->weld_check_button("autoclose_quotes"))
     , m_xAutoCorrectChk(m_xBuilder->weld_check_button("autocorrect"))
     , m_xUseExtendedTypesChk(m_xBuilder->weld_check_button("extendedtypes_enable"))
+    , m_xBasicIdeDebugChk(m_xBuilder->weld_check_button("basicidedebug_enable"))
 {
     LoadConfig();
 }
@@ -51,6 +52,8 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     m_xAutoCorrectChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::isReadOnly() );
     m_xUseExtendedTypesChk->set_active( officecfg::Office::BasicIDE::Autocomplete::UseExtended::get() );
     m_xUseExtendedTypesChk->set_sensitive( !officecfg::Office::BasicIDE::Autocomplete::UseExtended::isReadOnly() );
+    m_xBasicIdeDebugChk->set_active( officecfg::Office::BasicIDE::MarcoErrorRuntime::BasicIdeDebug::get() );
+    m_xBasicIdeDebugChk->set_sensitive( !officecfg::Office::BasicIDE::MarcoErrorRuntime::BasicIdeDebug::isReadOnly() );
 }
 
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -101,6 +104,13 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         bModified = true;
     }
 
+    if( m_xBasicIdeDebugChk->get_state_changed_from_saved() )
+    {
+        officecfg::Office::BasicIDE::MarcoErrorRuntime::BasicIdeDebug::set( m_xBasicIdeDebugChk->get_active(), batch );
+        CodeCompleteOptions::SetBasicIdeDebugOn( m_xBasicIdeDebugChk->get_active() );
+        bModified = true;
+    }
+
     if( bModified )
         batch->commit();
 
@@ -116,6 +126,7 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xAutocloseParenChk->save_state();
     m_xAutoCorrectChk->save_state();
     m_xUseExtendedTypesChk->save_state();
+    m_xBasicIdeDebugChk->save_state();
 }
 
 std::unique_ptr<SfxTabPage> SvxBasicIDEOptionsPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )

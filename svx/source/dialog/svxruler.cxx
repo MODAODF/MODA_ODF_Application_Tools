@@ -2012,10 +2012,10 @@ bool IsCustomNumberingStyle()
     return bReturn;
 }
 
-bool dragtip = true;
+bool svxdragtip = true;
 void SvxRuler::ApplyIndents()
 {
-    if (dragtip)
+    if (svxdragtip)
     {
         if (IsCustomNumberingStyle())
         {

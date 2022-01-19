@@ -1352,7 +1352,7 @@ bool IsRunFormatCheckInfobar()
     return bReturn;
 }
 
-bool dragtip = true;
+bool sfxdragtip = true;
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
@@ -1360,7 +1360,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
     // Use pending infobars
     // TODO: update only custom-tip can use
-    if (dragtip /*|| sometip*/)
+    if (sfxdragtip /*|| sometip*/)
     {
         std::vector<InfobarData>& aPendingInfobars = m_xObjSh->getPendingInfobars();
         while (!aPendingInfobars.empty())
@@ -1680,7 +1680,7 @@ IMPL_LINK(SfxViewFrame, TipHandler, weld::Button&, rButton, void)
 {
     // TODO: can use more tip
     if (rButton.get_tooltip_text().compareTo("tipdragruler") == 0)
-        dragtip = false;
+        sfxdragtip = false;
 
     RemoveInfoBar(rButton.get_tooltip_text());
 }

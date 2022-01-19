@@ -24,6 +24,10 @@ dispatcher.executeDispatch(document, &quot;.uno:StyleApply&quot;, &quot;&quot;, 
 End Function
 
 Function _IsCustomNumberingStyle() as Boolean
+    On Error Goto ErrorHandler
+	if not thiscomponent.supportsService(&quot;com.sun.star.text.TextDocument&quot;) then
+		exit function
+	end if
 &apos;----------------------------------------------------------------------
 	Dim vDoc as object
     Dim oViewCursor as object
@@ -45,6 +49,9 @@ Function _IsCustomNumberingStyle() as Boolean
     else
 		_IsCustomNumberingStyle = False
     end if
+
+	ErrorHandler:
+		exit function
 End Function
 
 Function ChkDragRuler as Boolean

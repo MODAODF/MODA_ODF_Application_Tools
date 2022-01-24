@@ -955,15 +955,22 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
                     const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
-                    PhysicalFontFamily* pFontFamily = nullptr;
-                    PhysicalFontFamily* pDefaultData = nullptr;
-                    pDefaultData = pFontCollection->FindCNS11643FontFamily(GetEnglishSearchFontName(pA->GetFont().GetFamilyName()));
-                    pFontFamily = pFontCollection->ImplFindByGroupName(pA->GetFont().GetFamilyName());
+                    OUString oName = pA->GetFont().GetFamilyName();
+                    sal_Int32 tokencolon = pA->GetFont().GetFamilyName().indexOf(OUString(":"));
 
-                    if (pDefaultData && pDefaultData->GetFamilyName() == pA->GetFont().GetFamilyName()) {
+                    if (tokencolon != -1)
+                        oName = pA->GetFont().GetFamilyName().copy(0,tokencolon);
+
+                    if (pFontCollection->FindFontFamily(oName))
+                    {
                         m_rOuterFace.SetFont( pA->GetFont() );
-                    } else {
-                        if (pFontFamily) {
+                    }
+                    else
+                    {
+                        PhysicalFontFamily* pFontFamily = nullptr;
+                        pFontFamily = pFontCollection->ImplFindByGroupName(oName);
+                        if (pFontFamily)
+                        {
                             vcl::Font aFont = pA->GetFont();
                             aFont.SetFamilyName(pFontFamily->GetFamilyName());
                             aFont.SetFontHeight(pA->GetFont().GetFontHeight());

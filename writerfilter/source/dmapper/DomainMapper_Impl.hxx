@@ -1116,6 +1116,9 @@ public:
     /// Handles <w:altChunk>.
     void HandleAltChunk(const OUString& rStreamName);
 
+    /// Handles <w:ptab>.
+    void HandlePTab(sal_Int32 nAlignment);
+
     void commentProps(const OUString& sId, const CommentProperties& rProps);
 
 private:

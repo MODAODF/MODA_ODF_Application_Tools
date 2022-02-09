@@ -374,7 +374,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-    if( !snRefCount++ )          // for the first time, initialize
+    if( !snRefCount++ || rNm.indexOf("Bullet") != -1 || rNm.indexOf("Numbering") != -1 ) // for the first time, initialize
     {
         SwNumFormat* pFormat;
         sal_uInt8 n;
@@ -407,7 +407,10 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetIncludeUpperLevels( 1 );
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
-            pFormat->SetLabelFollowedBy( SvxNumberFormat::NOTHING ); // use NOTHING
+            if (rNm.indexOf("Bullet") != -1)
+                pFormat->SetLabelFollowedBy( SvxNumberFormat::LISTTAB ); // Bullet use LISTTAB
+            else
+                pFormat->SetLabelFollowedBy( SvxNumberFormat::NOTHING ); // Numbering use NOTHING
             pFormat->SetListtabPos( cIndentAt[ n ] );
             pFormat->SetFirstLineIndent( cFirstLineIndent );
             pFormat->SetIndentAt( cIndentAt[ n ] );

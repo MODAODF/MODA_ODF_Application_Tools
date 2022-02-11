@@ -24,6 +24,7 @@
 
 #include <hldoctp.hxx>
 #include <hlmarkwn_def.hxx>
+#include <comphelper/lok.hxx>
 
 char const sHash[]          = "#";
 char const sFileScheme[]    = INET_FILE_SCHEME;
@@ -49,6 +50,11 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDl
 
     m_xCbbPath->show();
     m_xCbbPath->SetBaseURL(INET_FILE_SCHEME);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        xBuilder->weld_frame("frame1")->hide();
+    }
 
     SetExchangeSupport();
 

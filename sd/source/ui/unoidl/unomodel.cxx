@@ -3311,12 +3311,13 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         return { };
     }
 
-    if( pDoc->GetDocumentType() == DocumentType::Draw )
+    bool isLoKitActive = comphelper::LibreOfficeKit::isActive();
+    if( pDoc->GetDocumentType() == DocumentType::Draw || isLoKitActive)
     {
         const sal_uInt16 nMaxPages = pDoc->GetSdPageCount( PageKind::Standard );
         const sal_uInt16 nMaxMasterPages = pDoc->GetMasterSdPageCount( PageKind::Standard );
 
-        uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
+        uno::Sequence< OUString > aSeq( nMaxPages + (isLoKitActive ? 0 : nMaxMasterPages) );
         OUString* pStr = aSeq.getArray();
 
         sal_uInt16 nPage;
@@ -3324,9 +3325,12 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         for( nPage = 0; nPage < nMaxPages; nPage++ )
             *pStr++ = pDoc->GetSdPage( nPage, PageKind::Standard )->GetName();
 
-        // master pages
-        for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
-            *pStr++ = pDoc->GetMasterSdPage( nPage, PageKind::Standard )->GetName();
+        if (!isLoKitActive)
+        {
+            // master pages
+            for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
+                *pStr++ = pDoc->GetMasterSdPage( nPage, PageKind::Standard )->GetName();
+        }
         return aSeq;
     }
     else

@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/viewoptions.hxx>
 #include <cuihyperdlg.hxx>
 #include <hlinettp.hxx>
@@ -129,10 +130,20 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     // insert pages
     AddTabPage("internet", SvxHyperlinkInternetTp::Create);
     AddTabPage("mail", SvxHyperlinkMailTp::Create);
+    AddTabPage("document", SvxHyperlinkDocTp::Create);
+
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        AddTabPage("document", SvxHyperlinkDocTp::Create);
         AddTabPage("newdocument", SvxHyperlinkNewDocTp::Create);
+    }
+    else
+    {
+        m_xIconCtrl->remove_page("newdocument");
+        if (officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
+        {
+            m_xHelpBtn->hide();
+        }
+
     }
 
     SetCurPageId("internet");

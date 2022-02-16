@@ -70,6 +70,7 @@ namespace desktop {
         static RectangleAndPart Create(const std::string& rPayload);
     };
 
+    /// One instance of this per view, handles flushing callbacks
     class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle
     {
     public:
@@ -135,6 +136,7 @@ namespace desktop {
 
         queue_type m_queue;
         std::map<int, std::string> m_states;
+        std::unordered_map<std::string, std::string> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
         LibreOfficeKitDocument* m_pDocument;
         LibreOfficeKitCallback m_pCallback;

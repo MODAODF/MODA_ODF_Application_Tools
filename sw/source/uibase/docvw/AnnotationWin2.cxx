@@ -968,6 +968,9 @@ void SwAnnotationWin::DoResize()
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     Window::SetSizePixel(rNewSize);
 
     if (mpShadow)

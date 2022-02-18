@@ -1458,13 +1458,24 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     }
 }
 
-void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+static bool ignoreLibreOfficeKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
 {
     if (!comphelper::LibreOfficeKit::isActive())
-        return;
+        return true;
 
-    if (comphelper::LibreOfficeKit::isTiledPainting() && nType != LOK_CALLBACK_FORM_FIELD_BUTTON)
-        return;
+    if (comphelper::LibreOfficeKit::isTiledPainting())
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_FORM_FIELD_BUTTON:
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_COMMENT:
+            break;
+        default:
+            // Reject e.g. invalidate during paint.
+            return true;
+        }
+    }
 
     if (pImpl->m_bTiledSearching)
     {
@@ -1476,9 +1487,17 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
         case LOK_CALLBACK_TEXT_SELECTION_END:
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-            return;
+            return true;
         }
     }
+
+    return false;
+}
+
+void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+{
+    if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
+        return;
 
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);

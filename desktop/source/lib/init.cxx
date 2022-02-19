@@ -2750,6 +2750,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:IncrementIndent"),
         OUString(".uno:Italic"),
         OUString(".uno:JustifyPara"),
+        OUString(".uno:JumpToMark"),
         OUString(".uno:OutlineFont"),
         OUString(".uno:LeftPara"),
         OUString(".uno:LanguageStatus"),
@@ -2766,6 +2767,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertPage"),
         OUString(".uno:DeletePage"),
         OUString(".uno:DuplicatePage"),
+        OUString(".uno:InsertSlide"),
+        OUString(".uno:DeleteSlide"),
+        OUString(".uno:DuplicateSlide"),
         OUString(".uno:Cut"),
         OUString(".uno:Copy"),
         OUString(".uno:Paste"),
@@ -2907,7 +2911,12 @@ static void doc_iniUnoCommands ()
         OUString(".uno:FreezePanes"),
         OUString(".uno:FreezePanesColumn"),
         OUString(".uno:FreezePanesRow"),
-        OUString(".uno:Sidebar")
+        OUString(".uno:Sidebar"),
+        OUString(".uno:SheetRightToLeft"),
+        OUString(".uno:RunMacro"),
+        OUString(".uno:SpacePara1"),
+        OUString(".uno:SpacePara15"),
+        OUString(".uno:SpacePara2")
     };
 
     util::URL aCommandURL;

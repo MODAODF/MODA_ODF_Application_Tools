@@ -2284,10 +2284,17 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     if (!pViewSh)
         return OUString();
 
-    // 從 SdPage 取得的資料才準確
-    SdPage* pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
-    if (!pPage)
+    SdPage* pPage;
+    // 取得何種頁面資料(母片或投影片)
+    if (isMasterViewMode())
+        pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+    else
+        pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+
+    if (!pPage) {
+        SAL_WARN("sd", "DrawViewShell not available!");
         return OUString();
+    }
 
     const sal_Int16 nMasterPageCount = pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
 

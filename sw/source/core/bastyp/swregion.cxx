@@ -29,6 +29,12 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     push_back( m_aOrigin );
 }
 
+SwRegionRects::SwRegionRects( sal_uInt16 nInit ) :
+    m_aOrigin()
+{
+    reserve(nInit);
+}
+
 // If <rDel> is true then this Rect will be overwritten by <rRect> at
 // position <nPos>. Otherwise <rRect> is attached at the end.
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
@@ -47,8 +53,7 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect,
 
 void SwRegionRects::operator+=( const SwRect &rRect )
 {
-    bool f = false;
-    InsertRect( rRect, 0, f );
+    push_back( rRect );
 }
 
 /** Delete all overlaps of the Rects in array with the given <rRect>
@@ -141,54 +146,87 @@ static SwTwips CalcArea( const SwRect &rRect )
     return rRect.Width() * rRect.Height();
 }
 
-// combine all adjacent rectangles
-void SwRegionRects::Compress()
+void SwRegionRects::LimitToOrigin()
 {
-    for (size_type i = 0; i < size(); )
+    for (size_type i = 0; i < size(); ++i )
+        (*this)[ i ].Intersection( m_aOrigin );
+}
+
+// combine all adjacent rectangles
+void SwRegionRects::Compress( CompressType type )
+{
+    bool bAgain;
+    do
     {
-        bool bRestart(false);
-        for ( size_type j = i+1; j < size(); ++j )
+        sort( begin(), end(), []( const SwRect& l, const SwRect& r ) { return l.Top() < r.Top(); } );
+        bAgain = false;
+        bool bRemoved = false;
+        for (size_type i = 0; i < size(); ++i )
         {
-            // If one rectangle contains a second completely than the latter
-            // does not need to be stored and can be deleted
-            if ( (*this)[i].IsInside( (*this)[j] ) )
+            if( (*this)[i].IsEmpty())
+                continue;
+            // Rectangles are sorted by Y axis, so check only pairs of rectangles
+            // that are possibly overlapping or adjacent or close enough to be grouped by the fuzzy
+            // code below.
+            const tools::Long nFuzzy = type == CompressFuzzy ? 1361513 : 0;
+            const tools::Long yMax = (*this)[i].Top() + (*this)[i].Height() + nFuzzy
+                / std::max<tools::Long>( 1, (*this)[i].Width());
+            for(size_type j = i+1; j < size(); ++j)
             {
-                erase( begin() + j );
-                --j;
-            }
-            else if ( (*this)[j].IsInside( (*this)[i] ) )
-            {
-                (*this)[i] = (*this)[j];
-                erase( begin() + j );
-                bRestart = true;
-                break;
-            }
-            else
-            {
-                // If two rectangles have the same area of their union minus the
-                // intersection then one of them can be deleted.
-                // For combining as much as possible (and for having less single
-                // paints), the area of the union can be a little bit larger:
-                // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
-                // than the width of an A4 page
-                const tools::Long nFuzzy = 1361513;
-                SwRect aUnion( (*this)[i] );
-                aUnion.Union( (*this)[j] );
-                SwRect aInter( (*this)[i] );
-                aInter.Intersection( (*this)[j] );
-                if ( (::CalcArea( (*this)[i] ) +
-                      ::CalcArea( (*this)[j] ) + nFuzzy) >=
-                     (::CalcArea( aUnion ) - CalcArea( aInter )) )
-                {
-                    (*this)[i] = aUnion;
-                    erase( begin() + j );
-                    bRestart = true;
+                if( (*this)[j].IsEmpty())
+                    continue;
+                if( (*this)[j].Top() > yMax )
                     break;
+                // If one rectangle contains a second completely than the latter
+                // does not need to be stored and can be deleted
+                else if ( (*this)[i].IsInside( (*this)[j] ) )
+                {
+                    (*this)[j].Width(0); // = erase(), see below
+                    bRemoved = true;
+                }
+                else if ( (*this)[j].IsInside( (*this)[i] ) )
+                {
+                    (*this)[i] = (*this)[j];
+                    (*this)[j].Width(0);
+                    bRemoved = true;
+                    bAgain = true;
+                }
+                else
+                {
+                    // Merge adjacent rectangles (possibly overlapping), such rectangles can be
+                    // detected by their merged areas being equal to the area of the union
+                    // (which is obviously the case if they share one side, and using
+                    // the nFuzzy extra allows merging also rectangles that do not quite cover
+                    // the entire union but it's close enough).
+
+                    // For combining as much as possible (and for having less single
+                    // paints), the area of the union can be a little bit larger:
+                    // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
+                    // than the width of an A4 page
+                    SwRect aUnion( (*this)[i] );
+                    aUnion.Union( (*this)[j] );
+                    SwRect aInter( (*this)[i] );
+                    aInter.Intersection( (*this)[j] );
+                    if ( CalcArea( (*this)[i] ) + CalcArea( (*this)[j] ) - CalcArea( aInter )
+                            + nFuzzy >= CalcArea( aUnion ) )
+                    {
+                        (*this)[i] = aUnion;
+                        (*this)[j].Width(0);
+                        bRemoved = true;
+                        bAgain = true;
+                    }
                 }
             }
         }
-        i = bRestart ? 0 : i+1;
-    }
+        // Instead of repeated erase() we Width(0) the elements, and now erase
+        // all empty elements just once.
+        if( bRemoved )
+            resize( std::remove_if(begin(), end(), [](const SwRect& rect) { return rect.IsEmpty(); }) - begin());
+        // Code paths setting bAgain alter elements of the vector, possibly breaking
+        // the Y-axis optimization, so run another pass just to make sure. The adjacent-rects
+        // merging code may possibly benefit from a repeated pass also if two pairs of merged
+        // rects might get merged again and this pass skipped that.
+    } while(bAgain);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

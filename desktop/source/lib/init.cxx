@@ -1968,6 +1968,14 @@ void CallbackFlushHandler::Invoke()
     if (!m_pCallback)
         return;
 
+    // Get any pending invalidate tile events. This will call our callbacks,
+    // so it must be done before taking the mutex.
+    if(SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
+        [this](const SfxViewShell* shell) { return shell->GetViewShellId().get() == m_viewId; } ))
+    {
+        viewShell->flushPendingLOKInvalidateTiles();
+    }
+
     std::scoped_lock<std::mutex> lock(m_mutex);
 
     SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
@@ -3348,7 +3356,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 {
                     if (pViewShell->getPart() == nPart)
                     {
-                        nViewId = static_cast<sal_Int32>(pViewShell->GetViewShellId());
+                        nViewId = pViewShell->GetViewShellId().get();
                         doc_setView(pThis, nViewId);
                         break;
                     }
@@ -3481,6 +3489,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {
+            pDocument->mpCallbackFlushHandlers[nView]->setViewId(pViewShell->GetViewShellId().get());
             pViewShell->registerLibreOfficeKitViewCallback(
                 CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
         }
@@ -3490,6 +3499,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             pViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+            pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
         }
     }
 }

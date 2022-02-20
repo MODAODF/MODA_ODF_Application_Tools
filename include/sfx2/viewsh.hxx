@@ -335,6 +335,9 @@ public:
     void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
+    // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
+    virtual void flushPendingLOKInvalidateTiles();
+
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
     /// See lok::Document::getPart().

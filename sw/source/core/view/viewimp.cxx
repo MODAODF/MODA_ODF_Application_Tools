@@ -128,12 +128,28 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
             const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
-            m_pRegion.reset(new SwRegionRects(rArea));
+            m_pRegion.reset(new SwRegionRects);
+            m_pRegion->ChangeOrigin(rArea);
         }
-        (*m_pRegion) -= rRect;
+        (*m_pRegion) += rRect;
         return true;
     }
     return false;
+}
+
+void SwViewShellImp::AddPendingLOKInvalidation( const SwRect& rRect )
+{
+    // These are often repeated, so check first for duplicates.
+    std::vector<SwRect>& l = m_pendingLOKInvalidations;
+    if( std::find( l.begin(), l.end(), rRect ) == l.end())
+        l.push_back( rRect );
+}
+
+std::vector<SwRect> SwViewShellImp::TakePendingLOKInvalidations()
+{
+    std::vector<SwRect> ret;
+    std::swap(ret, m_pendingLOKInvalidations);
+    return ret;
 }
 
 void SwViewShellImp::CheckWaitCursor()

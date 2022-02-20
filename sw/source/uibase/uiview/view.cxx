@@ -1862,6 +1862,13 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
     GetViewImpl()->AddTransferable(rTransferable);
 }
 
+void SwView::flushPendingLOKInvalidateTiles()
+{
+    SwWrtShell* pSh = GetWrtShellPtr();
+    assert(pSh);
+    pSh->FlushPendingLOKInvalidateTiles();
+}
+
 namespace sw {
 
 void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)

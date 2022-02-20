@@ -674,6 +674,8 @@ public:
     void SetOldFrameCat(const OUString& sStr);
     const OUString& GetOldDrwCat();
     void SetOldDrwCat(const OUString& sStr);
+
+    virtual void flushPendingLOKInvalidateTiles() override;
 };
 
 inline tools::Long SwView::GetXScroll() const

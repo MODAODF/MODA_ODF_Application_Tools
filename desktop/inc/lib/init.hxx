@@ -92,6 +92,8 @@ namespace desktop {
         void addViewStates(int viewId);
         void removeViewStates(int viewId);
 
+        void setViewId( int viewId ) { m_viewId = viewId; }
+
         struct CallbackData
         {
             CallbackData(int type, const std::string& payload)
@@ -139,6 +141,7 @@ namespace desktop {
         std::unordered_map<std::string, std::string> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
         LibreOfficeKitDocument* m_pDocument;
+        int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         int m_nDisableCallbacks;

@@ -675,6 +675,7 @@ public:
     const OUString& GetOldDrwCat();
     void SetOldDrwCat(const OUString& sStr);
 
+    virtual tools::Rectangle getLOKVisibleArea() const override;
     virtual void flushPendingLOKInvalidateTiles() override;
 };
 

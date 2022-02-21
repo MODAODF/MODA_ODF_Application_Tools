@@ -1862,6 +1862,15 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
     GetViewImpl()->AddTransferable(rTransferable);
 }
 
+tools::Rectangle SwView::getLOKVisibleArea() const
+{
+    SwViewShell* pVwSh = GetWrtShellPtr();
+    if (pVwSh)
+        return pVwSh->getLOKVisibleArea();
+    else
+        return tools::Rectangle();
+}
+
 void SwView::flushPendingLOKInvalidateTiles()
 {
     SwWrtShell* pSh = GetWrtShellPtr();

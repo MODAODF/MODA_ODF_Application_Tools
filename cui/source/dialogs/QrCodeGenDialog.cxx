@@ -75,6 +75,9 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     , mpParent(pParent)
 #endif
 {
+    // Clear placeholder string.
+    m_xEdittext->set_placeholder_text("");
+
     if (!bEditExisting)
     {
         // TODO: This only works in Writer doc. Should also work in shapes

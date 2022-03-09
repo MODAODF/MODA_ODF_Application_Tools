@@ -1743,7 +1743,8 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     maTextWriter(rExport, maAttributeWriter, *this),
     mpVDev(VclPtr<VirtualDevice>::Create()),
     mbClipAttrChanged( false ),
-    mbIsPlaceholderShape( false )
+    mbIsPlaceholderShape( false ),
+    mbIsPreview( false )
 {
     mpVDev->EnableOutput( false );
     maTargetMapMode = MapMode(MapUnit::Map100thMM);

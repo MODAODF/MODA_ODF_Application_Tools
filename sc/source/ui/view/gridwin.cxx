@@ -2254,14 +2254,16 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         // (but we should probably keep the same behaviour for double clicks).
         if ( bEditAllowed && (!bIsTiledRendering || bDouble) )
         {
-            // don't forward the event to an empty cell, causes deselection in
+            // Disabled by Firefly <firefly@ossii.com.tw>
+            // 雙擊空儲存格也要像 desktop 版一樣可進入編輯模式
+            /*// don't forward the event to an empty cell, causes deselection in
             // case we used the double-click to select the empty cell
             if (bIsTiledRendering && bDouble)
             {
                 ScRefCellValue aCell(mrViewData.GetDocument(), ScAddress(nPosX, nPosY, nTab));
                 if (aCell.isEmpty())
                     return;
-            }
+            }*/
 
             //  edit cell contents
             mrViewData.GetViewShell()->UpdateInputHandler();

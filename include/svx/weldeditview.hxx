@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_WELDEDITVIEW_HXX
-#define INCLUDED_SVX_WELDEDITVIEW_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
@@ -89,8 +88,8 @@ protected:
         SetCursorRect(rRefDevice.LogicToPixel(rRect),
                       rRefDevice.LogicToPixel(Size(nExtTextInputWidth, 0)).Width());
     }
-};
 
-#endif // INCLUDED_SVX_WELDEDITVIEW_HXX
+    virtual weld::Widget* EditViewPopupParent() const override { return GetDrawingArea(); }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

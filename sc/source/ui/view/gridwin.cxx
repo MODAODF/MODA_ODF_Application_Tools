@@ -1145,7 +1145,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     bool bEmpty = false;
     std::vector<ScTypedStrData> aStrings; // case sensitive
     // Fill List
-    rDoc.GetDataEntries(nCol, nRow, nTab, aStrings);
+    rDoc.GetDataEntries(nCol, nRow, nTab, aStrings, true /* bValidation */);
     if (aStrings.empty())
         bEmpty = true;
 
@@ -1169,8 +1169,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         aPos.setY(aPos.getY() / fZoomY);
         nSizeX = nSizeX / fZoomX;
         nSizeY = nSizeY / fZoomY;
-        sal_uLong nIndex = rDoc.GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
-        if (!bEmpty && nIndex)
+        if (!bEmpty)
         {
             OUString aValue = rDoc.GetString(nCol, nRow, nTab);
             ScTabViewShell* pViewShell = mrViewData.GetViewShell();

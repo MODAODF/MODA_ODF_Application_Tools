@@ -187,14 +187,8 @@ void SfxApplication::Initialize_Impl()
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
 
     // SV-Look
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        Help::EnableContextHelp();
-        Help::EnableExtHelp();
-    } else {
-        Help::DisableContextHelp();
-        Help::DisableExtHelp();
-    }
+    Help::EnableContextHelp();
+    Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl.reset(new SfxErrorHandler(
         RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl));

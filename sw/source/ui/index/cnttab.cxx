@@ -60,6 +60,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
 #include <chpfld.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cmath>
 #include <memory>
@@ -267,7 +268,16 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet
     AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
     AddTabPage("columns", SwColumnPage::Create, nullptr);
     AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
-    AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);
+    // Added By Firefly <firefly@ossii.com.tw>
+    //  LoKit 模式，就移除條目分頁
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        RemoveTabPage("entries");
+    }
+    else
+    {
+        AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);
+    }
     if (!pCurTOX)
         SetCurPageId("index");
 

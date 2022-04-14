@@ -27,6 +27,7 @@
 #include <svx/sdtaiitm.hxx>
 #include <svx/sdtayitm.hxx>
 #include <svtools/unitconv.hxx>
+#include <comphelper/lok.hxx>
 
 const sal_uInt16 SvxTextAnimationPage::pRanges[] =
 {
@@ -46,7 +47,16 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
     , pView(pSdrView)
 {
     AddTabPage("RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
-    AddTabPage("RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    // Added By Firefly <firefly@ossii.com.tw>
+    // LoKit 模式，就移除文字動畫分頁
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        RemoveTabPage("RID_SVXPAGE_TEXTANIMATION");
+    }
+    else
+    {
+        AddTabPage("RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    }
 }
 
 /*************************************************************************

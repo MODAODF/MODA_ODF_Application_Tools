@@ -2323,7 +2323,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
         SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
                                                        uno::makeAny(aOptions),
@@ -2341,6 +2341,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
+
+        // set this explicitly false to be able to load template files
+        // as regular files, otherwise we cannot save them; it will try
+        // to bring saveas dialog which cannot work with LOK case
+        aFilterOptions[2].Name = "AsTemplate";
+        aFilterOptions[2].Value <<= false;
 
         /* TODO
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
@@ -3922,10 +3928,12 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 
     if (strcmp(pOption, "profilezonerecording") == 0)
     {
+        /* disabled!
         if (strcmp(pValue, "start") == 0)
             comphelper::ProfileZone::startRecording();
         else if (strcmp(pValue, "stop") == 0)
             comphelper::ProfileZone::stopRecording();
+        */
     }
     else if (strcmp(pOption, "sallogoverride") == 0)
     {

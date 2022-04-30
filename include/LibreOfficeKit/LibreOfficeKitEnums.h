@@ -939,8 +939,7 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_LAUNCH_MENU";
     }
 
-    assert(!"Unknown LibreOfficeKitCallbackType type.");
-    return nullptr;
+    return "Unknown LibreOfficeKitCallbackType type.";
 }
 
 typedef enum

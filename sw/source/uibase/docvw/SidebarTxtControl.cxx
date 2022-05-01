@@ -217,9 +217,9 @@ void SidebarTextControl::LogicInvalidate(const tools::Rectangle* pRectangle)
     rParent.Pop();
     aRectangle.Move(aOffset.getX(), aOffset.getY());
 
-    OString sRectangle = aRectangle.toString();
+    //OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
-    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
+    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), &aRectangle);
 }
 
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )

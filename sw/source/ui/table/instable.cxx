@@ -78,8 +78,8 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "previewinstable", m_aWndPreview))
     , m_xStyleFrame(m_xBuilder->weld_frame("stylesframe"))
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        m_xStyleFrame->hide();
+    //if (comphelper::LibreOfficeKit::isActive())
+    //    m_xStyleFrame->hide();
 
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);
@@ -149,7 +149,7 @@ void SwInsTableDlg::InitAutoTableFormat()
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
-    lbIndex = 0;
+    lbIndex = comphelper::LibreOfficeKit::isActive() ? 1 : 0;
     m_xLbFormat->select( lbIndex );
     tbIndex = lbIndexToTableIndex(lbIndex);
 

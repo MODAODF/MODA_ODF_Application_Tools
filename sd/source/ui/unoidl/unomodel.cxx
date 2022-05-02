@@ -2296,14 +2296,11 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
         return OUString();
     }
 
-    const sal_Int16 nMasterPageCount = pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
-
     boost::property_tree::ptree aJson;
     aJson.put("part", nPart); // 編號
     aJson.put("name", pPage->GetName()); // 投影片名稱
     aJson.put("visible", static_cast<unsigned int>(!pPage->IsExcluded())); // 是否隱藏
     aJson.put("selected", static_cast<unsigned int>(pPage->IsSelected())); // 是否選取
-    aJson.put("masterPageCount", nMasterPageCount);
     aJson.put("autoLayout", pPage->GetAutoLayout()); // 自動版面配置編號
     aJson.put("transitionType", pPage->getTransitionType()); // 轉場動畫類別 0 表示沒有
     aJson.put("transitionSubtype", pPage->getTransitionSubtype()); // 轉場動畫子類別(變化)

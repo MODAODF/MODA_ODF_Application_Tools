@@ -1289,7 +1289,7 @@
           automatically.</desc>
           <label>Correct two initial capitals</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: AutoCorrect/Options/All -->
@@ -1410,7 +1410,7 @@
           <desc>Specifies if single quotes should be replaced.</desc>
           <label>Single quotes - Replace</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="SingleQuoteAtStart" oor:type="xs:int">
         <!-- OldPath: AutoCorrect/Options/All -->
@@ -1441,7 +1441,7 @@
           <desc>Specifies if double quotes should be replaced.</desc>
           <label>Double quotes - Replace</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="DoubleQuoteAtStart" oor:type="xs:int">
         <!-- OldPath: AutoCorrect/Options/All -->
@@ -1480,7 +1480,7 @@
             <label>Words with two initial capital letters or a small initial -
             Add automatically</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: AutoCorrect/Options/All -->

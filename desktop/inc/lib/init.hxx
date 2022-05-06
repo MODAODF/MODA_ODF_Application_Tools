@@ -85,6 +85,7 @@ namespace desktop {
         static tools::Rectangle CheckedRectangle(const tools::Rectangle& rect);
     };
 
+    /// One instance of this per view, handles flushing callbacks
     class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
     {
     public:

@@ -510,6 +510,8 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
     return aTree;
 }
 
+static int lcl_getViewId(const std::string& payload);
+
 namespace desktop {
 
 RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
@@ -564,23 +566,30 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     return aRet;
 }
 
-RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const std::string& payload)
+const std::string& CallbackFlushHandler::CallbackData::getPayload() const
 {
-    setRectangleAndPart(RectangleAndPart::Create(payload));
-
-    // Return reference to the cached object.
-    return boost::get<RectangleAndPart>(PayloadObject);
+    if(PayloadString.empty())
+    {
+        // Do to-string conversion on demand, as many calls will get dropped without
+        // needing the string.
+        if(PayloadObject.which() == 1)
+            PayloadString = getRectangleAndPart().toString();
+    }
+    return PayloadString;
 }
 
-void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndPart& rRectAndPart)
+void CallbackFlushHandler::CallbackData::updateRectangleAndPart(const RectangleAndPart& rRectAndPart)
 {
-    PayloadString = rRectAndPart.toString().getStr();
     PayloadObject = rRectAndPart;
+    PayloadString.clear(); // will be set on demand if needed
 }
 
 const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
 {
-    assert(PayloadObject.which() == 1);
+    // TODO: In case of unittests, they do not pass invalidations in binary but as text messages.
+    // LO core should preferably always pass binary for performance.
+    if(PayloadObject.which() != 1)
+        PayloadObject = RectangleAndPart::Create(PayloadString);
     return boost::get<RectangleAndPart>(PayloadObject);
 }
 
@@ -613,6 +622,16 @@ const boost::property_tree::ptree& CallbackFlushHandler::CallbackData::getJson()
     return boost::get<boost::property_tree::ptree>(PayloadObject);
 }
 
+int CallbackFlushHandler::CallbackData::getViewId() const
+{
+    if (isCached())
+    {
+        assert(PayloadObject.which() == 3);
+        return boost::get<int>(PayloadObject);
+    }
+    return lcl_getViewId(getPayload());
+}
+
 bool CallbackFlushHandler::CallbackData::validate() const
 {
     switch (PayloadObject.which())
@@ -623,7 +642,7 @@ bool CallbackFlushHandler::CallbackData::validate() const
 
         // RectangleAndPart.
         case 1:
-            return getRectangleAndPart().toString().getStr() == PayloadString;
+            return getRectangleAndPart().toString().getStr() == getPayload();
 
         // Json.
         case 2:
@@ -631,8 +650,12 @@ bool CallbackFlushHandler::CallbackData::validate() const
             std::stringstream aJSONStream;
             boost::property_tree::write_json(aJSONStream, getJson(), false);
             const std::string aExpected = boost::trim_copy(aJSONStream.str());
-            return aExpected == PayloadString;
+            return aExpected == getPayload();
         }
+
+        // View id.
+        case 3:
+            return getViewId() == lcl_getViewId( getPayload());
 
         default:
             assert(!"Unknown variant type; please add an entry to validate.");
@@ -641,11 +664,9 @@ bool CallbackFlushHandler::CallbackData::validate() const
     return false;
 }
 
-}
+} // namespace desktop
 
-namespace {
-
-bool lcl_isViewCallbackType(const int type)
+static bool lcl_isViewCallbackType(const int type)
 {
     switch (type)
     {
@@ -661,7 +682,7 @@ bool lcl_isViewCallbackType(const int type)
     }
 }
 
-int lcl_getViewId(const std::string& payload)
+static int lcl_getViewId(const std::string& payload)
 {
     // this is a cheap way how to get the viewId from a JSON message; proper
     // parsing is terribly expensive, and we just need the viewId here
@@ -685,12 +706,7 @@ int lcl_getViewId(const std::string& payload)
     return 0;
 }
 
-int lcl_getViewId(const desktop::CallbackFlushHandler::CallbackData& rCallbackData)
-{
-    if (rCallbackData.isCached())
-        return rCallbackData.getJson().get<int>("viewId");
-    return lcl_getViewId(rCallbackData.PayloadString);
-}
+namespace {
 
 std::string extractCertificate(const std::string & certificate)
 {
@@ -1422,15 +1438,6 @@ CallbackFlushHandler::~CallbackFlushHandler()
     Stop();
 }
 
-void CallbackFlushHandler::callback(const int type, const char* payload, void* data)
-{
-    CallbackFlushHandler* self = static_cast<CallbackFlushHandler*>(data);
-    if (self)
-    {
-        self->queue(type, payload);
-    }
-}
-
 CallbackFlushHandler::queue_type2::iterator CallbackFlushHandler::toQueue2(CallbackFlushHandler::queue_type1::iterator pos)
 {
     int delta = std::distance(m_queue1.begin(), pos);
@@ -1443,13 +1450,34 @@ CallbackFlushHandler::queue_type2::reverse_iterator CallbackFlushHandler::toQueu
     return m_queue2.rbegin() + delta;
 }
 
+void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const char* pPayload)
+{
+    CallbackData callbackData(pPayload);
+    queue(nType, callbackData);
+}
+
+void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId)
+{
+    CallbackData callbackData(pPayload, nViewId);
+    queue(nType, callbackData);
+}
+
+void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+{
+    CallbackData callbackData(pRect, nPart);
+    queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
+}
+
 void CallbackFlushHandler::queue(const int type, const char* data)
+{
+    CallbackData callbackData(data);
+    queue(type, callbackData);
+}
+void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
 
-    CallbackData aCallbackData(data ? data : "(nil)");
-    const std::string& payload = aCallbackData.PayloadString;
-    SAL_INFO("lok", "Queue: [" << type << "]: [" << payload << "] on " << m_queue1.size() << " entries.");
+    SAL_INFO("lok", "Queue: [" << type << "]: [" << aCallbackData.getPayload() << "] on " << m_queue1.size() << " entries.");
 
     bool bIsChartActive = false;
     bool bIsComment = false;
@@ -1482,7 +1510,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_TEXT_SELECTION_END &&
             type != LOK_CALLBACK_REFERENCE_MARKS)
         {
-            SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
+            SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
             return;
         }
 
@@ -1493,13 +1521,15 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     // Suppress invalid payloads.
     if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-        payload.find(", 0, 0, ") != std::string::npos)
+        aCallbackData.getPayload().find(", 0, 0, ") != std::string::npos &&
+        aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos &&
+        aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos)
     {
         // The cursor position is often the relative coordinates of the widget
         // issuing it, instead of the absolute one that we expect.
         // This is temporary however, and, once the control is created and initialized
         // correctly, it eventually emits the correct absolute coordinates.
-        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
         return;
     }
 
@@ -1530,35 +1560,32 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_CALC_FUNCTION_LIST:
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
-            const auto& pos = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                    [type] (int elemType) { return (elemType == type); });
+            const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
-            if (pos != m_queue1.rend() && pos2->PayloadString == payload)
+            if (pos != m_queue1.rend() && pos2->getPayload() == aCallbackData.getPayload())
             {
-                SAL_INFO("lok", "Skipping queue duplicate [" << type << + "]: [" << payload << "].");
+                SAL_INFO("lok", "Skipping queue duplicate [" << type << + "]: [" << aCallbackData.getPayload() << "].");
                 return;
             }
         }
         break;
     }
 
-    if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
+    if (type == LOK_CALLBACK_TEXT_SELECTION && aCallbackData.isEmpty())
     {
-        const auto& posStart = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_START); });
+        const auto& posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
-            posStart2->PayloadString.clear();
+            posStart2->clear();
 
-        const auto& posEnd = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_END); });
+        const auto& posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
-            posEnd2->PayloadString.clear();
+            posEnd2->clear();
     }
 
     // When payload is empty discards any previous state.
-    if (payload.empty())
+    if (aCallbackData.isEmpty())
     {
         switch (type)
         {
@@ -1569,7 +1596,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             case LOK_CALLBACK_INVALIDATE_TILES:
                 if (removeAll(type))
-                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
+                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
                 break;
         }
     }
@@ -1592,7 +1619,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_RULER_UPDATE:
             {
                 if (removeAll(type))
-                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << payload << "].");
+                    SAL_INFO("lok", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
             }
             break;
 
@@ -1612,13 +1639,16 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
                 // If the hyperlink is not empty we can bypass that to show the popup
                 const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
-                    payload.find("\"hyperlink\":\"\"") == std::string::npos &&
-                    payload.find("\"hyperlink\": {}") == std::string::npos;
-                const int nViewId = lcl_getViewId(payload);
-                removeAll(type, [nViewId, hyperLinkException] (const CallbackData& elemData) {
-                        return (nViewId == lcl_getViewId(elemData) && !hyperLinkException);
-                    }
-                );
+                    aCallbackData.getPayload().find("\"hyperlink\":\"\"") == std::string::npos &&
+                    aCallbackData.getPayload().find("\"hyperlink\": {}") == std::string::npos;
+                if(!hyperLinkException)
+                {
+                    const int nViewId = aCallbackData.getViewId();
+                    removeAll(type, [nViewId] (const CallbackData& elemData) {
+                            return (nViewId == elemData.getViewId());
+                        }
+                    );
+                }
             }
             break;
 
@@ -1632,16 +1662,16 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_STATE_CHANGED:
             {
                 // Compare the state name=value and overwrite earlier entries with same name.
-                const auto pos = payload.find('=');
+                const auto pos = aCallbackData.getPayload().find('=');
                 if (pos != std::string::npos)
                 {
-                    const std::string name = payload.substr(0, pos + 1);
+                    const std::string name = aCallbackData.getPayload().substr(0, pos + 1);
                     // This is needed because otherwise it creates some problems when
                     // a save occurs while a cell is still edited in Calc.
                     if (name != ".uno:ModifiedStatus=")
                     {
                         removeAll(type, [&name] (const CallbackData& elemData) {
-                                return (elemData.PayloadString.compare(0, name.size(), name) == 0);
+                                return (elemData.getPayload().compare(0, name.size(), name) == 0);
                             }
                         );
                     }
@@ -1658,8 +1688,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             {
                 // remove only selection ranges and 'EMPTY' messages
                 // always send 'INPLACE' and 'INPLACE EXIT' messages
-                removeAll(type, [payload] (const CallbackData& elemData)
-                    { return (elemData.PayloadString[0] != 'I'); });
+                removeAll(type, [] (const CallbackData& elemData)
+                    { return (elemData.getPayload().find("INPLACE") == std::string::npos); });
             }
             break;
         }
@@ -1670,7 +1700,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(aCallbackData);
     SAL_INFO("lok", "Queued #" << (m_queue1.size() - 1) <<
-             " [" << type << "]: [" << payload << "] to have " << m_queue1.size() << " entries.");
+             " [" << type << "]: [" << aCallbackData.getPayload() << "] to have " << m_queue1.size() << " entries.");
 
 #ifdef DBG_UTIL
     {
@@ -1684,7 +1714,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         auto it1 = m_queue1.begin();
         auto it2 = m_queue2.begin();
         for (; it1 != m_queue1.end(); ++it1, ++it2)
-            oss << i++ << ": [" << *it1 << "] [" << it2->PayloadString << "].\n";
+            oss << i++ << ": [" << *it1 << "] [" << it2->getPayload() << "].\n";
+
         SAL_INFO("lok", "Current Queue: " << oss.str());
         assert(
             std::all_of(
@@ -1704,12 +1735,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
 {
-    const std::string& payload = aCallbackData.PayloadString;
-
-    RectangleAndPart& rcNew = aCallbackData.setRectangleAndPart(payload);
+    RectangleAndPart rcNew = aCallbackData.getRectangleAndPart();
     if (rcNew.isEmpty())
     {
-        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << payload << "].");
+        SAL_INFO("lok", "Skipping invalid event [" << type << "]: [" << aCallbackData.getPayload() << "].");
         return true;
     }
 
@@ -1725,7 +1754,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         const RectangleAndPart& rcOld = pos2->getRectangleAndPart();
         if (rcOld.isInfinite() && (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart))
         {
-            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
+            SAL_INFO("lok", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
                                                << "] since all tiles need to be invalidated.");
             return true;
         }
@@ -1735,7 +1764,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
             // If fully overlapping.
             if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
             {
-                SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
+                SAL_INFO("lok", "Skipping queue [" << type << "]: [" << aCallbackData.getPayload()
                                                    << "] since overlaps existing all-parts.");
                 return true;
             }
@@ -1744,7 +1773,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
 
     if (rcNew.isInfinite())
     {
-        SAL_INFO("lok", "Have Empty [" << type << "]: [" << payload
+        SAL_INFO("lok", "Have Empty [" << type << "]: [" << aCallbackData.getPayload()
                                        << "] so removing all with part " << rcNew.m_nPart << ".");
         removeAll(LOK_CALLBACK_INVALIDATE_TILES, [&rcNew](const CallbackData& elemData) {
             // Remove exiting if new is all-encompassing, or if of the same part.
@@ -1755,7 +1784,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     {
         const auto rcOrig = rcNew;
 
-        SAL_INFO("lok", "Have [" << type << "]: [" << payload << "] so merging overlapping.");
+        SAL_INFO("lok", "Have [" << type << "]: [" << aCallbackData.getPayload() << "] so merging overlapping.");
         removeAll(LOK_CALLBACK_INVALIDATE_TILES,[&rcNew](const CallbackData& elemData) {
             const RectangleAndPart& rcOld = elemData.getRectangleAndPart();
             if (rcNew.m_nPart != -1 && rcOld.m_nPart != -1 && rcOld.m_nPart != rcNew.m_nPart)
@@ -1820,14 +1849,14 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         }
     }
 
-    aCallbackData.setRectangleAndPart(rcNew);
+    aCallbackData.updateRectangleAndPart(rcNew);
     // Queue this one.
     return false;
 }
 
 bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackData)
 {
-    const std::string& payload = aCallbackData.PayloadString;
+    const std::string& payload = aCallbackData.getPayload();
 
     boost::property_tree::ptree& aTree = aCallbackData.setJson(payload);
     const unsigned nLOKWindowId = aTree.get<unsigned>("id", 0);
@@ -2022,8 +2051,8 @@ void CallbackFlushHandler::Invoke()
     for (; it1 != m_queue1.end(); ++it1, ++it2)
     {
         const int type = *it1;
-        const auto& payload = it2->PayloadString;
-        const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(*it2) : -1;
+        const auto& payload = it2->getPayload();
+        const int viewId = lcl_isViewCallbackType(type) ? it2->getViewId() : -1;
 
         SAL_INFO("lok", "processing event: [" << type << ',' << viewId << "]: [" << payload << "].");
         // common code-path for events on this view:
@@ -3616,15 +3645,14 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {
             pDocument->mpCallbackFlushHandlers[nView]->setViewId(pViewShell->GetViewShellId().get());
-            pViewShell->registerLibreOfficeKitViewCallback(
-                CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+            pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
         }
     }
     else
     {
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {
-            pViewShell->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+            pViewShell->setLibreOfficeKitViewCallback(nullptr);
             pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
         }
     }

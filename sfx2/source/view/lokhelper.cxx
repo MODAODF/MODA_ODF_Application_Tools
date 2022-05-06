@@ -349,7 +349,8 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
         return;
 
     const OString aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
-    pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr());
+    const int viewId = SfxLokHelper::getView(pThisView);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
@@ -359,7 +360,8 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
     if (DisableCallbacks::disabled())
         return;
 
-    pOtherView->libreOfficeKitViewCallback(nType, lcl_generateJSON(pThisView, rTree).getStr());
+    const int viewId = SfxLokHelper::getView(pThisView);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(pThisView, rTree).getStr(), viewId);
 }
 
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
@@ -371,6 +373,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, co
 
     // Cache the payload so we only have to generate it once, at most.
     OString aPayload;
+    int viewId = -1;
 
     const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -380,9 +383,12 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, co
         {
             // Payload is only dependent on pThisView.
             if (aPayload.isEmpty())
+            {
                 aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
+                viewId = SfxLokHelper::getView(pThisView);
+            }
 
-            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
+            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -398,6 +404,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
 
     // Cache the payload so we only have to generate it once, at most.
     OString aPayload;
+    int viewId = -1;
 
     const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -407,9 +414,12 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
         {
             // Payload is only dependent on pThisView.
             if (aPayload.isEmpty())
+            {
                 aPayload = lcl_generateJSON(pThisView, rTree);
+                viewId = SfxLokHelper::getView(pThisView);
+            }
 
-            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
+            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload.getStr(), viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -488,17 +498,8 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rect
     if (DisableCallbacks::disabled())
         return;
 
-    OStringBuffer aBuf(64);
-    if (pRect)
-        aBuf.append(pRect->toString());
-    else
-        aBuf.append("EMPTY");
-    if (comphelper::LibreOfficeKit::isPartInInvalidation())
-    {
-        aBuf.append(", ");
-        aBuf.append(static_cast<sal_Int32>(pThisView->getPart()));
-    }
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
+    const int nPart = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
+    pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart);
 }
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
@@ -511,8 +512,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
         for (int i = 0; i < pDoc->getParts(); ++i)
         {
             tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-            OString sPayload = aRectangle.toString() + ", " + OString::number(i);
-            pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
+            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i);
         }
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload.getStr());
@@ -545,20 +545,21 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
     if (DisableCallbacks::disabled())
         return;
 
-    OString sPayload;
     if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
     {
         OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
-        sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
+        OString sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
             "\", \"rectangle\": \"" + rRectangle +
             "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";
+        const int viewId = SfxLokHelper::getView();
+        pThisView->libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr(), viewId);
     }
     else
     {
-        sPayload = rRectangle;
+        OString sPayload = rRectangle;
+        pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr());
     }
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr());
 }
 
 void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)

@@ -677,6 +677,7 @@ public:
 
     virtual tools::Rectangle getLOKVisibleArea() const override;
     virtual void flushPendingLOKInvalidateTiles() override;
+    virtual OString getLOKPayload(int nType, int nViewId) const override;
 };
 
 inline tools::Long SwView::GetXScroll() const

@@ -459,10 +459,13 @@ struct _LibreOfficeKitDocumentClass
                                 const char* pArguments);
 
     /// @see lok::Document::setFreemiumDenyList
-    void (*setFreemiumDenyList) (const char* freemiumDenyList);
+    void (*setFreemiumDenyList) (LibreOfficeKitDocument* pThis,
+                                const char* freemiumDenyList);
 
     /// @see lok::Document::setFreemiumView
-    void (*setFreemiumView) (int nViewId, bool isFreemium);
+    void (*setFreemiumView) (LibreOfficeKitDocument* pThis,
+                            int nViewId,
+                            bool isFreemium);
 
     /// Added by Firefly<firefly@ossii.com.tw>
     /// @see lok::Document::initUnoStatus

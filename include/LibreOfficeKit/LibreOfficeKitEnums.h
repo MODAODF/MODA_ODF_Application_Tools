@@ -780,6 +780,11 @@ typedef enum
     LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
 
     /**
+     * When a user tries to use command which is restricted for that user
+     */
+    LOK_COMMAND_BLOCKED = 53,
+
+    /**
      * Show a message on the editor's screen.
      *
      * The payload example:
@@ -941,6 +946,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
     case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
         return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
+    case LOK_COMMAND_BLOCKED:
+        return "LOK_COMMAND_BLOCKED";
     case LOK_CALLBACK_MSGBOX:
         return "LOK_CALLBACK_MSGBOX";
     case LOK_CALLBACK_LAUNCH_MENU:

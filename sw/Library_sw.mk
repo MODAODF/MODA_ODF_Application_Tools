@@ -350,7 +350,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/trvlfrm \
     sw/source/core/layout/unusedf \
     sw/source/core/layout/virtoutp \
-	sw/source/core/model/SearchResultLocator \
+    sw/source/core/model/ModelTraverser \
+    sw/source/core/model/SearchResultLocator \
     sw/source/core/layout/wsfrm \
     sw/source/core/objectpositioning/anchoredobjectposition \
     sw/source/core/objectpositioning/ascharanchoredobjectposition \
@@ -569,6 +570,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/xml/xmltext \
     sw/source/filter/xml/xmltexte \
     sw/source/filter/xml/xmltexti \
+    sw/source/filter/indexing/IndexingExport \
     sw/source/uibase/app/appenv \
     sw/source/uibase/app/apphdl \
     sw/source/uibase/app/applab \

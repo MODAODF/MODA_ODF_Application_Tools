@@ -467,6 +467,12 @@ struct _LibreOfficeKitDocumentClass
                             int nViewId,
                             bool isFreemium);
 
+    /// @see lok::Document::renderSearchResult
+    bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
+                                const char* pSearchResult,
+                                unsigned char** pBitmapBuffer,
+                                int* pWidth, int* pHeight, size_t* pByteSize);
+
     /// Added by Firefly<firefly@ossii.com.tw>
     /// @see lok::Document::initUnoStatus
     void (*initUnoStatus) (LibreOfficeKitDocument* pThis,

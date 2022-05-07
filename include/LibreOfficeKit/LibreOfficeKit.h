@@ -458,6 +458,12 @@ struct _LibreOfficeKitDocumentClass
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
 
+    /// @see lok::Document::setFreemiumDenyList
+    void (*setFreemiumDenyList) (const char* freemiumDenyList);
+
+    /// @see lok::Document::setFreemiumView
+    void (*setFreemiumView) (int nViewId, bool isFreemium);
+
     /// Added by Firefly<firefly@ossii.com.tw>
     /// @see lok::Document::initUnoStatus
     void (*initUnoStatus) (LibreOfficeKitDocument* pThis,

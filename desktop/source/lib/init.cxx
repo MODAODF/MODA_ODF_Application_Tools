@@ -1013,6 +1013,10 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
+static void doc_setFreemiumDenyList(const char* freemiumDenyList);
+
+static void doc_setFreemiumView(int nViewId, bool isFreemium);
+
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
@@ -1281,6 +1285,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->completeFunction = doc_completeFunction;
 
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
+
+        m_pDocumentClass->setFreemiumDenyList = doc_setFreemiumDenyList;
+        m_pDocumentClass->setFreemiumView = doc_setFreemiumView;
 
         // Added By Firefly<firefly@ossii.com.tw>
         m_pDocumentClass->initUnoStatus = doc_initUnoStatus;
@@ -3814,6 +3821,17 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
         SetLastExceptionMsg(exception.Message);
         SAL_INFO("lok", "Failed to postKeyEvent " << exception.Message);
     }
+}
+
+static void doc_setFreemiumDenyList(const char* freemiumDenyList)
+{
+    comphelper::LibreOfficeKit::setFreemiumDenyList(freemiumDenyList);
+}
+
+static void doc_setFreemiumView(int nViewId, bool isFreemium)
+{
+    SolarMutexGuard aGuard;
+    SfxLokHelper::setFreemiumView(nViewId, isFreemium);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)

@@ -787,6 +787,16 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
+    void setFreemiumDenyList(const char* freemiumDenyList)
+    {
+        mpDoc->pClass->setFreemiumDenyList(freemiumDenyList);
+    }
+
+    void setFreemiumView(int nViewId, bool isFreemium)
+    {
+        mpDoc->pClass->setFreemiumView(nViewId, isFreemium);
+    }
+
     // Added by Firefly <firefly@ossii.com.tw>
     /**
      * Let OxOffice report the status of the specified UNO command.

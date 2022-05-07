@@ -350,6 +350,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/trvlfrm \
     sw/source/core/layout/unusedf \
     sw/source/core/layout/virtoutp \
+	sw/source/core/model/SearchResultLocator \
     sw/source/core/layout/wsfrm \
     sw/source/core/objectpositioning/anchoredobjectposition \
     sw/source/core/objectpositioning/ascharanchoredobjectposition \

@@ -28,36 +28,22 @@ public:
     virtual int GetSurroundingText(OUString& rSurrounding) override;
     virtual bool DeleteSurroundingText(const Selection& rRange) override;
 
-    void SetText(const OUString& rStr) { m_xEditEngine->SetText(rStr); }
+    void SetText(const OUString& rStr);
 
-    OUString GetText() const { return m_xEditEngine->GetText(); }
+    OUString GetText() const;
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    void SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
-    {
-        m_xEditEngine->SetModifyHdl(rLink);
-    }
+    void SetModifyHdl(const Link<LinkParamNone*, void>& rLink);
 
-    EditEngine& GetEditEngine() { return *m_xEditEngine; }
+    virtual EditView* GetEditView() const;
+    virtual EditEngine* GetEditEngine() const;
 
-    bool HasSelection() const { return m_xEditView && m_xEditView->HasSelection(); }
+    bool HasSelection() const;
 
-    void Cut()
-    {
-        if (m_xEditView)
-            m_xEditView->Cut();
-    }
-    void Copy()
-    {
-        if (m_xEditView)
-            m_xEditView->Copy();
-    }
-    void Paste()
-    {
-        if (m_xEditView)
-            m_xEditView->Paste();
-    }
+    void Cut();
+    void Copy();
+    void Paste();
 
     virtual ~WeldEditView() override;
 
@@ -67,6 +53,8 @@ protected:
     rtl::Reference<WeldEditAccessible> m_xAccessible;
 
     virtual void makeEditEngine();
+
+    void InitAccessible();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

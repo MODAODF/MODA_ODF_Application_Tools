@@ -1142,6 +1142,7 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
 
 static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
                                    const char* pArguments);
+
 static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
                                  const char* pSearchResult, unsigned char** pBitmapBuffer,
                                  int* pWidth, int* pHeight, size_t* pByteSize);
@@ -1180,6 +1181,26 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
+const vcl::Font* FindFont(const OUString& rFontName)
+{
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFonts
+        = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
+    if (pList && !rFontName.isEmpty())
+        if (sal_Handle hMetric = pList->GetFirstFontMetric(rFontName))
+            return &FontList::GetFontMetric(hMetric);
+    return nullptr;
+}
+
+vcl::Font FindFont_FallbackToDefault(const OUString& rFontName)
+{
+    if (auto pFound = FindFont(rFontName))
+        return *pFound;
+
+    return OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE, LANGUAGE_NONE,
+                                        GetDefaultFontFlags::NONE);
+}
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent, int nDocumentId)
@@ -1324,7 +1345,7 @@ void CallbackFlushHandler::TimeoutIdle::Invoke()
     mHandler->Invoke();
 }
 
-
+// One of these is created per view to handle events cf. doc_registerCallback
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
     : Idle( "lokit idle callback" ),
       m_pDocument(pDocument),
@@ -1455,6 +1476,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     CallbackData callbackData(data);
     queue(type, callbackData);
 }
+
 void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
@@ -1713,7 +1735,6 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         auto it2 = m_queue2.begin();
         for (; it1 != m_queue1.end(); ++it1, ++it2)
             oss << i++ << ": [" << *it1 << "] [" << it2->getPayload() << "].\n";
-
         SAL_INFO("lok", "Current Queue: " << oss.str());
         assert(
             std::all_of(
@@ -1738,9 +1759,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
     const auto& pos
-        = std::find_if(m_queue1.rbegin(), m_queue1.rend(), [](int elemType) {
-              return (elemType == LOK_CALLBACK_INVALIDATE_TILES);
-          });
+        = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
         auto pos2 = toQueue2(pos);
@@ -2128,6 +2147,7 @@ void CallbackFlushHandler::Invoke()
         const int viewId = lcl_isViewCallbackType(type) ? it2->getViewId() : -1;
 
         SAL_INFO("lok", "processing event: [" << type << ',' << viewId << "]: [" << payload << "].");
+
         // common code-path for events on this view:
         if (viewId == -1)
         {
@@ -2152,7 +2172,7 @@ void CallbackFlushHandler::Invoke()
                 }
                 else
                 {
-                     SAL_INFO("lok", "Inserted a new state element: [" << type << "]: [" << payload << "]");
+                    SAL_INFO("lok", "Inserted a new state element: [" << type << "]: [" << payload << "]");
                     m_lastStateChange.emplace(key, value);
                 }
             }
@@ -2273,7 +2293,6 @@ bool CallbackFlushHandler::removeAll(const std::function<bool (int, const Callba
             ++it2;
         }
     }
-
     return bErased;
 }
 
@@ -2563,11 +2582,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
 
-       // set this explicitly false to be able to load template files
+        // set this explicitly false to be able to load template files
         // as regular files, otherwise we cannot save them; it will try
         // to bring saveas dialog which cannot work with LOK case
         aFilterOptions[3].Name = "AsTemplate";
         aFilterOptions[3].Value <<= false;
+
 
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
@@ -5027,43 +5047,25 @@ static char* getFonts (const char* pCommand)
 static char* getFontSubset (const OString& aFontName)
 {
     OUString aFoundFont(::rtl::Uri::decode(OStringToOUString(aFontName, RTL_TEXTENCODING_UTF8), rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-    const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:FontSubset");
     boost::property_tree::ptree aValues;
 
-    if ( pList && !aFoundFont.isEmpty() )
+    if (const vcl::Font* pFont = FindFont(aFoundFont))
     {
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        sal_uInt16 nItFont = 0;
-        for (; nItFont < nFontCount; ++nItFont)
+        FontCharMapRef xFontCharMap (new FontCharMap());
+        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
+
+        aDevice->SetFont(*pFont);
+        aDevice->GetFontCharMap(xFontCharMap);
+        SubsetMap aSubMap(xFontCharMap);
+
+        for (auto const& subset : aSubMap.GetSubsetMap())
         {
-            if (aFoundFont == pList->GetFontName(nItFont).GetFamilyName())
-            {
-                break;
-            }
-        }
-
-        if ( nItFont < nFontCount )
-        {
-            FontCharMapRef xFontCharMap (new FontCharMap());
-            auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT));
-            const vcl::Font& aFont(pList->GetFontName(nItFont));
-
-            aDevice->SetFont(aFont);
-            aDevice->GetFontCharMap(xFontCharMap);
-            SubsetMap aSubMap(xFontCharMap);
-
-            for (auto const& subset : aSubMap.GetSubsetMap())
-            {
-                boost::property_tree::ptree aChild;
-                aChild.put("", static_cast<int>(ublock_getCode(subset.GetRangeMin())));
-                aValues.push_back(std::make_pair("", aChild));
-            }
+            boost::property_tree::ptree aChild;
+            aChild.put("", static_cast<int>(ublock_getCode(subset.GetRangeMin())));
+            aValues.push_back(std::make_pair("", aChild));
         }
     }
 
@@ -5738,30 +5740,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     }
     else
     {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
-        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
-        const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
-        if (!pFonts)
-            return nullptr;
-
-        sal_uInt16 nFontCount = pList->GetFontNameCount();
-        sal_uInt16 nItFont = 0;
-        for (; nItFont < nFontCount; ++nItFont)
-        {
-            const FontMetric& rFontMetric = pList->GetFontName(nItFont);
-            if (aSearchedFontName == rFontMetric.GetFamilyName())
-            {
-                aFont = rFontMetric;
-                break;
-            }
-        }
-
-        // 沒找到指定字型就結束
-        if (aFont.GetFamilyName().isEmpty())
-        {
-            return nullptr;
-        }
+        aFont = FindFont_FallbackToDefault(OStringToOUString(pFontName, RTL_TEXTENCODING_UTF8));
 
         // 沒有指定顯示文字就以字型名稱當作顯示文字
         if (aText.isEmpty())
@@ -5859,7 +5838,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     }
 
     return pBuffer;
- }
+}
 
 
 static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
@@ -6409,7 +6388,7 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
-        "\"OxofficeVersion\": \"%OXOFFICEVERSION\", "
+        "\"OxOfficeVersion\": \"%OXOFFICEVERSION\", "
         "\"BuildId\": \"%BUILDID\" "
         "}"));
 }

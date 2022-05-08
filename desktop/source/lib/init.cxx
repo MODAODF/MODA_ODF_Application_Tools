@@ -134,6 +134,8 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <unicode/uchar.h>
+#include <unotools/securityoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -2552,23 +2554,35 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
 
-        // set this explicitly false to be able to load template files
-        // as regular files, otherwise we cannot save them; it will try
-        // to bring saveas dialog which cannot work with LOK case
-        aFilterOptions[2].Name = "AsTemplate";
-        aFilterOptions[2].Value <<= false;
+        int nMacroSecurityLevel = 1;
+        const OUString aMacroSecurityLevel = extractParameter(aOptions, u"MacroSecurityLevel");
+        if (!aMacroSecurityLevel.isEmpty())
+        {
+            double nNumber;
+            sal_uInt32 nFormat = 1;
+            SvNumberFormatter aFormatter(::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+            if (aFormatter.IsNumberFormat(aMacroSecurityLevel, nFormat, nNumber))
+                nMacroSecurityLevel = static_cast<int>(nNumber);
+        }
+        SvtSecurityOptions().SetMacroSecurityLevel(nMacroSecurityLevel);
 
         const OUString aEnableMacrosExecution = extractParameter(aOptions, u"EnableMacrosExecution");
         sal_Int16 nMacroExecMode = aEnableMacrosExecution == "true" ? document::MacroExecMode::USE_CONFIG :
             document::MacroExecMode::NEVER_EXECUTE;
-        aFilterOptions[3].Name = "MacroExecutionMode";
-        aFilterOptions[3].Value <<= nMacroExecMode;
+        aFilterOptions[2].Name = "MacroExecutionMode";
+        aFilterOptions[2].Value <<= nMacroExecMode;
 
         /* TODO
         sal_Int16 nUpdateDoc = document::UpdateDocMode::ACCORDING_TO_CONFIG;
         aFilterOptions[3].Name = "UpdateDocMode";
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
+
+       // set this explicitly false to be able to load template files
+        // as regular files, otherwise we cannot save them; it will try
+        // to bring saveas dialog which cannot work with LOK case
+        aFilterOptions[3].Name = "AsTemplate";
+        aFilterOptions[3].Value <<= false;
 
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));

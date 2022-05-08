@@ -2558,7 +2558,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[2].Name = "AsTemplate";
         aFilterOptions[2].Value <<= false;
 
-        sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
+        sal_Int16 nMacroExecMode = document::MacroExecMode::NEVER_EXECUTE;
         aFilterOptions[3].Name = "MacroExecutionMode";
         aFilterOptions[3].Value <<= nMacroExecMode;
 

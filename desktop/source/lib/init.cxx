@@ -3093,6 +3093,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:NumberFormatPercent"),
         OUString(".uno:NumberFormatDecimal"),
         OUString(".uno:NumberFormatDate"),
+        OUString(".uno:EditHeaderAndFooter"),
         OUString(".uno:FrameLineColor"),
         OUString(".uno:SortAscending"),
         OUString(".uno:SortDescending"),

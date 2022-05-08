@@ -6409,6 +6409,7 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
+        "\"OxofficeVersion\": \"%OXOFFICEVERSION\", "
         "\"BuildId\": \"%BUILDID\" "
         "}"));
 }

@@ -48,7 +48,10 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
     , pView(pSdrView)
 {
     AddTabPage("RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
-    AddTabPage("RID_SVXPAGE_TEXTCOLUMNS", SvxTextColumnsPage::Create, nullptr);
+    // TODO: 文字方塊欄位分頁目前不好用，所以先移除，將來改善後再啟用
+    RemoveTabPage("RID_SVXPAGE_TEXTCOLUMNS");
+    //AddTabPage("RID_SVXPAGE_TEXTCOLUMNS", SvxTextColumnsPage::Create, nullptr);
+    //----------------------------------------------------------------
     // Added By Firefly <firefly@ossii.com.tw>
     // LoKit 模式，就移除文字動畫分頁
     if (comphelper::LibreOfficeKit::isActive())

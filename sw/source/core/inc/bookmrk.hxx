@@ -272,7 +272,6 @@ namespace sw::mark {
             virtual ~FieldmarkWithDropDownButton() override;
 
             virtual void ShowButton(SwEditWin* pEditWin) = 0;
-            virtual void HideButton();
             virtual void RemoveButton();
 
         protected:
@@ -288,7 +287,6 @@ namespace sw::mark {
             virtual ~DropDownFieldmark() override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
-            virtual void HideButton() override;
             virtual void RemoveButton() override;
 
             // This method should be called only by the portion so we can now the portion's painting area

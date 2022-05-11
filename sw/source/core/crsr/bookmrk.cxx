@@ -650,12 +650,6 @@ namespace sw::mark
         m_pButton.disposeAndClear();
     }
 
-    void FieldmarkWithDropDownButton::HideButton()
-    {
-        if(m_pButton)
-            m_pButton->Show(false);
-    }
-
     void FieldmarkWithDropDownButton::RemoveButton()
     {
         if(m_pButton)
@@ -680,11 +674,6 @@ namespace sw::mark
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
             m_pButton->Show();
         }
-    }
-
-    void DropDownFieldmark::HideButton()
-    {
-        FieldmarkWithDropDownButton::HideButton();
     }
 
     void DropDownFieldmark::RemoveButton()

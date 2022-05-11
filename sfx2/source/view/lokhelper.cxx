@@ -361,7 +361,7 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, int nViewId, c
     assert(pView != nullptr && "pView must be valid");
     return OStringLiteral("{ \"viewId\": \"") + OString::number(nViewId)
            + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"" + rKey + "\": \""
-           + lcl_escapeQuotes(rPayload) + "\" }";
+           + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
 
 static inline OString lcl_generateJSON(const SfxViewShell* pView, const OString& rKey,

@@ -1284,16 +1284,13 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
 
         SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? (pFrame->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
-        bool bVert = pFrame->IsVertical();
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
         if ( bTop )
         {
             SwTwips nDiff = rBox.GetTop() ?
-                rBox.CalcLineSpace( bVert ? SvxBoxItemLine::LEFT : SvxBoxItemLine::TOP ) :
-                ( rAttrs.IsBorderDist() ?
-                       // Increase of distance by one twip is incorrect.
-                rBox.GetDistance( bVert ? SvxBoxItemLine::LEFT : SvxBoxItemLine::TOP ) : 0 );
+                rBox.CalcLineSpace( SvxBoxItemLine::TOP ) :
+                rBox.GetDistance( SvxBoxItemLine::TOP );
             if( nDiff )
                 (rRect.*fnRect->fnSubTop)( nDiff );
         }
@@ -1313,24 +1310,22 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
             else
             {
                 nDiff = rBox.GetBottom() ?
-                    rBox.CalcLineSpace( bVert ? SvxBoxItemLine::RIGHT : SvxBoxItemLine::BOTTOM ) :
-                    ( rAttrs.IsBorderDist() ?
-                       // Increase of distance by one twip is incorrect.
-                    rBox.GetDistance( bVert ? SvxBoxItemLine::RIGHT : SvxBoxItemLine::BOTTOM ) : 0 );
+                    rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) :
+                    rBox.GetDistance( SvxBoxItemLine::BOTTOM );
             }
             if( nDiff )
                 (rRect.*fnRect->fnAddBottom)( nDiff );
         }
 
         if ( rBox.GetLeft() )
-            (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( bVert ? SvxBoxItemLine::TOP : SvxBoxItemLine::LEFT ) );
+            (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
         else
-            (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( bVert ? SvxBoxItemLine::TOP : SvxBoxItemLine::LEFT ) );
+            (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( SvxBoxItemLine::LEFT ) );
 
         if ( rBox.GetRight() )
-            (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace(bVert ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::RIGHT ) );
+            (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
         else
-            (rRect.*fnRect->fnAddRight)( rBox.GetDistance( bVert ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::RIGHT ) );
+            (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
 
         if ( bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
         {

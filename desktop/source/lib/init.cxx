@@ -4193,12 +4193,10 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 
     if (strcmp(pOption, "traceeventrecording") == 0)
     {
-        /* disabled!
         if (strcmp(pValue, "start") == 0)
             comphelper::TraceEvent::startRecording();
         else if (strcmp(pValue, "stop") == 0)
             comphelper::TraceEvent::stopRecording();
-        */
     }
     else if (strcmp(pOption, "sallogoverride") == 0)
     {

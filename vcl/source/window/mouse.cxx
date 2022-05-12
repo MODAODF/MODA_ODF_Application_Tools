@@ -512,8 +512,7 @@ void Window::SetPointer( PointerStyle nPointer )
     // parent notifier set during initialization
     if ((ImplGetFrameData()->mbDragging &&
          ImplGetFrameData()->mpMouseDownWin == this) ||
-        (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
-         GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0))
+         GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0)
     {
         pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }

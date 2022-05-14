@@ -1311,18 +1311,29 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     if (comphelper::LibreOfficeKit::isActive())
     {
         bool bIsFocused = false;
-        if (HasFocus())
-        {
-            vcl::Cursor* pCursor = m_xEditView->GetCursor();
-            if (pCursor)
-                bIsFocused = true;
-        }
+        vcl::Cursor* pCursor = m_xEditView->GetCursor();
+        if (HasFocus() && pCursor)
+            bIsFocused = true;
 
         VclPtr<vcl::Window> pParent = mrGroupBar.GetVclParent().GetParentWithLOKNotifier();
         if (!pParent)
             return;
 
         const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        // Added by Firefly <firefly@ossii.com.tw>
+        // 回報 online 游標在公式列的位置
+        if (bIsFocused)
+        {
+            Point aCurPos = mrGroupBar.GetCursorScreenPixelPos(false);
+            Size aCurSize = GetEditViewDevice().LogicToPixel(pCursor->GetSize());
+            aCurPos.AdjustY((aCurSize.Height() + gnBorderHeight) * -1);
+
+            const tools::Rectangle aRect(aCurPos, aCurSize);
+            std::vector<vcl::LOKPayloadItem> aRectItems;
+            aRectItems.emplace_back("rectangle", aRect.toString());
+            pNotifier->notifyWindow(pParent->GetLOKWindowId(), "cursor_invalidate", aRectItems);
+        }
+
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("visible", bIsFocused ? "true" : "false");
         pNotifier->notifyWindow(pParent->GetLOKWindowId(), "cursor_visible", aItems);

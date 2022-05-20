@@ -727,8 +727,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // the same as editeng and drawinglayer), and get rid of all the
         // SetMapMode's and other unnecessary fun we have with pixels
         // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
-        aDrawMode.SetOrigin(PixelToLogic(Point(tools::Long(nScrX / aOutputData.aZoomX),
-                                               tools::Long(nScrY / aOutputData.aZoomY)), aDrawMode));
+        aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
     }
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );

@@ -1904,7 +1904,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
             DisconnectFromNode(bDragA);
 
             // look for new connection
-            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge);
+            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge, nullptr, &rDragStat);
 
             if(pDraggedOne->pObj)
             {

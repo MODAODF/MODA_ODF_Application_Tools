@@ -44,7 +44,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <comphelper/lok.hxx>
 
 void WeldEditView::SetText(const OUString& rStr) { GetEditEngine()->SetText(rStr); }
 
@@ -141,13 +140,7 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     {
         pEditView->SetBackgroundColor(aBgColor);
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-            pEditView->Paint(aLogicRect, &rRenderContext);
-        } else {
-            pEditView->Paint(rRect, &rRenderContext);
-        }
+        m_xEditView->Paint(rRect, &rRenderContext);
 
         if (HasFocus())
         {

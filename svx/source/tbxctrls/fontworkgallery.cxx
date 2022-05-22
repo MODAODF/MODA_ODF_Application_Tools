@@ -58,6 +58,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     : GenericDialogController(pParent, "svx/ui/fontworkgallerydialog.ui", "FontworkGalleryDialog")
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
+    , mbInsertIntoPage(true)
     , mppSdrObject(nullptr)
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
@@ -137,9 +138,9 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         maCtlFavorites->select(0);
 }
 
-void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* pModel )
+void FontWorkGalleryDialog::SetSdrObjectRef( SdrModel* pModel, bool bInsertIntoPage )
 {
-    mppSdrObject = ppSdrObject;
+    mbInsertIntoPage = bInsertIntoPage;
     mpDestModel = pModel;
 }
 
@@ -170,7 +171,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     // If this is not used, the correct SdrModel seems to be the one from
     // the mrSdrView that is used to insert (InsertObjectAtView below) the
     // cloned SdrObject.
-    const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
+    const bool bUseSpecialCalcMode(!mbInsertIntoPage && nullptr != mpDestModel);
 
     // center shape on current view
     OutputDevice* pOutDev(mrSdrView.GetFirstOutputDevice());
@@ -236,7 +237,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
     if (bUseSpecialCalcMode)
     {
-        *mppSdrObject = pNewObject;
+        mppSdrObject = pNewObject;
     }
     else
     {

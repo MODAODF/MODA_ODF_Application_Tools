@@ -150,35 +150,39 @@ void SwView::ExecDraw(SfxRequest& rReq)
         pSdrView = m_pWrtShell->GetDrawView();
         if (pSdrView)
         {
-            SdrObject* pObj = nullptr;
-            svx::FontWorkGalleryDialog aDlg(rWin.GetFrameWeld(), *pSdrView);
-            aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
-            aDlg.run();
-            if ( pObj )
-            {
-                Size            aDocSize( m_pWrtShell->GetDocSize() );
-                const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
-                                            m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
-                Point           aPos( rVisArea.Center() );
+            std::shared_ptr<svx::FontWorkGalleryDialog> pDlg = std::make_shared<svx::FontWorkGalleryDialog>(rWin.GetFrameWeld(), *pSdrView);
+            pDlg->SetSdrObjectRef( pSdrView->GetModel(), false );
+            weld::DialogController::runAsync(pDlg, [this, pDlg](int) {
+                vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
 
-                if( rVisArea.Width() > aDocSize.Width())
-                    aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
+                SdrObject* pObj = pDlg->GetSdrObjectRef();
+                if ( pObj )
+                {
+                    Size            aDocSize( m_pWrtShell->GetDocSize() );
+                    const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
+                                                m_pWrtShell->getLOKVisibleArea() : m_pWrtShell->VisArea();
+                    Point           aPos( rVisArea.Center() );
+                    tools::Rectangle aObjRect( pObj->GetLogicRect() );
 
-                if(rVisArea.Height() > aDocSize.Height())
-                    aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
+                    if ( rVisArea.Width() > aDocSize.Width())
+                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
+                    else if (aPos.getX() > aObjRect.GetWidth() / 2)
+                         aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
 
-                tools::Rectangle aObjRect( pObj->GetLogicRect() );
-                if (aPos.getX() > aObjRect.GetWidth() / 2)
-                    aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
-                if (aPos.getY() > aObjRect.GetHeight() / 2)
-                    aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
+                    if (rVisArea.Height() > aDocSize.Height())
+                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
+                    else if (aPos.getY() > aObjRect.GetHeight() / 2)
+                         aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
 
-                m_pWrtShell->EnterStdMode();
-                m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
-                rReq.Ignore ();
-            }
+                    m_pWrtShell->EnterStdMode();
+                    m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aPos );
+                }
+
+                rWin2.LeaveWait();
+            });
         }
-        rWin.LeaveWait();
+        else
+            rWin.LeaveWait();
     }
     else if ( m_nFormSfxId != USHRT_MAX )
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );

@@ -139,7 +139,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <vector>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <FilterListBox.hxx>
@@ -602,91 +601,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = mrViewData.GetTabNo();
     ScDocument& rDoc = mrViewData.GetDocument();
-    ScFilterEntries aFilterEntries;
-    rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
-
-    ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
-    if (!pDBData)
-        return;
-
-    Point aPos = mrViewData.GetScrPos(nCol, nRow, eWhich);
-    tools::Long nSizeX  = 0;
-    tools::Long nSizeY  = 0;
-    mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
-
-    // Modified by Firefly <firefly@ossii.com.tw>
-    // 把自動篩選資料組成 json 傳給前端處理
-    if (comphelper::LibreOfficeKit::isActive() && !aFilterEntries.empty())
-    {
-        // Reverse the zoom factor from aPos and nSize[X|Y]
-        // before letting the autofilter window convert the to twips
-        // with no zoom information.
-        double fZoomX(mrViewData.GetZoomX());
-        double fZoomY(mrViewData.GetZoomY());
-        aPos.setX(aPos.getX() / fZoomX);
-        aPos.setY(aPos.getY() / fZoomY);
-        nSizeX = nSizeX / fZoomX;
-        nSizeY = nSizeY / fZoomY;
-
-        ScAddress aScAddress(nCol, nRow, nTab);
-        OUString aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
-
-        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        boost::property_tree::ptree aTree;
-        aTree.put("type", "AutoFilter");
-        aTree.put("part", nTab);
-        aTree.put("row", nRow);
-        aTree.put("column", nCol);
-        aTree.put("address", aAddr);
-        aTree.put("isRTL", rDoc.IsLayoutRTL(nTab));
-        aTree.put("left", aPos.getX());
-        aTree.put("top", aPos.getY());
-        aTree.put("width", nSizeX);
-        aTree.put("height", nSizeY);
-
-        ScQueryParam aParam;
-        pDBData->GetQueryParam(aParam);
-        std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nCol);
-        std::unordered_set<OUString> aSelected;
-        for (ScQueryEntry* pEntry : aEntries)
-        {
-            if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
-            {
-                ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
-                std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
-            }
-        }
-
-        boost::property_tree::ptree aList;
-        for (const auto& rEntry : aFilterEntries)
-        {
-            const OUString& aVal = rEntry.GetString();
-            bool bSelected = true;
-            if (!aSelected.empty())
-            {
-                bSelected = aSelected.count(aVal) > 0;
-            }
-            boost::property_tree::ptree aItem;
-            aItem.put("item", aVal);
-            aItem.put("checked", bSelected);
-            aItem.put("isdate", rEntry.IsDate()); // 是否日期型態
-            /*if ( rEntry.IsDate() )
-                rControl.addDateMember( aVal, rEntry.GetValue(), bSelected );
-            else
-                rControl.addMember(aVal, bSelected);*/
-            aList.push_back(boost::property_tree::ptree::value_type("", aItem));
-        }
-
-        aTree.put_child("list", aList);
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_LAUNCH_MENU, aStream.str().c_str());
-        return;
-    }
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     mpAutoFilterPopup.disposeAndClear();
 
     // Estimate the width (in pixels) of the longest text in the list
+    ScFilterEntries aFilterEntries;
+    rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
                                                                   aFilterEntries.mbHasDates, nColWidth));
@@ -725,13 +647,35 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     nWindowWidth = rControl.IncreaseWindowWidthToFitText(nWindowWidth);
     nMaxTextWidth = std::max<int>(nMaxTextWidth, nWindowWidth - 70);
 
+    if (bLOKActive)
+        mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     rControl.setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
     rControl.setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
     std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
 
+    Point aPos = mrViewData.GetScrPos(nCol, nRow, eWhich);
+    tools::Long nSizeX  = 0;
+    tools::Long nSizeY  = 0;
+    mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    if (bLOKActive)
+    {
+        // Reverse the zoom factor from aPos and nSize[X|Y]
+        // before letting the autofilter window convert the to twips
+        // with no zoom information.
+        double fZoomX(mrViewData.GetZoomX());
+        double fZoomY(mrViewData.GetZoomY());
+        aPos.setX(aPos.getX() / fZoomX);
+        aPos.setY(aPos.getY() / fZoomY);
+        nSizeX = nSizeX / fZoomX;
+        nSizeY = nSizeY / fZoomY;
+    }
     tools::Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+
+    ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+    if (!pDBData)
+        return;
 
     pData->mpData = pDBData;
     rControl.setExtendedData(std::move(pData));
@@ -1144,21 +1088,13 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     SCTAB nTab = mrViewData.GetTabNo();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
-    bool bEmpty = false;
-    std::vector<ScTypedStrData> aStrings; // case sensitive
-    // Fill List
-    rDoc.GetDataEntries(nCol, nRow, nTab, aStrings);
-    if (aStrings.empty())
-        bEmpty = true;
-
     tools::Long nSizeX  = 0;
     tools::Long nSizeY  = 0;
     mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
-    // Modified by Firefly <firefly@ossii.com.tw>
-    // 把清單資料組成 json 格式，傳給前端處理
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bLOKActive)
     {
         // aPos is now view-zoom adjusted and in pixels an more importantly this is pixel aligned to the view-zoom,
         // but once we use this to set the position of the floating window, it has no information of view-zoom level
@@ -1171,40 +1107,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         aPos.setY(aPos.getY() / fZoomY);
         nSizeX = nSizeX / fZoomX;
         nSizeY = nSizeY / fZoomY;
-        sal_uLong nIndex = rDoc.GetAttr( nCol, nRow, nTab, ATTR_VALIDDATA )->GetValue();
-        if (!bEmpty && nIndex)
-        {
-            OUString aValue = rDoc.GetString(nCol, nRow, nTab);
-            ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-            ScAddress aScAddress(nCol, nRow, nTab);
-            OUString aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
-
-            boost::property_tree::ptree aTree;
-            aTree.put("type", "DataSelect");
-            aTree.put("part", nTab); // 工作表編號
-            aTree.put("row", nRow); // 列
-            aTree.put("column", nCol); // 欄
-            aTree.put("address", aAddr);
-            aTree.put("isRTL", bLayoutRTL); // 文字是否由右至左
-            aTree.put("left", aPos.getX()); // 左方位置 pixel
-            aTree.put("top", aPos.getY()); // 上方位置 pixel
-            aTree.put("width", nSizeX); // 寬 pixel
-            aTree.put("height", nSizeY); // 高 pixel
-
-            boost::property_tree::ptree aList;
-            for (auto rString : aStrings)
-            {
-                boost::property_tree::ptree aItem;
-                aItem.put("item", rString.GetString());
-                aItem.put("checked", rString.GetString() == aValue);
-                aList.push_back(boost::property_tree::ptree::value_type("", aItem));
-            }
-            aTree.put_child("list", aList);
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_LAUNCH_MENU, aStream.str().c_str());
-        }
-        return;
     }
 
     if ( bLayoutRTL )
@@ -1216,12 +1118,23 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     aPos.AdjustY( nSizeY - 1 );
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
+    if (bLOKActive)
+    {
+        mpFilterFloat->SetLOKNotifier(SfxViewShell::Current());
+    }
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
     rFilterBox.set_direction(bLayoutRTL); // Fix for bug fdo#44925 use sheet direction for widget RTL/LTR
 
     // SetSize later
+
+    bool bEmpty = false;
+    std::vector<ScTypedStrData> aStrings; // case sensitive
+    // Fill List
+    rDoc.GetDataEntries(nCol, nRow, nTab, aStrings);
+    if (aStrings.empty())
+        bEmpty = true;
 
     if (!bEmpty)
     {

@@ -388,9 +388,11 @@ public:
     void            ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayoutRTL);
 
     void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow );
+    void            LaunchLokDataSelectMenu( SCCOL nCol, SCROW nRow );
     void            DoScenarioMenu( const ScRange& rScenRange );
 
     void            LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow);
+    void            LaunchLokAutoFilterMenu(SCCOL nCol, SCROW nRow);
     void            RefreshAutoFilterButton(const ScAddress& rPos);
     void            UpdateAutoFilterFromMenu(AutoFilterMode eMode);
 

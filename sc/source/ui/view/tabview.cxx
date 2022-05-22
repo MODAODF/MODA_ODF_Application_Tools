@@ -2218,10 +2218,20 @@ void ScTabView::StartDataSelect()
         aViewData.GetDocument().GetAttr(
             nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG);
 
-    if (pAttr->HasAutoFilter())
-        pWin->LaunchAutoFilterMenu(nCol, nRow);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (pAttr->HasAutoFilter())
+            pWin->LaunchLokAutoFilterMenu(nCol, nRow);
+        else
+            pWin->LaunchLokDataSelectMenu(nCol, nRow);
+    }
     else
-        pWin->LaunchDataSelectMenu(nCol, nRow);
+    {
+        if (pAttr->HasAutoFilter())
+            pWin->LaunchAutoFilterMenu(nCol, nRow);
+        else
+            pWin->LaunchDataSelectMenu(nCol, nRow);
+    }
 }
 
 void ScTabView::EnableRefInput(bool bFlag)

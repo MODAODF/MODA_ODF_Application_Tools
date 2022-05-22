@@ -139,7 +139,10 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
         mpFilterButton->setDrawPopupButton(true);
         mpFilterButton->setPopupPressed(true);
         mpFilterButton->draw();
-        LaunchAutoFilterMenu(nCol, nRow);
+        if (comphelper::LibreOfficeKit::isActive())
+            LaunchLokAutoFilterMenu(nCol, nRow);
+        else
+            LaunchAutoFilterMenu(nCol, nRow);
         return true;
     }
 

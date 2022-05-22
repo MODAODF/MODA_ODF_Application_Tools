@@ -1788,8 +1788,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 // tdf#125917 typically we have the mouse captured already, except if are editing the cell.
                 // Ensure its captured before the menu is launched even in the cell editing case
                 CaptureMouse();
-
-                LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
+                if (comphelper::LibreOfficeKit::isActive())
+                    LaunchLokDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
+                else
+                    LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
                 rState.mbActivatePart = false;
@@ -6720,6 +6722,167 @@ ScViewData& ScGridWindow::getViewData()
 FactoryFunction ScGridWindow::GetUITestFactory() const
 {
     return ScGridWinUIObject::create;
+}
+
+void ScGridWindow::LaunchLokAutoFilterMenu(SCCOL nCol, SCROW nRow)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SCTAB nTab = mrViewData.GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    ScFilterEntries aFilterEntries;
+    rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+
+    ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+    if (!pDBData)
+        return;
+
+    Point aPos = mrViewData.GetScrPos(nCol, nRow, eWhich);
+    tools::Long nSizeX  = 0;
+    tools::Long nSizeY  = 0;
+    mrViewData.GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+
+    // 把自動篩選資料組成 json 傳給前端處理
+    if (!aFilterEntries.empty())
+    {
+        // Reverse the zoom factor from aPos and nSize[X|Y]
+        // before letting the autofilter window convert the to twips
+        // with no zoom information.
+        double fZoomX(mrViewData.GetZoomX());
+        double fZoomY(mrViewData.GetZoomY());
+        aPos.setX(aPos.getX() / fZoomX);
+        aPos.setY(aPos.getY() / fZoomY);
+        nSizeX = nSizeX / fZoomX;
+        nSizeY = nSizeY / fZoomY;
+
+        ScAddress aScAddress(nCol, nRow, nTab);
+        OUString aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+        boost::property_tree::ptree aTree;
+        aTree.put("type", "AutoFilter");
+        aTree.put("part", nTab);
+        aTree.put("row", nRow);
+        aTree.put("column", nCol);
+        aTree.put("address", aAddr);
+        aTree.put("isRTL", rDoc.IsLayoutRTL(nTab));
+        aTree.put("left", aPos.getX());
+        aTree.put("top", aPos.getY());
+        aTree.put("width", nSizeX);
+        aTree.put("height", nSizeY);
+
+        ScQueryParam aParam;
+        pDBData->GetQueryParam(aParam);
+        std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nCol);
+        std::unordered_set<OUString> aSelected;
+        for (ScQueryEntry* pEntry : aEntries)
+        {
+            if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
+            {
+                ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
+                std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
+            }
+        }
+
+        boost::property_tree::ptree aList;
+        for (const auto& rEntry : aFilterEntries)
+        {
+            const OUString& aVal = rEntry.GetString();
+            bool bSelected = true;
+            if (!aSelected.empty())
+            {
+                bSelected = aSelected.count(aVal) > 0;
+            }
+            boost::property_tree::ptree aItem;
+            aItem.put("item", aVal);
+            aItem.put("checked", bSelected);
+            aItem.put("isdate", rEntry.IsDate()); // 是否日期型態
+            /*if ( rEntry.IsDate() )
+                rControl.addDateMember( aVal, rEntry.GetValue(), bSelected );
+            else
+                rControl.addMember(aVal, bSelected);*/
+            aList.push_back(boost::property_tree::ptree::value_type("", aItem));
+        }
+
+        aTree.put_child("list", aList);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_LAUNCH_MENU, aStream.str().c_str());
+        return;
+    }
+}
+
+void ScGridWindow::LaunchLokDataSelectMenu( SCCOL nCol, SCROW nRow )
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
+
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+
+    bool bEmpty = false;
+    std::vector<ScTypedStrData> aStrings; // case sensitive
+    // Fill List
+    rDoc.GetDataEntries(nCol, nRow, nTab, aStrings, true /* bValidation */);
+    if (aStrings.empty())
+        bEmpty = true;
+
+    tools::Long nSizeX  = 0;
+    tools::Long nSizeY  = 0;
+    mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    Point aPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
+
+    // 把清單資料組成 json 格式，傳給前端處理
+
+    // aPos is now view-zoom adjusted and in pixels an more importantly this is pixel aligned to the view-zoom,
+    // but once we use this to set the position of the floating window, it has no information of view-zoom level
+    // so if we don't reverse the zoom now, a simple PixelToLogic(aPos, MapMode(MapUnit::MapTwip)) employed in
+    // FloatingWindow::ImplCalcPos will produce a 'scaled' twips position which will again get zoom scaled in the
+    // client (effective double scaling) causing wrong positioning/size.
+    double fZoomX(mrViewData.GetZoomX());
+    double fZoomY(mrViewData.GetZoomY());
+    aPos.setX(aPos.getX() / fZoomX);
+    aPos.setY(aPos.getY() / fZoomY);
+    nSizeX = nSizeX / fZoomX;
+    nSizeY = nSizeY / fZoomY;
+    if (!bEmpty)
+    {
+        OUString aValue = rDoc.GetString(nCol, nRow, nTab);
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+        ScAddress aScAddress(nCol, nRow, nTab);
+        OUString aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+
+        boost::property_tree::ptree aTree;
+        aTree.put("type", "DataSelect");
+        aTree.put("part", nTab); // 工作表編號
+        aTree.put("row", nRow); // 列
+        aTree.put("column", nCol); // 欄
+        aTree.put("address", aAddr);
+        aTree.put("isRTL", bLayoutRTL); // 文字是否由右至左
+        aTree.put("left", aPos.getX()); // 左方位置 pixel
+        aTree.put("top", aPos.getY()); // 上方位置 pixel
+        aTree.put("width", nSizeX); // 寬 pixel
+        aTree.put("height", nSizeY); // 高 pixel
+
+        boost::property_tree::ptree aList;
+        for (auto rString : aStrings)
+        {
+            boost::property_tree::ptree aItem;
+            aItem.put("item", rString.GetString());
+            aItem.put("checked", rString.GetString() == aValue);
+            aList.push_back(boost::property_tree::ptree::value_type("", aItem));
+        }
+        aTree.put_child("list", aList);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_LAUNCH_MENU, aStream.str().c_str());
+    }
+    return;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

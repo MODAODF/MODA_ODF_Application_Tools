@@ -33,7 +33,6 @@
 #include <svtools/popupwindowcontroller.hxx>
 
 #include <svx/fmmodel.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -227,6 +226,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
         aPagePos = aVisArea.Center();
     }
+
     if (aPagePos.getX() > aFontworkSize.getWidth() / 2)
         aPagePos.AdjustX( -(aFontworkSize.getWidth() / 2) );
     if (aPagePos.getY() > aFontworkSize.getHeight() / 2)

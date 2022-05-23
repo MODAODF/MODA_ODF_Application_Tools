@@ -53,9 +53,9 @@ void SidebarScrollBar::LogicInvalidate(const tools::Rectangle* pRectangle)
     rParent.Pop();
     aRectangle.Move(aOffset.getX(), aOffset.getY());
 
-    //OString sRectangle = aRectangle.toString();
+    OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = m_rView.GetWrtShell();
-    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), &aRectangle);
+    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
 void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/) { EndTracking(); }

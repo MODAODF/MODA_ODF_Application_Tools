@@ -93,10 +93,7 @@ public:
         Modify(*xEntry);
     }
 
-    void GrabFocus()
-    {
-        xEntry->grab_focus();
-    }
+    void GrabFocus();
 
     void SelectAll()
     {

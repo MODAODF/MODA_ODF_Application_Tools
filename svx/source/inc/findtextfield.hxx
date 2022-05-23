@@ -37,6 +37,8 @@ public:
 
     virtual ~FindTextFieldControl() override;
 
+    virtual void GetFocus() override;
+
     void Remember_Impl(const OUString& rStr);
     void SetTextToSelected_Impl();
 

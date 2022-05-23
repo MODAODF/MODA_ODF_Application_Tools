@@ -84,6 +84,7 @@ void OTasksWindow::GrabFocus()
     if (!m_xTreeView)
         return;
     m_xTreeView->grab_focus();
+    FocusInHdl(*m_xTreeView);
 }
 
 bool OTasksWindow::HasChildPathFocus() const

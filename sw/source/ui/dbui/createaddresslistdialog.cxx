@@ -206,6 +206,7 @@ void SwAddressControl_Impl::SetCursorTo(std::size_t nElement)
     {
         weld::Entry* pEdit = m_aLines[nElement]->m_xEntry.get();
         pEdit->grab_focus();
+        GotFocusHdl_Impl(*pEdit);
     }
 
 }

@@ -452,9 +452,8 @@ void SlideBackground::Update()
     }
 
     // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
-    sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
-    if (pPanel)
-        pPanel->TriggerDeckLayouting();
+    if (m_pPanel)
+        m_pPanel->TriggerDeckLayouting();
 }
 
 void SlideBackground::UpdateMarginBox()

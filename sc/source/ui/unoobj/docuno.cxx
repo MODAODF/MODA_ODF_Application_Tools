@@ -609,6 +609,7 @@ OUString ScModelObj::getPartInfo( int nPart )
     const ScDocument& pDoc = ScDocShell::GetViewData()->GetDocument();
     const bool bIsVisible = pDoc.IsVisible(nPart);
     const bool bIsSelected = false; // FIXME: Implement IsSelected(nPart).
+    const bool bIsRTLLayout = pDoc.IsLayoutRTL(nPart);
     OUString aTabName;
     pDoc.GetName(nPart, aTabName);
     const Color aTabBgColor = pDoc.GetTabBgColor(nPart);
@@ -624,6 +625,7 @@ OUString ScModelObj::getPartInfo( int nPart )
     aJson.put("name", aTabName); // 工作表名稱
     aJson.put("visible", static_cast<unsigned int>(bIsVisible)); // 是否可見
     aJson.put("selected", static_cast<unsigned int>(bIsSelected)); // 被選取
+    aJson.put("rtllayout", static_cast<unsigned int>(bIsRTLLayout)); // 文字是否由右至左
     aJson.put("bgColor", static_cast<sal_Int32>(aTabBgColor)); // 標籤顏色，-1：透明
     aJson.put("bgIsDark", aTabBgColor.GetLuminance() < 128 ? 1 : 0); // // 標籤顏色是否偏暗
     aJson.put("protected", static_cast<unsigned int>(bProtected)); // 是否保護

@@ -6147,6 +6147,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aPos;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex, &pFallbackFont))
     {
+        // adjust export PDF vertical text position
+        if (pGlyph->IsVertical())
+        {
+            aPos.AdjustX( aRefDevFontMetric.GetDescent()/2 );
+            aPos.AdjustY( ( -aRefDevFontMetric.GetLineHeight() +
+                            aRefDevFontMetric.GetInternalLeading() )/2 );
+        }
         const auto* pFont = pFallbackFont ? pFallbackFont : pDevFont;
 
         aCodeUnits.clear();

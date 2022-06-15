@@ -1948,6 +1948,13 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
     FilterConfigItem aConfigItem( pFilterData );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
+
+    // if VectorGraphicDataType is svg then filtername use "SVESVG"
+    auto const & pVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+    if (pVectorGraphicDataPtr
+        && pVectorGraphicDataPtr->getVectorGraphicDataType() == VectorGraphicDataType::Svg)
+        aFilterName = OUString("SVESVG");
+
     ErrCode     nStatus = ERRCODE_NONE;
     GraphicType eType;
     Graphic     aGraphic = ImpGetScaledGraphic( rGraphic, aConfigItem );

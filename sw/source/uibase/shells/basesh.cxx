@@ -1001,9 +1001,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case SID_STYLE_NEW_BY_EXAMPLE:
         case SID_STYLE_APPLY:
         {
-            // set UseMenuBarNum false
-            if (!rSh.SelectionHasNumber())
-                rSh.SetUseMenuBarNum(false);
             ShellMode eMode = GetView().GetShellMode();
             if ( ShellMode::Draw != eMode &&
                  ShellMode::DrawForm != eMode &&

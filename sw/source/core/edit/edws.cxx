@@ -62,16 +62,6 @@ SwEditShell::~SwEditShell() // USED
 {
 }
 
-bool SwEditShell::IsUseMenuBarNum() const
-{
-    return m_bUseMenuBarNum;
-}
-
-bool SwEditShell::SetUseMenuBarNum(bool enable)
-{
-    return m_bUseMenuBarNum = enable;
-}
-
 bool SwEditShell::IsModified() const
 {
     return GetDoc()->getIDocumentState().IsModified();

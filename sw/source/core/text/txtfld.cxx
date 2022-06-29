@@ -725,6 +725,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
 
+                    const SwDoc* pDoc = pTextNd->GetDoc();
                     SwWrtShell *pWSh = rInf.GetVsh()->GetDoc()->GetDocShell()->GetWrtShell();
                     if (pWSh->IsUseMenuBarNum())
                     {

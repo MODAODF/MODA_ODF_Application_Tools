@@ -21,7 +21,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/propertyvalue.hxx>
 
 using namespace css;
 using namespace ::com::sun::star;
@@ -148,7 +147,6 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
 IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
 {
     sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
-
     if ( mePageType == NumberingPageType::BULLET )
     {
         auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::makeAny( nSelItem ) } } ) );
@@ -158,17 +156,6 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
     {
         auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::makeAny( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetNumber", aArgs );
-
-        // select (壹, 貳, 參) then use customstyle
-        if (mxValueSet->GetSelectedItemId() == 6)
-        {
-            uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-            {
-                {"Template", uno::makeAny(OUString("CustomNum"))},
-                {"Family", uno::makeAny(sal_Int32(16))}
-            });
-            mrController.dispatchCommand(".uno:StyleApply", aPropertyValues);
-        }
     }
     else
     {

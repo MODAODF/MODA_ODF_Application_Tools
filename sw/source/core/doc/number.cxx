@@ -393,8 +393,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             SwNumRule::saBaseFormats[ NUM_RULE ][ n ] = pFormat;
         }
         // position-and-space mode LABEL_ALIGNMENT
-        // first line indent of general numbering in inch: -0,25 inch
-        const tools::Long cFirstLineIndent = -1440/4;
+        // first line indent of general numbering in inch: -0,5 inch
+        const tools::Long cFirstLineIndent = -1440/2;
         // indent values of general numbering in inch:
         //  0,5         0,75        1,0         1,25        1,5
         //  1,75        2,0         2,25        2,5         2,75

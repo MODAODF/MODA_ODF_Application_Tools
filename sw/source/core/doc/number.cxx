@@ -408,8 +408,8 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFormat->SetStart( 1 );
             pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
             if (rNm.indexOf("Bullet") != -1)
-                pFormat->SetLabelFollowedBy( SvxNumberFormat::LISTTAB ); // Bullet use LISTTAB
-            else
+                pFormat->SetLabelFollowedBy( SvxNumberFormat::SPACE ); // Bullet use SPACE
+            if (rNm.indexOf("Numbering") != -1)
                 pFormat->SetLabelFollowedBy( SvxNumberFormat::NOTHING ); // Numbering use NOTHING
             pFormat->SetListtabPos( cIndentAt[ n ] );
             pFormat->SetFirstLineIndent( cFirstLineIndent );

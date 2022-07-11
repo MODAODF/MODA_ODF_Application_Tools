@@ -40,6 +40,191 @@
 #include <sfx2/bindings.hxx>
 #include <memory>
 
+#define DOUBLEMAXLEVEL 20
+
+enum NumList
+{
+    nARABIC = 1,
+    nCHARS_UPPER_LETTER,
+    nROMAN_UPPER,
+    nFULLWIDTH_ARABIC,
+    nNUMBER_LOWER_ZH,
+    nNUMBER_UPPER_ZH_TW,
+    nTIAN_GAN_ZH,
+    nDI_ZI_ZH
+};
+
+const tools::Long ARA_fontIndent[ DOUBLEMAXLEVEL ] = {
+    181, -181, 454, -272, 675, -221, 1009, -335, 1174, -164,
+    1435, -261, 1435, 0, 1435, 0, 1435, 0, 1435, 0
+};
+
+const tools::Long ARA_offset[ DOUBLEMAXLEVEL ] = {
+    28, -28, 79, -51, 125, -45, 181, -57, 210, -28,
+    261, -51, 261, 0, 261, 0, 261, 0, 261, 0
+};
+
+const tools::Long LZ_fontIndent[ DOUBLEMAXLEVEL ] = {
+    482, -482, 879, -397, 1060, -181, 1338, -278, 1571, -232,
+    1905, -335, 1905, 0, 1905, 0, 1905, 0, 1905, 0
+};
+
+const tools::Long LZ_offset[ DOUBLEMAXLEVEL ] = {
+    79, -79, 147, -68, 176, -28, 221, -45, 261, -40,
+    318, -57, 318, 0, 318, 0, 318, 0, 318, 0
+};
+
+const tools::Long UZT_fontIndent[ DOUBLEMAXLEVEL ] = {
+    482, -482, 964, -482, 1361, -397, 1542, -181, 1820, -278,
+    2296, -476, 2693, -397, 2926, -232, 3255, -329, 3430, -176
+};
+
+const tools::Long UZT_offset[ DOUBLEMAXLEVEL ] = {
+    79, -79, 159, -79, 227, -68, 255, -28, 306, -51,
+    386, -79, 454, -68, 493, -40, 550, -57, 573, -23
+};
+
+const OUString ARABIC_MORPHEME[DOUBLEMAXLEVEL] = {
+    "", ".",
+    "(" ,")",
+    "", ".",
+    "(", ")",
+    "", ".",
+    "(" ,")",
+    "", ".",
+    "", ".",
+    "", ".",
+    "", ".",
+};
+
+const OUString NUMBER_LOWER_ZH_MORPHEME[DOUBLEMAXLEVEL] = {
+    "", u"\x3001",
+    "(" ,")",
+    "", ".",
+    "(", ")",
+    "", ".",
+    "(" ,")",
+    "", ".",
+    "(", ")",
+    "", ".",
+    "", ".",
+};
+
+const OUString NUMBER_UPPER_ZH_TW_MORPHEME[DOUBLEMAXLEVEL] = {
+    "", u"\x3001",
+    "" ,u"\x3001",
+    "(", ")",
+    "", ".",
+    "(" ,")",
+    "", u"\x3001",
+    "(" ,")",
+    "", ".",
+    "(" ,")",
+    "", ".",
+};
+
+const SvxNumType ARABIC_TYPE[ MAXLEVEL ] = {
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER,
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC
+};
+
+const SvxNumType NUMBER_LOWER_ZH_TYPE[ MAXLEVEL ] = {
+    SVX_NUM_NUMBER_LOWER_ZH,
+    SVX_NUM_NUMBER_LOWER_ZH,
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER
+};
+
+const SvxNumType NUMBER_UPPER_ZH_TW_TYPE[ MAXLEVEL ] = {
+
+    SVX_NUM_NUMBER_UPPER_ZH_TW,
+    SVX_NUM_NUMBER_LOWER_ZH,
+    SVX_NUM_NUMBER_LOWER_ZH,
+    SVX_NUM_ARABIC,
+    SVX_NUM_ARABIC,
+    SVX_NUM_TIAN_GAN_ZH,
+    SVX_NUM_TIAN_GAN_ZH,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_UPPER_LETTER,
+    SVX_NUM_CHARS_LOWER_LETTER
+};
+
+const SvxNumType* cType(int chooseindex)
+{
+    switch(chooseindex)
+    {
+        case NumList::nARABIC:
+            return ARABIC_TYPE;
+        case NumList::nNUMBER_LOWER_ZH:
+            return NUMBER_LOWER_ZH_TYPE;
+        case NumList::nNUMBER_UPPER_ZH_TW:
+            return NUMBER_UPPER_ZH_TW_TYPE;
+        default:
+            return ARABIC_TYPE;
+    }
+}
+
+const tools::Long* cIndent(int chooseindex)
+{
+    switch(chooseindex)
+    {
+        case NumList::nARABIC:
+            return ARA_fontIndent;
+        case NumList::nNUMBER_LOWER_ZH:
+            return LZ_fontIndent;
+        case NumList::nNUMBER_UPPER_ZH_TW:
+            return UZT_fontIndent;
+        default:
+            return ARA_fontIndent;
+    }
+}
+
+const tools::Long* cOffset(int chooseindex)
+{
+     switch(chooseindex)
+     {
+        case NumList::nARABIC:
+            return ARA_offset;
+        case NumList::nNUMBER_LOWER_ZH:
+            return LZ_offset;
+        case NumList::nNUMBER_UPPER_ZH_TW:
+            return UZT_offset;
+         default:
+            return ARA_offset;
+     }
+}
+
+const OUString* cMorpheme(int chooseindex)
+{
+    switch(chooseindex)
+    {
+        case NumList::nARABIC:
+            return ARABIC_MORPHEME;
+        case NumList::nNUMBER_LOWER_ZH:
+            return NUMBER_LOWER_ZH_MORPHEME;
+        case NumList::nNUMBER_UPPER_ZH_TW:
+            return NUMBER_UPPER_ZH_TW_MORPHEME;
+        default:
+            return ARABIC_MORPHEME;
+    }
+}
+
+
+
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
     //Because the record before any shell exchange.
@@ -291,6 +476,37 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
 
                     pNBOTypeMgr->SetItems( &aSet );
                     pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChosenItemIdx - 1, nActNumLvl );
+
+                    // use NDC rule for NumberingPopup
+                    if (nSlot == FN_SVX_SET_NUMBER)
+                    {
+                        SwDocShell* pDocSh = GetView().GetDocShell();
+                        OutputDevice* rOutDev = pDocSh->GetDocumentRefDev();
+                        vcl::Font bFont( rOutDev->GetFont() );
+                        Size bSize = bFont.GetFontSize();
+                        sal_uInt16 multiple = (bSize.Height() - 240)/40;
+
+                        sal_uInt8 n;
+                        for( n = 0; n < MAXLEVEL; ++n )
+                        {
+                            SvxNumberFormat nFmt(aNewSvxNumRule.GetLevel(n));
+                            nFmt.SetLabelFollowedBy( SvxNumberFormat::NOTHING ); // Numbering use NOTHING
+
+                            if ( nChosenItemIdx == NumList::nARABIC ||
+                                nChosenItemIdx == NumList::nNUMBER_LOWER_ZH ||
+                                nChosenItemIdx == NumList::nNUMBER_UPPER_ZH_TW )
+                            {
+                                nFmt.SetNumberingType(cType(nChosenItemIdx)[n]);
+                                nFmt.SetListtabPos( cIndent(nChosenItemIdx)[n*2] + ( cOffset(nChosenItemIdx)[n*2] * multiple ) );
+                                nFmt.SetIndentAt( cIndent(nChosenItemIdx)[n*2] + ( cOffset(nChosenItemIdx)[n*2] * multiple ) );
+                                nFmt.SetFirstLineIndent( cIndent(nChosenItemIdx)[n*2+1] + ( cOffset(nChosenItemIdx)[n*2+1] * multiple ) );
+                                nFmt.SetPrefix(cMorpheme(nChosenItemIdx)[ n*2 ]);
+                                nFmt.SetSuffix(cMorpheme(nChosenItemIdx)[ n*2+1 ]);
+                            }
+                            aNewSvxNumRule.SetLevel(n, nFmt);
+                            pNBOTypeMgr->RelplaceNumRule( aNewSvxNumRule, nChosenItemIdx - 1, nActNumLvl );
+                        }
+                    }
 
                     // BulletPopup followdby use SPACE
                     if (nSlot == FN_SVX_SET_BULLET)

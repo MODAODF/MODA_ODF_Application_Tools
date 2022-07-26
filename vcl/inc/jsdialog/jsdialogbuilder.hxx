@@ -408,6 +408,14 @@ public:
         sendUpdate();
     }
 
+    virtual void grab_focus() override
+    {
+        BaseInstanceClass::grab_focus();
+        std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+        (*pMap)[ACTION_TYPE] = "hide";
+        sendAction(std::move(pMap));
+    }
+
     virtual void sendClose() override
     {
         if (m_pSender)

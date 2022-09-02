@@ -142,9 +142,9 @@
 
 #include <strings.hxx>
 #define STR_FEEDBACK_URL        "https://www.ossii.com.tw/"
-#define STR_UPDATEINFO_URL      "https://www.ndc.gov.tw/cp.aspx?n=32A75A78342B669D"
+#define STR_UPDATEINFO_URL      "https://moda.gov.tw/"
 #define STR_OXHELPINDEX_URL     "https://www.ossii.com.tw/odf"
-#define STR_NDCHELPINDEX_URL    "https://www.ndc.gov.tw/cp.aspx?n=D6D0A9E658098CA2&s=CDA642B408087E65"
+#define STR_MODAHELPINDEX_URL    "https://moda.gov.tw/"
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -409,7 +409,7 @@ OUString ReplaceStringHookProc( const OUString& rStr )
 
     if ( sRet.indexOf( "%FEEDBACKURL" ) != -1 )
     {
-        if ( sBrandName.indexOf( "NDC" ) != -1 )
+        if ( sBrandName.indexOf( "MODA" ) != -1 )
             sRet = sRet.replaceAll("%FEEDBACKURL", STR_UPDATEINFO_URL);
         else
             sRet = sRet.replaceAll("%FEEDBACKURL", STR_FEEDBACK_URL);
@@ -417,8 +417,8 @@ OUString ReplaceStringHookProc( const OUString& rStr )
 
     if ( sRet.indexOf( "%HELPINDEX" ) != -1 )
     {
-        if ( sBrandName.indexOf( "NDC" ) != -1 )
-            sRet = sRet.replaceAll("%HELPINDEX", STR_NDCHELPINDEX_URL);
+        if ( sBrandName.indexOf( "MODA" ) != -1 )
+            sRet = sRet.replaceAll("%HELPINDEX", STR_MODAHELPINDEX_URL);
         else
             sRet = sRet.replaceAll("%HELPINDEX", STR_OXHELPINDEX_URL);
     }

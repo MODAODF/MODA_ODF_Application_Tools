@@ -139,7 +139,7 @@ sub get_productname_for_property_table($$)
     if ( $allvariables->{'PRODUCTEXTENSION'} )
     {
         # for ndc and ossii edition
-        if ( index($productname, "NDC") != -1 || index($productname, "OxOffice") != -1)
+        if ( index($productname, "MODA") != -1 || index($productname, "OxOffice") != -1)
         {
             $productname = $productname . " " . $lableversion;
         } else {

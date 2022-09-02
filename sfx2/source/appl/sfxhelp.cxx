@@ -711,9 +711,9 @@ static bool impl_showOnlineHelp( const OUString& rURL )
         return false;
 
     OUString aHelpLink =  "";
-    if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
+    if (utl::ConfigManager::getProductName().indexOf("MODA") != -1)
     {
-        aHelpLink = "https://www.ndc.gov.tw/cp.aspx?n=D6D0A9E658098CA2&s=CDA642B408087E65";
+        aHelpLink = "https://moda.gov.tw/";
     }
     else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
     {

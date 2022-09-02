@@ -57,7 +57,7 @@ char const maximalVersionOpenOfficeOrg[] =
 
 OUString getLibreOfficeMajorMinorMicro() {
     OUString productname = utl::ConfigManager::getProductName();
-    if ( productname.indexOf( "NDC" ) != -1 || productname.indexOf( "OxOffice" ) != -1 )
+    if ( productname.indexOf( "MODA" ) != -1 || productname.indexOf( "OxOffice" ) != -1 )
     {
         return utl::ConfigManager::getBaseonVersion();
     } else {

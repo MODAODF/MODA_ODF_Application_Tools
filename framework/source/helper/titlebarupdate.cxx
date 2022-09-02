@@ -142,8 +142,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         else
             sDesktopName = "Startcenter";
 #if defined(_WIN32)
-        if (utl::ConfigManager::getProductName().indexOf("NDC") != -1)
-            sApplicationID = "NationalDevelopmentCouncil.NDCODFApplicationTools." + sDesktopName;
+        if (utl::ConfigManager::getProductName().indexOf("MODA") != -1)
+            sApplicationID = "MinistryofDigitalAffairs.MODAODFApplicationTools." + sDesktopName;
         else if (utl::ConfigManager::getProductName().indexOf("OxOffice") != -1)
             sApplicationID = "OSSIntegralInstitute.OxOffice." + sDesktopName;
         else

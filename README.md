@@ -1,10 +1,10 @@
-﻿## NDC ODF Application Tools
+﻿## MODA ODF Application Tools
 
-NDC ODF Application Tools
+MODA ODF Application Tools
 本軟體是一套開放文件格式(ODF)應用工具組合，
 用以協助單位人員產出符合基礎開放文件格式(ODF)之應用軟體套件。
 
-## 編譯NDC ODF Application Tools for Windows
+## 編譯MODA ODF Application Tools for Windows
 
     1. 請先安裝Widnows 10 64 bit主機一台，並將相關基本的環境都建好(解壓縮、防毒、輸入法、瀏
         覽器等)

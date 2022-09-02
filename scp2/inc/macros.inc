@@ -296,7 +296,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(CONCAT2(%PRODUCTNAME_WITHOUT_SPACES.,name)); \
         Name = STRING(AppUserModelID); \
-        Value = STRING(CONCAT2(NationalDevelopmentCouncil.NDCODFApplicationTools.,doc_type)); \
+        Value = STRING(CONCAT2(MinistryofDigitalAffairs.MODAODFApplicationTools.,doc_type)); \
     End
 #endif
 

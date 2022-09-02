@@ -485,7 +485,7 @@ if test "$PRODUCTNAME" == "OxOffice" ; then
     AC_SUBST(ISOXOFFICE)
     AC_SUBST(REGISTERPRODUCTNAME)
 else
-    REGISTERPRODUCTNAME="NationalDevelopmentCouncil.NDCODFApplicationTools"
+    REGISTERPRODUCTNAME="MinistryofDigitalAffairs.MODAODFApplicationTools"
     AC_SUBST(REGISTERPRODUCTNAME)
 fi
 AC_MSG_RESULT([$ISOXOFFICE])

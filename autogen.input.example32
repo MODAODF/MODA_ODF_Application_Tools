@@ -25,9 +25,9 @@
 --with-lang=en-US zh-TW
 
 ## Productname setting
---with-product-name=NDC ODF Application Tools 
---with-vendor=National Development Council
---with-branding=./icon-themes/ossii/NDC/brand/shell
+--with-product-name=MODA ODF Application Tools
+--with-vendor=Ministry of Digital Affairs
+--with-branding=./icon-themes/ossii/MODA/brand/shell
 --with-aboutbox-version=3.3.4
 --with-lproduct-version=3.3.4
 --with-userdirproduct-version=3

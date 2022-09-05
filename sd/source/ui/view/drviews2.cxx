@@ -1319,6 +1319,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 pSet.reset(new SfxItemSet( GetPool() ));
+
+                // Default > Object no fill no line
+                pSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+                pSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
+
                 mpDrawView->SetAttributes( *pSet, true );
 
                 sal_uLong j = 0;

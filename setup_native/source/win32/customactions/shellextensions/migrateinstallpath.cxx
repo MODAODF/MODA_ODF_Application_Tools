@@ -86,8 +86,11 @@ extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath(MSIHANDLE han
         }
     }
 
-    if (!sInstDir.empty())
-        MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
+    if (!sInstDir.find(L"NDC"))
+    {
+        if (!sInstDir.empty())
+            MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
+    }
 
     return ERROR_SUCCESS;
 

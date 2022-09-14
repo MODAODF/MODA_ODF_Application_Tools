@@ -24,6 +24,7 @@ $(eval $(call gb_Library_add_ldflags,sn_tools,\
 
 $(eval $(call gb_Library_add_exception_objects,sn_tools,\
     setup_native/source/win32/customactions/tools/checkversion \
+    setup_native/source/win32/customactions/tools/finialcheck \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,sn_tools,\

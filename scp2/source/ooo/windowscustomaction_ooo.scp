@@ -36,6 +36,15 @@ WindowsCustomAction gid_Customaction_RemovePrgFolder
 	Assignment1 = ("InstallExecuteSequence", "OLDPRODUCTS And Not REMOVE=\"ALL\" And Not PATCH", "end");
 End
 
+WindowsCustomAction gid_Customaction_RegistryCheck
+	Name = "RegistryCheck";
+	Typ = "1";
+	Source = "sn_tools.dll";
+	Target = "RegistryCheck";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "Shellextensionsdll3");
+End
+
 WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Name = "Regallmsdocdll";
 	Typ = "65";

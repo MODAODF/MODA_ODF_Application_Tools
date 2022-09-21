@@ -82,6 +82,7 @@ using namespace ::com::sun::star::beans;
 std::vector< OUString > CheckMarkList =
 {
      "FormatCheckEvent",
+     "SubscriptionEvent",
 };
 
 // oxt-menuitems default checkmark
@@ -1909,6 +1910,32 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                             DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "FormatCheckEvent"), DMarkList.end());
                     }
                 }
+
+                // for Subscription oxt
+                if (pData->aCommandStr.indexOf("SubscriptionEvent") > 1)
+                {
+                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
+                        css::frame::theGlobalEventBroadcaster::get(xContext);
+                    bool hasbyname = xModelCollection->getEvents()->hasByName("OnStartApp");
+                    if (hasbyname)
+                    {
+                        OUString sScriptValue;
+                        Sequence < PropertyValue > aProps;
+                        Any aAny = xModelCollection->getEvents()->getByName("OnStartApp");
+                        aAny >>= aProps;
+                        const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
+                        [](const PropertyValue& rProp) { return rProp.Name == "Script"; });
+                        if (pProp != aProps.end())
+                            pProp->Value >>= sScriptValue;
+
+                        if(!sScriptValue.isEmpty())
+                            DMarkList.push_back("SubscriptionEvent");
+                        else
+                            DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "SubscriptionEvent"), DMarkList.end());
+                    }
+                }
+
                 // oxt default checked
                 if (!DMarkList.empty())
                 {

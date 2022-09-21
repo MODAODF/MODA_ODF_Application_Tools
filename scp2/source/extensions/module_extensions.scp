@@ -231,4 +231,19 @@ Module gid_Module_Optional_Extensions_FORMATCHECK
 End
 #endif
 
+/* ** SUBSCRIPTION ** */
+
+#ifdef WITH_EXTENSION_SUBSCRIPTION
+Module gid_Module_Optional_Extensions_SUBSCRIPTION
+    PackageInfo = "packinfo_extensions.txt";
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SUBSCRIPTION);
+    ParentID = gid_Module_Optional_Extensions;
+    Files = (
+        gid_File_Oxt_SUBSCRIPTION );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+#endif
+
 #endif

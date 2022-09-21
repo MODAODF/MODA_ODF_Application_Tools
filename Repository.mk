@@ -800,6 +800,12 @@ $(eval $(call gb_Helper_register_packages_for_install,extensions_FormatCheck,\
 ))
 endif
 
+ifeq ($(SUBSCRIPTION_EXTENSION_PACK),yes)
+$(eval $(call gb_Helper_register_packages_for_install,extensions_Subscription,\
+	subscription \
+))
+endif
+
 $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
 	active_java \

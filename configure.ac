@@ -13003,6 +13003,7 @@ libo_CHECK_EXTENSION([Onekey2ODF],[ONEKEY2ODF],[onekey2odf],[onekey2odf],[])
 libo_CHECK_EXTENSION([NDCHelp],[NDCHELP],[ndchelp],[ndchelp],[])
 libo_CHECK_EXTENSION([VrtNetworkEquipment],[VRTNETWORKEQUIPMENT],[vrtnetworkequipment],[vrtnetworkequipment],[])
 libo_CHECK_EXTENSION([FormatCheck],[FORMATCHECK],[formatcheck],[formatcheck],[])
+libo_CHECK_EXTENSION([Subscription],[SUBSCRIPTION],[subscription],[subscription],[])
 libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
 if test "x$with_java" != "xno"; then
     libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
@@ -13068,6 +13069,16 @@ else
 fi
 $as_echo "FORMATCHECK_EXTENSION_PACK = $FORMATCHECK_EXTENSION_PACK"
 AC_SUBST(FORMATCHECK_EXTENSION_PACK)
+
+# Check whether --enable-ext-subscription was given.
+# AC_MSG_CHECKING([for subscription])
+if test -z "${enable_ext_subscription+set}"; then :
+    SUBSCRIPTION_EXTENSION_PACK=no
+else
+    SUBSCRIPTION_EXTENSION_PACK=yes
+fi
+$as_echo "SUBSCRIPTION_EXTENSION_PACK = $SUBSCRIPTION_EXTENSION_PACK"
+AC_SUBST(SUBSCRIPTION_EXTENSION_PACK)
 
 AC_MSG_CHECKING([whether to build opens___.ttf])
 if test "$enable_build_opensymbol" = "yes"; then

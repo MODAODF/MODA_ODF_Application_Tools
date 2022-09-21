@@ -165,4 +165,17 @@ End
 
 #endif
 
+/* ** SUBSCRIPTION ** */
+
+#ifdef WITH_EXTENSION_SUBSCRIPTION
+
+File gid_File_Oxt_SUBSCRIPTION
+    TXT_FILE_BODY;
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "Subscription.filelist";
+End
+
+#endif
+
 #endif

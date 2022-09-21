@@ -85,10 +85,7 @@ std::vector< OUString > CheckMarkList =
 };
 
 // oxt-menuitems default checkmark
-std::vector< OUString > DefaultMarkList =
-{
-     "FormatCheckEvent",
-};
+std::vector< OUString > DMarkList;
 
 bool oxtchecked = true;
 
@@ -1905,18 +1902,19 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                         [](const PropertyValue& rProp) { return rProp.Name == "Script"; });
                         if (pProp != aProps.end())
                             pProp->Value >>= sScriptValue;
+
                         if(!sScriptValue.isEmpty())
-                            oxtchecked = true;
+                            DMarkList.push_back("FormatCheckEvent");
                         else
-                            oxtchecked = false;
+                            DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "FormatCheckEvent"), DMarkList.end());
                     }
                 }
                 // oxt default checked
-                if (oxtchecked)
+                if (!DMarkList.empty())
                 {
-                    for(int i=0; i<DefaultMarkList.size(); i++)
+                    for(int i=0; i<DMarkList.size(); i++)
                     {
-                        if (pData->aCommandStr.indexOf(DefaultMarkList[i]) > 1)
+                        if (pData->aCommandStr.indexOf(DMarkList[i]) > 1)
                         {
                             pData->bChecked = true;
                             break;

@@ -56,6 +56,7 @@
 #include <map>
 #include <string_view>
 #include <vector>
+#include <officecfg/Office/Common.hxx>
 
 namespace vcl
 {
@@ -87,8 +88,6 @@ std::vector< OUString > CheckMarkList =
 
 // oxt-menuitems default checkmark
 std::vector< OUString > DMarkList;
-
-bool oxtchecked = true;
 
 static bool ImplAccelDisabled()
 {
@@ -344,6 +343,18 @@ void Menu::Deactivate()
     }
 }
 
+static void OxtSwitch(OUString oxtname, bool enable)
+{
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
+
+    if (oxtname.indexOf("FormatCheckEvent") != -1)
+            officecfg::Office::Common::Misc::OxtFormatCheck::set(enable, batch);
+    if (oxtname.indexOf("SubscriptionEvent") != -1)
+            officecfg::Office::Common::Misc::OxtSubscription::set(enable, batch);
+    batch->commit();
+}
+
 void Menu::ImplSelect()
 {
     MenuItemData* pData = GetItemList()->GetData( nSelectedId );
@@ -356,9 +367,13 @@ void Menu::ImplSelect()
         if (checkmark > 1)
         {
             if (pData->bChecked)
+            {
                 CheckItem( pData->nId, false );
-            else
+                OxtSwitch( CheckMarkList[i], false );
+            } else {
                 CheckItem( pData->nId, true );
+                OxtSwitch( CheckMarkList[i], true );
+            }
         }
     }
 
@@ -1889,51 +1904,21 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                 // for FormatCheck oxt
                 if (pData->aCommandStr.indexOf("FormatCheckEvent") > 1)
                 {
-                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
-                        css::frame::theGlobalEventBroadcaster::get(xContext);
-                    bool hasbyname = xModelCollection->getEvents()->hasByName("OnLoadFinished");
-                    if (hasbyname)
-                    {
-                        OUString sScriptValue;
-                        Sequence < PropertyValue > aProps;
-                        Any aAny = xModelCollection->getEvents()->getByName("OnLoadFinished");
-                        aAny >>= aProps;
-                        const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
-                        [](const PropertyValue& rProp) { return rProp.Name == "Script"; });
-                        if (pProp != aProps.end())
-                            pProp->Value >>= sScriptValue;
-
-                        if(!sScriptValue.isEmpty())
-                            DMarkList.push_back("FormatCheckEvent");
-                        else
-                            DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "FormatCheckEvent"), DMarkList.end());
-                    }
+                    const bool bOxtFormatCheck = officecfg::Office::Common::Misc::OxtFormatCheck::get();
+                    if (bOxtFormatCheck)
+                        DMarkList.push_back("FormatCheckEvent");
+                    else
+                        DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "FormatCheckEvent"), DMarkList.end());
                 }
 
                 // for Subscription oxt
                 if (pData->aCommandStr.indexOf("SubscriptionEvent") > 1)
                 {
-                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
-                        css::frame::theGlobalEventBroadcaster::get(xContext);
-                    bool hasbyname = xModelCollection->getEvents()->hasByName("OnStartApp");
-                    if (hasbyname)
-                    {
-                        OUString sScriptValue;
-                        Sequence < PropertyValue > aProps;
-                        Any aAny = xModelCollection->getEvents()->getByName("OnStartApp");
-                        aAny >>= aProps;
-                        const PropertyValue* pProp = std::find_if(aProps.begin(), aProps.end(),
-                        [](const PropertyValue& rProp) { return rProp.Name == "Script"; });
-                        if (pProp != aProps.end())
-                            pProp->Value >>= sScriptValue;
-
-                        if(!sScriptValue.isEmpty())
-                            DMarkList.push_back("SubscriptionEvent");
-                        else
-                            DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "SubscriptionEvent"), DMarkList.end());
-                    }
+                    const bool bOxtSubscription = officecfg::Office::Common::Misc::OxtSubscription::get();
+                    if (bOxtSubscription)
+                        DMarkList.push_back("SubscriptionEvent");
+                    else
+                        DMarkList.erase(std::remove(DMarkList.begin(), DMarkList.end(), "SubscriptionEvent"), DMarkList.end());
                 }
 
                 // oxt default checked

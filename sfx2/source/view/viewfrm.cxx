@@ -1443,7 +1443,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     batch->commit();
                 }*/
                 // add FormatCheck infobar
-                if (IsRunFormatCheckInfobar() && EnabledFormatCheck())
+                if (IsRunFormatCheckInfobar()
+                    && EnabledFormatCheck()
+                    && (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument"))
                 {
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("tipformatcheck", "", SfxResId(STR_TIP_FORMATCHECK), InfobarType::WARNING);
                     if (pInfoBar)

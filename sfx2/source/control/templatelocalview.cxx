@@ -227,7 +227,7 @@ TemplateLocalView::~TemplateLocalView()
         FILE *pf = NULL;
 
         if ((pf = fopen (OUStringToOString( Listurl, RTL_TEXTENCODING_UTF8 ).getStr(), "r")) == NULL) {
-            printf ( "could not open file\n");
+            printf ( "readlistdata could not open file\n");
         }else{
             printf ( "Success open file\n");
             while ((fgets (line, sizeof (line), pf))) {
@@ -317,8 +317,10 @@ void TemplateLocalView::Populate()
             printf("remove list.txt OK!\n");
     }
 
-    fstream = fopen(cList,"a");
-
+    if ((fstream = fopen(cList,"a")) == NULL)
+    {
+        printf ( "Populate could not open file\n");
+    }
 #endif
 
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
@@ -345,92 +347,93 @@ void TemplateLocalView::Populate()
             aProperties.aPath = aURL;
             aProperties.aRegionName = aRegionName;
 
-#if TemplateCache
-
-            std::fill_n(cIndex, PATH_SIZE, 0);
-            std::fill_n(cFile, PATH_SIZE, 0);
-            std::fill_n(csFile, PATH_SIZE, 0);
-            BitmapEx cImg;
-            OUString imgurl/*,imgurl2*/;
-            OUString ii = OStringToOUString(std::to_string(i).c_str(), RTL_TEXTENCODING_UTF8);
-            OUString jj = OStringToOUString(std::to_string(j).c_str(), RTL_TEXTENCODING_UTF8);
-
-            #if defined(_WIN32)
-                if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
-                    imgurl += PicPath + "\\s\\" + ii + jj +".png";
-                    firstrun = 0;
-                } else {
-                    imgurl += PicPath + "\\b\\" + ii + jj +".png";
-                }
-            #else
-                if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
-                    imgurl += PicPath + "/s/" + ii + jj +".png";
-                    firstrun = 0;
-                } else {
-                    imgurl += PicPath + "/b/" + ii + jj +".png";
-                }
-            #endif
-
-            snprintf(cFile,PATH_SIZE,OUStringToOString( imgurl, RTL_TEXTENCODING_UTF8 ).getStr());
-
-            // check png file exist
-            OUString OUS_mapname;
-            if(exist_listfile)
-                OUS_mapname += OStringToOUString(string(cachedata[nAllCount2].filename).c_str(), RTL_TEXTENCODING_UTF8);
-            if((aName.compareTo(OUS_mapname) != 0) || (stat(cFile, cFilebuf) != 0))
+            if (TemplateCache && (fstream != NULL))
             {
-                #if templatecache_debug
-                    printf("OUString(PicPath + /s/ + ii + jj +.png = %s \n", OUStringToOString( OUString(PicPath + "/s/" + ii + jj +".png"), RTL_TEXTENCODING_UTF8 ).getStr());
-                #endif
-                snprintf(csFile,PATH_SIZE,OUStringToOString( OUString(PicPath + "/s/" + ii + jj +".png"), RTL_TEXTENCODING_UTF8 ).getStr());
-                remove(csFile);
-
-                // wirte list.txt
-                snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2015",i,j,OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr());
-                fwrite(cIndex,1,strlen(cIndex),fstream);
-
-                cImg = TemplateLocalView::fetchThumbnail(aURL, mnThumbnailWidth, mnThumbnailHeight);
-                // write cache png
-                SvFileStream aNew(imgurl, StreamMode::WRITE|StreamMode::TRUNC);
-                vcl::PNGWriter aPNGWriter(cImg);
-                aPNGWriter.Write(aNew);
-                aNew.Close();
-            } else {
-                // wirte list.txt
-                snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2017",i,j,cachedata[nAllCount2].filename);
-                fwrite(cIndex,1,strlen(cIndex),fstream);
-
-                OUString PngURL;
+                std::fill_n(cIndex, PATH_SIZE, 0);
+                std::fill_n(cFile, PATH_SIZE, 0);
+                std::fill_n(csFile, PATH_SIZE, 0);
+                BitmapEx cImg;
+                OUString imgurl/*,imgurl2*/;
+                OUString ii = OStringToOUString(std::to_string(i).c_str(), RTL_TEXTENCODING_UTF8);
+                OUString jj = OStringToOUString(std::to_string(j).c_str(), RTL_TEXTENCODING_UTF8);
 
                 #if defined(_WIN32)
-
-                    if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
-                    {
-                        PngURL += PicPath + "\\s\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
+                        imgurl += PicPath + "\\s\\" + ii + jj +".png";
+                        firstrun = 0;
                     } else {
-                        PngURL += PicPath + "\\b\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        imgurl += PicPath + "\\b\\" + ii + jj +".png";
                     }
                 #else
-                    if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
-                    {
-                        PngURL += PicPath + "/s/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                    if(mnThumbnailWidth < TEMPLATE_ITEM_MAX_WIDTH) {
+                        imgurl += PicPath + "/s/" + ii + jj +".png";
+                        firstrun = 0;
                     } else {
-                        PngURL += PicPath + "/b/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        imgurl += PicPath + "/b/" + ii + jj +".png";
                     }
-
                 #endif
 
-                SvFileStream aFileStream(PngURL, StreamMode::READ);
-                vcl::PNGReader aPNGReader(aFileStream);
-                cImg = aPNGReader.Read();
+                snprintf(cFile,PATH_SIZE,OUStringToOString( imgurl, RTL_TEXTENCODING_UTF8 ).getStr());
+
+                // check png file exist
+                OUString OUS_mapname;
+                if(exist_listfile)
+                    OUS_mapname += OStringToOUString(string(cachedata[nAllCount2].filename).c_str(), RTL_TEXTENCODING_UTF8);
+                if((aName.compareTo(OUS_mapname) != 0) || (stat(cFile, cFilebuf) != 0))
+                {
+                    #if templatecache_debug
+                        printf("OUString(PicPath + /s/ + ii + jj +.png = %s \n", OUStringToOString( OUString(PicPath + "/s/" + ii + jj +".png"), RTL_TEXTENCODING_UTF8 ).getStr());
+                    #endif
+                    snprintf(csFile,PATH_SIZE,OUStringToOString( OUString(PicPath + "/s/" + ii + jj +".png"), RTL_TEXTENCODING_UTF8 ).getStr());
+                    remove(csFile);
+
+                    // wirte list.txt
+                    snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2015",i,j,OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr());
+                    fwrite(cIndex,1,strlen(cIndex),fstream);
+
+                    cImg = TemplateLocalView::fetchThumbnail(aURL, mnThumbnailWidth, mnThumbnailHeight);
+                    // write cache png
+                    SvFileStream aNew(imgurl, StreamMode::WRITE|StreamMode::TRUNC);
+                    vcl::PNGWriter aPNGWriter(cImg);
+                    aPNGWriter.Write(aNew);
+                    aNew.Close();
+                } else {
+                    // wirte list.txt
+                    snprintf(cIndex,LINE_SIZE,"%-4d %-20s  %d%d  %-s\n",nAllCount++,"Sun Oct 29 15:03:07 2017",i,j,cachedata[nAllCount2].filename);
+                    fwrite(cIndex,1,strlen(cIndex),fstream);
+
+                    OUString PngURL;
+
+                    #if defined(_WIN32)
+
+                        if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
+                        {
+                            PngURL += PicPath + "\\s\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        } else {
+                            PngURL += PicPath + "\\b\\" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        }
+                    #else
+                        if(mnThumbnailHeight < TEMPLATE_ITEM_MAX_WIDTH)
+                        {
+                            PngURL += PicPath + "/s/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        } else {
+                            PngURL += PicPath + "/b/" + OStringToOUString(string(cachedata[nAllCount2].mapname).c_str(), RTL_TEXTENCODING_UTF8) +".png";
+                        }
+
+                    #endif
+
+                    SvFileStream aFileStream(PngURL, StreamMode::READ);
+                    vcl::PNGReader aPNGReader(aFileStream);
+                    cImg = aPNGReader.Read();
+                }
+                nAllCount2++;
+                aProperties.aThumbnail = cImg;
             }
-            nAllCount2++;
-            aProperties.aThumbnail = cImg;
-#else
-            aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
-                                                                          mnThumbnailWidth,
-                                                                          mnThumbnailHeight);
-#endif
+            else
+            {
+                aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(
+                                            aURL,mnThumbnailWidth,mnThumbnailHeight);
+            }
             pItem->maTemplates.push_back(aProperties);
             maAllTemplates.push_back(aProperties);
         }
@@ -442,7 +445,8 @@ void TemplateLocalView::Populate()
     pWin.disposeAndClear();
     free(cDirbuf);
     free(cFilebuf);
-    fclose(fstream);
+    if (fstream != NULL)
+        fclose(fstream);
 #endif
 
 }

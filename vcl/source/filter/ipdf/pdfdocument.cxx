@@ -8,8 +8,6 @@
  */
 
 #include <vcl/filter/pdfdocument.hxx>
-#include <pdf/pdfcompat.hxx>
-#include <config_features.h>
 
 #include <map>
 #include <memory>
@@ -31,7 +29,6 @@
 #include <o3tl/safeint.hxx>
 
 #include <pdf/objectcopier.hxx>
-#include <vcl/pdfread.hxx>
 
 using namespace com::sun::star;
 
@@ -1351,22 +1348,6 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
 void PDFDocument::SetIDObject(size_t nID, PDFObjectElement* pObject)
 {
     m_aIDObjects[nID] = pObject;
-}
-
-bool PDFDocument::ReadWithPossibleFixup(SvStream& rStream)
-{
-#if HAVE_FEATURE_PDFIUM
-    if (Read(rStream))
-        return true;
-
-    // Read failed, try a roundtrip through pdfium and then retry.
-    rStream.Seek(0);
-    SvMemoryStream aStandardizedStream;
-    vcl::pdf::convertToHighestSupported(rStream, aStandardizedStream);
-    return Read(aStandardizedStream);
-#else
-    return Read(rStream);
-#endif
 }
 
 bool PDFDocument::Read(SvStream& rStream)

@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/lok.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -342,7 +343,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
 {
-    bExport = false;
+    // Online mode does not pop up of the export dialog.
+    bExport = comphelper::LibreOfficeKit::isActive();
 }
 
 // XExporter

@@ -70,7 +70,8 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
 
     m_xEdNSheets->set_value(aOpt.GetInitTabCount());
     m_xEdSheetPrefix->set_text( aOpt.GetInitTabPrefix() );
-    m_xEdJumboSheets->set_state( aOpt.GetInitJumboSheets() ? TRISTATE_TRUE : TRISTATE_FALSE );
+    // jumbo_sheets default set enabled
+    m_xEdJumboSheets->set_state( TRISTATE_TRUE );
     m_xEdNSheets->save_value();
     m_xEdSheetPrefix->save_value();
     m_xEdJumboSheets->save_state();

@@ -13000,7 +13000,7 @@ libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[ct2n],[])
 libo_CHECK_EXTENSION([CpmLibre],[CPMLIBRE],[cpmlibre],[cpmlibre],[])
 libo_CHECK_EXTENSION([HyperLink],[HYPERLINK],[hyperlink],[hyperlink],[])
 libo_CHECK_EXTENSION([Onekey2ODF],[ONEKEY2ODF],[onekey2odf],[onekey2odf],[])
-libo_CHECK_EXTENSION([NDCHelp],[NDCHELP],[ndchelp],[ndchelp],[])
+libo_CHECK_EXTENSION([ODFHelp],[ODFHELP],[odfhelp],[odfhelp],[])
 libo_CHECK_EXTENSION([VrtNetworkEquipment],[VRTNETWORKEQUIPMENT],[vrtnetworkequipment],[vrtnetworkequipment],[])
 libo_CHECK_EXTENSION([FormatCheck],[FORMATCHECK],[formatcheck],[formatcheck],[])
 libo_CHECK_EXTENSION([Subscription],[SUBSCRIPTION],[subscription],[subscription],[])
@@ -13040,15 +13040,15 @@ fi
 $as_echo "ONEKEY2ODF_EXTENSION_PACK = $ONEKEY2ODF_EXTENSION_PACK"
 AC_SUBST(ONEKEY2ODF_EXTENSION_PACK)
 
-# Check whether --enable-ext-ndchelp was given.
-# AC_MSG_CHECKING([for ndchelp])
-if test -z "${enable_ext_ndchelp+set}"; then :
-    NDCHELP_EXTENSION_PACK=no
+# Check whether --enable-ext-odfhelp was given.
+# AC_MSG_CHECKING([for odfhelp])
+if test -z "${enable_ext_odfhelp+set}"; then :
+    ODFHELP_EXTENSION_PACK=no
 else
-    NDCHELP_EXTENSION_PACK=yes
+    ODFHELP_EXTENSION_PACK=yes
 fi
-$as_echo "NDCHELP_EXTENSION_PACK = $NDCHELP_EXTENSION_PACK"
-AC_SUBST(NDCHELP_EXTENSION_PACK)
+$as_echo "ODFHELP_EXTENSION_PACK = $ODFHELP_EXTENSION_PACK"
+AC_SUBST(ODFHELP_EXTENSION_PACK)
 
 # Check whether --enable-ext-vrtnetworkequipment was given.
 # AC_MSG_CHECKING([for vrtnetworkequipment])

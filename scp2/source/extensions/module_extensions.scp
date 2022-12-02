@@ -171,15 +171,15 @@ Module gid_Module_Optional_Extensions_HYPERLINK
 End
 #endif
 
-/* ** NDCHelp ** */
+/* ** ODFHelp ** */
 
-#ifdef WITH_EXTENSION_NDCHELP
-Module gid_Module_Optional_Extensions_NDCHELP
+#ifdef WITH_EXTENSION_ODFHELP
+Module gid_Module_Optional_Extensions_ODFHELP
     PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NDCHELP);
+    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_ODFHELP);
     ParentID = gid_Module_Optional_Extensions;
     Files = (
-        gid_File_Oxt_NDCHELP );
+        gid_File_Oxt_ODFHELP );
     Minimal = NO;
     Default = YES;
     Styles = ( );

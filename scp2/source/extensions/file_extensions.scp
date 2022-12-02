@@ -113,15 +113,15 @@ End
 
 #endif
 
-/* ** NDCHelp ** */
+/* ** ODFHelp ** */
 
-#ifdef WITH_EXTENSION_NDCHELP
+#ifdef WITH_EXTENSION_ODFHELP
 
-File gid_File_Oxt_NDCHELP
+File gid_File_Oxt_ODFHELP
        TXT_FILE_BODY;
        Styles = (PACKED, FILELIST);
        Dir = FILELIST_DIR;
-       Name = "NDCHelp.filelist";
+       Name = "ODFHelp.filelist";
 End
 
 #endif

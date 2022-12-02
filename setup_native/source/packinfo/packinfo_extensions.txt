@@ -170,16 +170,16 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Extensions_NDCHELP"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-ndchelp"
+module = "gid_Module_Optional_Extensions_ODFHELP"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-odfhelp"
 solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-ndchelp"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-odfhelp"
 requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
 linuxpatchrequires = ""
 copyright = "OSSII"
 solariscopyright = "solariscopyrightfile"
 vendor = "%OOOVENDOR"
-description = "NDCHelp for %PRODUCTNAME %PRODUCTVERSION"
+description = "ODFHelp for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End

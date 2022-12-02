@@ -784,8 +784,8 @@ $(eval $(call gb_Helper_register_packages_for_install,extensions_ONEKEY2ODF,\
 	onekey2odf \
 ))
 
-$(eval $(call gb_Helper_register_packages_for_install,extensions_NDCHelp,\
-	ndchelp \
+$(eval $(call gb_Helper_register_packages_for_install,extensions_ODFHelp,\
+	odfhelp \
 ))
 
 ifeq ($(VRTNETWORKEQUIPMENT_EXTENSION_PACK),yes)

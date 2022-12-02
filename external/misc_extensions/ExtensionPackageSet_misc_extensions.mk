@@ -25,8 +25,8 @@ ifeq ($(ONEKEY2ODF_EXTENSION_PACK),yes)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,onekey2odf,onekey2odf.oxt))
 endif
 
-ifeq ($(NDCHELP_EXTENSION_PACK),yes)
-$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,NDCHelp,NDCHelp.oxt))
+ifeq ($(ODFHELP_EXTENSION_PACK),yes)
+$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,ODFHelp,ODFHelp.oxt))
 endif
 
 ifeq ($(VRTNETWORKEQUIPMENT_EXTENSION_PACK),yes)

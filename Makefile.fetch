@@ -241,6 +241,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item, \
 		CPMLIBRE_OXT_TARBALL \
 	,$(call fetch_Download_item,https://github.com/MODAODF/cpmlibre/releases/download/$(CPMLIBRE_OXT_MICRO),$(item)))
+	$(foreach item, \
+		ODFHELP_OXT_TARBALL \
+	,$(call fetch_Download_item,https://github.com/MODAODF/ODFHelp/releases/download/$(ODFHELP_OXT_MICRO),$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

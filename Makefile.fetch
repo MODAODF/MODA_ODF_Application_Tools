@@ -244,6 +244,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item, \
 		ODFHELP_OXT_TARBALL \
 	,$(call fetch_Download_item,https://github.com/MODAODF/ODFHelp/releases/download/$(ODFHELP_OXT_MICRO),$(item)))
+	$(foreach item, \
+		FORMATCHECK_OXT_TARBALL \
+	,$(call fetch_Download_item,https://github.com/MODAODF/FormatCheck/releases/download/$(FORMATCHECK_OXT_MICRO),$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

@@ -253,6 +253,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item, \
 		ONEKEY2ODF_OXT_TARBALL \
 	,$(call fetch_Download_item,https://github.com/MODAODF/Onekey2ODF/releases/download/$(ONEKEY2ODF_OXT_MICRO),$(item)))
+	$(foreach item, \
+		TEMPLATEREPO_OXT_TARBALL \
+	,$(call fetch_Download_item,https://github.com/MODAODF/TemplateRepo/releases/download/$(TEMPLATEREPO_OXT_MICRO),$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

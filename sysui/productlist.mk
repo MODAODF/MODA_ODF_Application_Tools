@@ -7,18 +7,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-PRODUCTLIST := libreoffice oxoffice ndcodfsys libreofficedev ndcodfapplicationtools
+PRODUCTLIST := libreoffice oxoffice modaodfsys libreofficedev modaodfapplicationtools
 PKGVERSION := $(USERDIRPRODUCTVERSION).$(OXO_VERSION_MINOR)
 PKGVERSIONSHORT := $(USERDIRPRODUCTVERSION)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.oxoffice := OxOffice
-PRODUCTNAME.ndcodfapplicationtools := NDCODFApplicationTools
-PRODUCTNAME.ndcodfsys := NDCODFSYS
+PRODUCTNAME.modaodfapplicationtools := MODAODFApplicationTools
+PRODUCTNAME.modaodfsys := MODAODFSYS
 PRODUCTNAME.libreofficedev := LibreOfficeDev
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.oxoffice := oxoffice
-UNIXFILENAME.ndcodfapplicationtools := ndcodfapplicationtools
-UNIXFILENAME.ndcodfsys := ndcodfsys
+UNIXFILENAME.modaodfapplicationtools := modaodfapplicationtools
+UNIXFILENAME.modaodfsys := modaodfsys
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
 
 # vim: set noet sw=4 ts=4:

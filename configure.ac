@@ -589,7 +589,7 @@ AC_MSG_CHECKING([for packages all obsoletes name])
 if test "$LOWER_PRODUCTNAME" = "oxoffice" ; then
     PACKAGEOBSOLETES1="${LOWER_PRODUCTNAME}8"
     PACKAGEOBSOLETES2="${LOWER_PRODUCTNAME}lib8"
-elif test "$LOWER_PRODUCTNAME" = "ndcodfsys" ; then
+elif test "$LOWER_PRODUCTNAME" = "modaodfsys" ; then
     PACKAGEOBSOLETES1="${LOWER_PRODUCTNAME}2"
     PACKAGEOBSOLETES2="${LOWER_PRODUCTNAME}lib2"
 fi

@@ -247,6 +247,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item, \
 		FORMATCHECK_OXT_TARBALL \
 	,$(call fetch_Download_item,https://github.com/MODAODF/FormatCheck/releases/download/$(FORMATCHECK_OXT_MICRO),$(item)))
+	$(foreach item, \
+		HYPERLINK_OXT_TARBALL \
+	,$(call fetch_Download_item,https://github.com/MODAODF/hyperlink/releases/download/$(HYPERLINK_OXT_MICRO),$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

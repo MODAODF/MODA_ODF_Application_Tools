@@ -97,6 +97,26 @@ GalleryThemeEntry* GalleryBinaryEngineEntry::CreateThemeEntry(const INetURLObjec
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
                 OUString aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
+                // rename VRT Network Equipment Gallery
+                // ToDo: use _NC(....)
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Clients & Peripherals"))
+                    aThemeName
+                        = OStringToOUString(OString("VRT 客戶端和外圍設備"), RTL_TEXTENCODING_UTF8);
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Energy Management"))
+                    aThemeName = OStringToOUString(OString("VRT 能源管理"), RTL_TEXTENCODING_UTF8);
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Industrial Automation"))
+                    aThemeName
+                        = OStringToOUString(OString("VRT 工業自動化"), RTL_TEXTENCODING_UTF8);
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Networking & Communications"))
+                    aThemeName
+                        = OStringToOUString(OString("VRT 網絡與通訊"), RTL_TEXTENCODING_UTF8);
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Servers"))
+                    aThemeName
+                        = OStringToOUString(OString("VRT 服務器設備"), RTL_TEXTENCODING_UTF8);
+                if (aThemeName.equalsIgnoreAsciiCase("VRT Visualisation"))
+                    aThemeName
+                        = OStringToOUString(OString("VRT 可視化設備"), RTL_TEXTENCODING_UTF8);
+
                 // execute a character conversion
                 if (nVersion >= 0x0004)
                 {

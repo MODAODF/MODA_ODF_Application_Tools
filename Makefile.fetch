@@ -259,6 +259,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(foreach item, \
 		QRCODEPRINT_OXT_TARBALL \
 	,$(call fetch_Download_item,https://github.com/MODAODF/QRcodePrint/releases/download/$(QRCODEPRINT_OXT_MICRO),$(item)))
+	$(foreach item, \
+		VRTNETWORKEQUIPMENT_OXT_TARBALL \
+	,$(call fetch_Download_item,https://extensions.libreoffice.org/assets/downloads/z,$(item)))
 	@mkdir -p $(dir $@) && touch $@
 	@mkdir -p $(dir $@)/Executable
 

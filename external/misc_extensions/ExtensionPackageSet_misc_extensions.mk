@@ -30,7 +30,7 @@ $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,ODFHelp,ODFHe
 endif
 
 ifeq ($(VRTNETWORKEQUIPMENT_EXTENSION_PACK),yes)
-$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,VrtNetworkEquipment,vrtnetworkequipment.oxt))
+$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,VrtNetworkEquipment,vrtnetworkequipment-1-2-0-lo.oxt))
 endif
 
 ifeq ($(FORMATCHECK_EXTENSION_PACK),yes)

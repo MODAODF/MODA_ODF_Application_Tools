@@ -11,6 +11,7 @@
 --enable-pch 
 --disable-ccache
 --disable-dependency-tracking
+--enable-skia
 
 ## 64-bit
 --with-jdk-home=/cygdrive/c/Program Files/Eclipse Adoptium/jdk-11.0.13.8-hotspot
@@ -27,10 +28,10 @@
 --with-product-name=MODA ODF Application Tools
 --with-vendor=Ministry of Digital Affairs
 --with-branding=./icon-themes/ossii/MODA/brand/shell
---with-aboutbox-version=3.3.4
---with-lproduct-version=3.3.4
+--with-aboutbox-version=3.5.4
+--with-lproduct-version=3.5.4
 --with-userdirproduct-version=3
---with-oxo-version-minor=3
+--with-oxo-version-minor=5
 --with-oxo-version-micro=4
 --with-oxo-version-patch=1
 
@@ -40,12 +41,13 @@
 --enable-ext-hyperlink
 --enable-ext-vrtnetworkequipment
 --enable-ext-formatcheck
+--enable-ext-subscription
 
 ## OSSII Custom oxt
 #--enable-ext-templaterepo
 
-## NDC Custom oxt
---enable-ext-ndchelp
+## ODF Custom oxt
+--enable-ext-odfhelp
 
 ## Build MSI packages
 --with-package-format=msi

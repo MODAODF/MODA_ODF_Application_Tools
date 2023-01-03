@@ -3228,6 +3228,14 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     return sString.makeStringAndClear();
 }
 
+bool SvNumberFormatter::_IsUserDefined(sal_uInt32 F_Index) const
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    const SvNumberformat* pFormat = GetFormatEntry(F_Index);
+
+    return pFormat && (pFormat->GetType() & SvNumFormatType::DEFINED);
+}
+
 bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
                                       LanguageType eLnge)
 {

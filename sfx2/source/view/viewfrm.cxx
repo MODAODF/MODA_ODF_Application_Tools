@@ -1659,7 +1659,7 @@ IMPL_LINK_NOARG(SfxViewFrame, FormatCheckDisabledHandler, weld::Button&, void)
 
 IMPL_LINK_NOARG(SfxViewFrame, LinkQAHandler, weld::Button&, void)
 {
-    OUString sLink = "https://odf.nat.gov.tw/QA/web/qa_index.html?topicid=223";
+    OUString sLink = "https://odf.nat.gov.tw/QA/web/qa_index.html?topicid=94";
     sfx2::openUriExternally(sLink, false);
 }
 

@@ -1291,7 +1291,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (mpDrawView->IsTextEdit())
             {
-                pSet.reset(new SfxItemSet( GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} ));
+                pSet.reset(new SfxItemSet( GetPool() ));
+
+                // Default > Object no fill no line
+                pSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+                pSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
+
                 mpDrawView->SetAttributes( *pSet, true );
             }
             else

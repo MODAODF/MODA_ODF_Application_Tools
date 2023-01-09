@@ -677,6 +677,7 @@ namespace
         MouseEvent maMouseEvent;
         KeyEvent maKeyEvent;
         OUString maText;
+        sal_Int32 mnCursorPos;
     };
 
     void LOKPostAsyncEvent(void* pEv, void*)
@@ -744,7 +745,7 @@ namespace
             break;
         case VclEventId::ExtTextInput:
         case VclEventId::EndExtTextInput:
-            pLOKEv->mpWindow->PostExtTextInputEvent(pLOKEv->mnEvent, pLOKEv->maText);
+            pLOKEv->mpWindow->PostExtTextInputEvent(pLOKEv->mnEvent, pLOKEv->maText, pLOKEv->mnCursorPos);
             break;
         default:
             assert(false);
@@ -804,7 +805,7 @@ void SfxLokHelper::setBlockedCommandList(int nViewId, const char* bolckedCommand
 }
 
 void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
-                                         int nType, const OUString &rText)
+                                         int nType, const OUString &rText, sal_Int32 nCursorPos)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (nType)
@@ -821,6 +822,7 @@ void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
         assert(false);
     }
     pLOKEv->mpWindow = xWindow;
+    pLOKEv->mnCursorPos = nCursorPos;
     postEventAsync(pLOKEv);
 }
 

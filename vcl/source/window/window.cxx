@@ -2080,17 +2080,23 @@ void Window::SetInputContext( const InputContext& rInputContext )
         ImplNewInputContext();
 }
 
-void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText)
+void Window::PostExtTextInputEvent(VclEventId nType, const OUString& rText, sal_Int32 nCursorPos)
 {
     switch (nType)
     {
     case VclEventId::ExtTextInput:
     {
         std::unique_ptr<ExtTextInputAttr[]> pAttr(new ExtTextInputAttr[rText.getLength()]);
-        for (int i = 0; i < rText.getLength(); ++i) {
-            pAttr[i] = ExtTextInputAttr::Underline;
+        for (int i = 0; i < rText.getLength(); ++i)
+        {
+            pAttr[i] = (i == nCursorPos ?
+                    ExtTextInputAttr::BoldUnderline :
+                    ExtTextInputAttr::DottedUnderline);
         }
-        SalExtTextInputEvent aEvent { rText, pAttr.get(), rText.getLength(), EXTTEXTINPUT_CURSOR_OVERWRITE };
+        SalExtTextInputEvent aEvent { rText, pAttr.get(),
+            (nCursorPos < 0 ? rText.getLength() : nCursorPos),
+            (sal_uInt8)(nCursorPos < 0 || nCursorPos >= rText.getLength() ?
+            EXTTEXTINPUT_CURSOR_OVERWRITE : EXTTEXTINPUT_CURSOR_INVISIBLE) };
         ImplWindowFrameProc(this, SalEvent::ExtTextInput, &aEvent);
     }
     break;

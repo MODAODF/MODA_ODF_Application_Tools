@@ -1163,6 +1163,12 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
 // Added By Firefly<firefly@ossii.com.tw>
 static void doc_initUnoStatus(LibreOfficeKitDocument* pThis,
                               const char* pCommands);
+
+static void doc_postWindowExtTextInputEventWithCursorPosition(LibreOfficeKitDocument* pThis,
+                                            unsigned nWindowId,
+                                            int nType,
+                                            const char* pText,
+                                            int nCursorPos);
 //---------------------------------------
 } // extern "C"
 
@@ -1309,6 +1315,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         // Added By Firefly<firefly@ossii.com.tw>
         m_pDocumentClass->initUnoStatus = doc_initUnoStatus;
+        m_pDocumentClass->postWindowExtTextInputEventWithCursorPosition = doc_postWindowExtTextInputEventWithCursorPosition;
         // -------------------------------------------------
 
         gDocumentClass = m_pDocumentClass;
@@ -6254,6 +6261,36 @@ static void doc_initUnoStatus(LibreOfficeKitDocument* /*pThis*/, const char* pCo
         }
     }
 }
+
+static void doc_postWindowExtTextInputEventWithCursorPosition(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText, int nCursorPos)
+{
+    comphelper::ProfileZone aZone("doc_postWindowExtTextInputEventWithCursorPosition");
+
+    SolarMutexGuard aGuard;
+    VclPtr<vcl::Window> pWindow;
+    if (nWindowId == 0)
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            return;
+        }
+        pWindow = pDoc->getDocWindow();
+    }
+    else
+    {
+        pWindow = vcl::Window::FindLOKWindow(nWindowId);
+    }
+
+    if (!pWindow)
+    {
+        SetLastExceptionMsg("No window found for window id: " + OUString::number(nWindowId));
+        return;
+    }
+
+    SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(OString(pText, strlen(pText))), nCursorPos);
+}
 //--------------------------------------------
 
 static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
@@ -6401,7 +6438,9 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
         "\"OxOfficeVersion\": \"%OXOFFICEVERSION\", "
-        "\"BuildId\": \"%BUILDID\" "
+        "\"BuildId\": \"%BUILDID\", "
+        "\"initUnoStatus\": true, "
+        "\"postWindowExtTextInputEventWithCursorPosition\": true"
         "}"));
 }
 

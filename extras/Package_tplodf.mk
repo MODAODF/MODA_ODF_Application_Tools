@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tplndcodf,$(SRCDIR)/extras/source/templates/NDCODFTemplate))
+$(eval $(call gb_Package_Package,extras_tplodf,$(SRCDIR)/extras/source/templates/ODFTemplate))
 
-$(eval $(call gb_Package_add_files,extras_tplndcodf,$(LIBO_SHARE_FOLDER)/template/common/NDCODFTemplate,\
+$(eval $(call gb_Package_add_files,extras_tplodf,$(LIBO_SHARE_FOLDER)/template/common/ODFTemplate,\
 	swriter.ott \
 	LibreOfficeDefault.ott \
 ))

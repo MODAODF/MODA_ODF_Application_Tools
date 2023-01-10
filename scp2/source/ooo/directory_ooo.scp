@@ -596,7 +596,7 @@ End
 
 Directory gid_Dir_Template_Common_Ossiitempl
     ParentID = gid_Dir_Template_Common;
-    DosName = "NDCGOVODFTool";
+    DosName = "GOVODFTool";
 End
 
 Directory gid_Dir_Template_Common_Offimisc

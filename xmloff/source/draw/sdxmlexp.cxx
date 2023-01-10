@@ -69,11 +69,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#if defined(_WIN32)
-#include <config_folders.h>
-#include <rtl/bootstrap.hxx>
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -2023,41 +2018,6 @@ void SdXMLExport::ExportStyles_(bool bUsed)
     }
 }
 
-#if defined(_WIN32)
-
-void writeurlfile(OUString url)
-{
-    remove("c:\\temp\\createurlfile.txt");
-    FILE *pf = NULL;
-    char cPath[256];
-    
-    if ((pf = fopen("c:\\temp\\createurlfile.txt","w")) == NULL) {
-        printf("could not open file\n");    
-    } else {
-        printf("Success open file\n");
-        snprintf(cPath,256,"%s",OUStringToOString( url, RTL_TEXTENCODING_UTF8 ).getStr());
-        fwrite(cPath,1,strlen(cPath),pf);
-        fclose(pf);
-    }
-}
-
-OUString getCacheFolder()
-{
-    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
-
-    rtl::Bootstrap::expandMacros(url);
-
-    OUString aSysPath;
-    if( url.startsWith( "file://" ) )
-    {
-        OUString aSysPath;
-        if( osl_getSystemPathFromFileURL( url.pData, &aSysPath.pData ) == osl_File_E_None )
-            url = aSysPath;
-    }
-    return url;
-}
-#endif
-
 void SdXMLExport::collectAutoStyles()
 {
     SvXMLExport::collectAutoStyles();
@@ -2242,16 +2202,6 @@ void SdXMLExport::ExportAutoStyles_()
     // export draw-page styles
     GetAutoStylePool()->exportXML( XmlStyleFamily::SD_DRAWINGPAGE_ID );
 
-#ifndef mts1158
-    for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
-    {
-        uno::Reference<drawing::XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), uno::UNO_QUERY );
-        Reference< drawing::XShapes > xExportShapes(xDrawPage, UNO_QUERY);
-        if(xExportShapes.is() && xExportShapes->getCount())
-            GetShapeExport()->exportShapes( xExportShapes );
-    }
-#endif
-
     exportAutoDataStyles();
 
     GetShapeExport()->exportAutoStyles();
@@ -2262,13 +2212,6 @@ void SdXMLExport::ExportAutoStyles_()
 
     // ...for text
     GetTextParagraphExport()->exportTextAutoStyles();
-    #if defined(_WIN32)
-        OUString getshapeflag = getCacheFolder() + "\\getshapeflag";
-        remove(OUStringToOString( getshapeflag, RTL_TEXTENCODING_UTF8 ).getStr());
-    #else
-        remove("/tmp/getshapeflag");
-        printf("remove /tmp/getshapeflag!!!\n");
-    #endif
 }
 
 void SdXMLExport::ExportMasterStyles_()

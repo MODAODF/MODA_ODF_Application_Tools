@@ -456,7 +456,7 @@ sub create_package
         }
         my $megabytes = 1500;
         $megabytes = 2000 if $ENV{'ENABLE_DEBUG'};
-        $systemcall = "cd $localtempdir && hdiutil create -megabytes $megabytes -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
+        $systemcall = "cd \"$localtempdir\" && hdiutil create -megabytes $megabytes -srcfolder \"$folder\" \"$archive\" -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
@@ -566,6 +566,12 @@ sub create_simple_package
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
 
+            # add PRODUCTNAME with space
+            my $productname = $allvariables->{'PRODUCTNAME'}.".app";
+            my $productname_withoutspace = $productname;
+            $productname_withoutspace =~ s/\s+//g;
+            $destdir =~ s/$productname_withoutspace/$productname/g;
+
             if ( ! -d $destdir )
             {
                 if ( $^O =~ /cygwin/i ) # Cygwin performance check
@@ -598,6 +604,13 @@ sub create_simple_package
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};
+
+        # add PRODUCTNAME with space
+        my $productname = $allvariables->{'PRODUCTNAME'};
+        my $productname_withoutspace = $productname;
+        $productname_withoutspace =~ s/\s+//g;
+        $destination =~ s/$productname_withoutspace/$productname/g;
+
         $destination = $subfolderdir . $installer::globals::separator . $destination;
 
         # Replacing $$ by $ is necessary to install files with $ in its name (back-masquerading)
@@ -666,6 +679,12 @@ sub create_simple_package
 
         my $target = $onelink->{'Target'};
         my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};
+
+        # add PRODUCTNAME with space
+        my $productname = $allvariables->{'PRODUCTNAME'}.".app";
+        my $productname_withoutspace = $productname;
+        $productname_withoutspace =~ s/\s+//g;
+        $destination =~ s/$productname_withoutspace/$productname/g;
 
         my @localcall = ('ln', '-sf', $target, $destination);
         system(@localcall) == 0 or die "system @localcall failed: $?";

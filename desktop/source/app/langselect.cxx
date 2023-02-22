@@ -124,6 +124,15 @@ bool prepareLocale() {
         } catch (const css::uno::Exception &) {
             TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
         }
+        // add ooSetupSystemLocale set
+        try {
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Setup::L10N::ooSetupSystemLocale::set(locale, batch);
+            batch->commit();
+        } catch (const css::uno::Exception &) {
+            TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
+        }
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
 

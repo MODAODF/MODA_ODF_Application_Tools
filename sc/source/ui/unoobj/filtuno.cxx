@@ -201,7 +201,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     }
     else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
     {
-        if (bExport)
+        if (bExport || comphelper::LibreOfficeKit::isActive())
             nRet = ui::dialogs::ExecutableDialogResults::OK;    // export HTML without dialog
         else
         {
@@ -343,8 +343,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
 void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
 {
-    // Online mode does not pop up of the export dialog.
-    bExport = comphelper::LibreOfficeKit::isActive();
+    bExport = false;
 }
 
 // XExporter

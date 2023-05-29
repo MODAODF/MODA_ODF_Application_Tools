@@ -63,6 +63,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -88,6 +89,7 @@
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
+#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
@@ -4966,6 +4968,132 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
     pDoc->setGraphicSelection(nType, nX, nY);
 }
 
+static void getDocLanguages(LibreOfficeKitDocument* pThis, uno::Sequence<lang::Locale>& rSeq)
+{
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
+
+    SfxDispatcher* pDispatcher = pViewFrame->GetBindings().GetDispatcher();
+    if (!pDispatcher)
+        return;
+
+    css::uno::Any aLangStatus;
+    pDispatcher->QueryState(SID_LANGUAGE_STATUS, aLangStatus);
+
+    OUString sCurrent;
+    OUString sKeyboard;
+    OUString sGuessText;
+    SvtScriptType eScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN
+        | SvtScriptType::COMPLEX;
+
+    Sequence<OUString> aSeqLang;
+    if (aLangStatus >>= aSeqLang)
+    {
+        if (aSeqLang.getLength() == 4)
+        {
+            sCurrent = aSeqLang[0];
+            eScriptType = static_cast<SvtScriptType>(aSeqLang[1].toInt32());
+            sKeyboard = aSeqLang[1];
+            sGuessText = aSeqLang[2];
+        }
+    }
+    else
+    {
+        aLangStatus >>= sCurrent;
+    }
+
+    LanguageType nLangType;
+    std::set<LanguageType> aLangItems;
+
+    if (!sCurrent.isEmpty())
+    {
+        nLangType = SvtLanguageTable::GetLanguageType(sCurrent);
+        if (nLangType != LANGUAGE_DONTKNOW)
+        {
+            aLangItems.insert(nLangType);
+        }
+    }
+
+    const AllSettings& rAllSettings = Application::GetSettings();
+    nLangType = rAllSettings.GetLanguageTag().getLanguageType();
+    if (nLangType != LANGUAGE_DONTKNOW &&
+        (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
+    {
+        aLangItems.insert(nLangType);
+    }
+
+    nLangType = rAllSettings.GetUILanguageTag().getLanguageType();
+    if (nLangType != LANGUAGE_DONTKNOW &&
+        (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
+    {
+        aLangItems.insert(nLangType);
+    }
+
+    if (!sKeyboard.isEmpty())
+    {
+        nLangType = SvtLanguageTable::GetLanguageType(sKeyboard);
+        if (nLangType != LANGUAGE_DONTKNOW &&
+            (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
+        {
+            aLangItems.insert(nLangType);
+        }
+    }
+
+    if (!sGuessText.isEmpty())
+    {
+        Reference<linguistic2::XLanguageGuessing> xLangGuesser;
+        try
+        {
+            xLangGuesser = linguistic2::LanguageGuessing::create(xContext);
+        }
+        catch(...)
+        {
+        }
+
+        if (xLangGuesser.is())
+        {
+            lang::Locale aLocale = xLangGuesser->guessPrimaryLanguage(sGuessText, 0,
+                                                                      sGuessText.getLength());
+            LanguageTag aLanguageTag(aLocale);
+            nLangType = aLanguageTag.getLanguageType(false);
+            if (nLangType != LANGUAGE_DONTKNOW &&
+                (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
+            {
+                aLangItems.insert(nLangType);
+            }
+        }
+    }
+
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    Reference<document::XDocumentLanguages> xDocumentLanguages(pDocument->mxComponent, UNO_QUERY);
+    if (xDocumentLanguages.is())
+    {
+        const Sequence<lang::Locale> aLocales(xDocumentLanguages->getDocumentLanguages(
+                                                  static_cast<sal_Int16>(eScriptType), 64));
+
+        for (const lang::Locale& aLocale : aLocales)
+        {
+            nLangType = SvtLanguageTable::GetLanguageType(aLocale.Language);
+            if (nLangType != LANGUAGE_DONTKNOW &&
+                (eScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType)))
+            {
+                aLangItems.insert(nLangType);
+            }
+        }
+    }
+
+    int nLocale = 0;
+    Sequence<lang::Locale> aLocales(aLangItems.size());
+    auto pLocales = aLocales.getArray();
+    for (const LanguageType& itLang : aLangItems)
+    {
+        pLocales[nLocale++] = LanguageTag::convertToLocale(itLang);
+    }
+
+    rSeq = aLocales;
+}
+
 static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_resetSelection");
@@ -4983,18 +5111,24 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
-static char* getLanguages(const char* pCommand)
+static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     css::uno::Sequence< css::lang::Locale > aLocales;
 
     if (xContext.is())
     {
-        css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
-        if (xLangSrv.is())
+        // First try to get the document languages
+        getDocLanguages(pThis, aLocales);
+        // If no document languages, try to get the spell checker languages
+        if (!aLocales.hasElements())
         {
-            css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
-            if (xSpell.is())
-                aLocales = xSpell->getLocales();
+            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+            if (xLangSrv.is())
+            {
+                css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+                if (xSpell.is())
+                    aLocales = xSpell->getLocales();
+            }
         }
     }
 
@@ -5343,7 +5477,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
     if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
-        return getLanguages(pCommand);
+        return getLanguages(pThis, pCommand);
     }
     else if (!strcmp(pCommand, ".uno:CharFontName"))
     {

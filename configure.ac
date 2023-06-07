@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[7.1.5.2.0+],[],[],[http://documentfoundation.org/])
+AC_INIT([MODA ODF Application Tools],[3.5.4],[],[],[https://moda.gov.tw/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -398,6 +398,7 @@ if test -n "$with_product_name" -a "$with_product_name" != no; then
 fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME="${PRODUCTNAME}Dev"
+    PRODUCTNAME=AC_PACKAGE_NAME
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
@@ -420,6 +421,8 @@ LIBO_VERSION_MAJOR=$1
 LIBO_VERSION_MINOR=$2
 LIBO_VERSION_MICRO=$3
 LIBO_VERSION_PATCH=$4
+# if LIBO_VERSION_PATCH is empty, set it to 1
+test -z "$LIBO_VERSION_PATCH" && LIBO_VERSION_PATCH=1
 
 LIBO_VERSION_SUFFIX=$5
 
@@ -474,7 +477,7 @@ AC_MSG_CHECKING([for product name])
 if test -n "$with_product_name" -a "$with_product_name" != "yes" ; then
     PRODUCTNAME="$with_product_name"
 else
-    PRODUCTNAME="OxOffice"
+    PRODUCTNAME=AC_PACKAGE_NAME
 fi
 AC_SUBST(PRODUCTNAME)
 
@@ -498,7 +501,7 @@ AC_MSG_CHECKING([for about box version])
 if test -n "$with_aboutbox_version" -a "$with_aboutbox_version" != "yes" ; then
     ABOUTBOXPRODUCTVERSION="$with_aboutbox_version"
 else
-    ABOUTBOXPRODUCTVERSION="R8L3"
+    ABOUTBOXPRODUCTVERSION="$PACKAGE_VERSION"
 fi
 AC_SUBST(ABOUTBOXPRODUCTVERSION)
 
@@ -506,7 +509,7 @@ AC_MSG_CHECKING([for labeled product version])
 if test -n "$with_lproduct_version" -a "$with_lproduct_version" != "yes" ; then
     LPRODUCTVERSION="$with_lproduct_version"
 else
-    LPRODUCTVERSION="R8"
+    LPRODUCTVERSION="$PACKAGE_VERSION"
 fi
 AC_SUBST(LPRODUCTVERSION)
 
@@ -514,7 +517,7 @@ AC_MSG_CHECKING([for user dir product version])
 if test -n "$with_userdirproduct_version" -a "$with_userdirproduct_version" != "yes" ; then
     USERDIRPRODUCTVERSION="$with_userdirproduct_version"
 else
-    USERDIRPRODUCTVERSION="8"
+    USERDIRPRODUCTVERSION="$LIBO_VERSION_MAJOR"
 fi
 AC_SUBST(USERDIRPRODUCTVERSION)
 
@@ -522,7 +525,7 @@ AC_MSG_CHECKING([for defined of oxoffice minor version])
 if test -n "$with_oxo_version_minor" -a "$with_oxo_version_minor" != "yes" ; then
     OXO_VERSION_MINOR="$with_oxo_version_minor"
 else
-    OXO_VERSION_MINOR="3"
+    OXO_VERSION_MINOR="$LIBO_VERSION_MINOR"
 fi
 AC_SUBST(OXO_VERSION_MINOR)
 
@@ -530,7 +533,7 @@ AC_MSG_CHECKING([for defined of oxoffice micro version])
 if test -n "$with_oxo_version_micro" -a "$with_oxo_version_micro" != "yes" ; then
     OXO_VERSION_MICRO="$with_oxo_version_micro"
 else
-    OXO_VERSION_MICRO="1"
+    OXO_VERSION_MICRO="$LIBO_VERSION_MICRO"
 fi
 AC_SUBST(OXO_VERSION_MICRO)
 
@@ -538,7 +541,7 @@ AC_MSG_CHECKING([for defined of oxoffice patch version])
 if test -n "$with_oxo_version_patch" -a "$with_oxo_version_patch" != "yes" ; then
     OXO_VERSION_PATCH="$with_oxo_version_patch"
 else
-    OXO_VERSION_PATCH="0"
+    OXO_VERSION_PATCH="$LIBO_VERSION_PATCH"
 fi
 AC_SUBST(OXO_VERSION_PATCH)
 

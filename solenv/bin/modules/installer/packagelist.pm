@@ -462,11 +462,6 @@ sub resolve_packagevariables2
         my $value = $variableshashref->{$key};
         if ( $make_lowercase ) { $value = lc($value); }
         $$packagenameref =~ s/\%$key/$value/g;
-        # makesure requires hunspell-en-us for deb
-        if (($installer::globals::debian) && ($$packagenameref eq "%PACKAGEREQUIRES_HUNSPELL_EN"))
-        {
-            $$packagenameref = "hunspell-en-us";
-        }
     }
 }
 

@@ -6,7 +6,7 @@ diff -urN epm-3.7-old//deb.c epm-3.7/deb.c
    else
      fprintf(fp, "Version: %s\n", dist->version);
 -  fprintf(fp, "Maintainer: %s\n", dist->vendor);
-+  fprintf(fp, "Maintainer: %s\n", "OxOffice");
++  fprintf(fp, "Maintainer: %s\n", dist->vendor);
 +  fprintf(fp, "Section: %s\n", "application");
 +  fprintf(fp, "Priority: %s\n", "optional");
  

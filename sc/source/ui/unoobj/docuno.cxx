@@ -562,11 +562,19 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     //if (pGridWindow->GetOutputSizePixel() != aTileSize)
     //    pGridWindow->SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
     // so instead for now, set the viewport size to document size
-    Size aDocSize = getDocumentSize();
+
+    // Fetch the document size and the tiled rendering area together,
+    // because the tiled rendering area is not cheap to compute, and we want
+    // to pass it down to ScGridWindow::PaintFile to avoid computing twice.
+    SCCOL nTiledRenderingAreaEndCol = 0;
+    SCROW nTiledRenderingAreaEndRow = 0;
+    Size aDocSize = getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
+
     pGridWindow->SetOutputSizePixel(Size(aDocSize.Width() * pViewData->GetPPTX(), aDocSize.Height() * pViewData->GetPPTY()));
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
-                            nTilePosX, nTilePosY, nTileWidth, nTileHeight );
+                            nTilePosX, nTilePosY, nTileWidth, nTileHeight,
+                            nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow );
 
     // Draw Form controls
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
@@ -679,6 +687,13 @@ VclPtr<vcl::Window> ScModelObj::getDocWindow()
 
 Size ScModelObj::getDocumentSize()
 {
+    SCCOL nTiledRenderingAreaEndCol = 0;
+    SCROW nTiledRenderingAreaEndRow = 0;
+    return getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
+}
+
+Size ScModelObj::getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTiledRenderingAreaEndRow)
+{
     Size aSize(10, 10); // minimum size
 
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -686,11 +701,11 @@ Size ScModelObj::getDocumentSize()
         return aSize;
 
     SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nEndCol = 0;
-    SCROW nEndRow = 0;
+    rnTiledRenderingAreaEndCol = 0;
+    rnTiledRenderingAreaEndRow = 0;
     const ScDocument& rDoc = pDocShell->GetDocument();
 
-    rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
+    rDoc.GetTiledRenderingArea(nTab, rnTiledRenderingAreaEndCol, rnTiledRenderingAreaEndRow);
 
     const ScDocument* pThisDoc = &rDoc;
     const double fPPTX = pViewData->GetPPTX();
@@ -701,8 +716,8 @@ Size ScModelObj::getDocumentSize()
         return ScViewData::ToPixel(nSize, fPPTX);
     };
 
-    tools::Long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
-    tools::Long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, nEndRow, nTab, fPPTY);
+    tools::Long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(rnTiledRenderingAreaEndCol, GetColWidthPx);
+    tools::Long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, rnTiledRenderingAreaEndRow, nTab, fPPTY);
 
     if (nDocWidthPixel > 0 && nDocHeightPixel > 0)
     {
@@ -713,8 +728,8 @@ Size ScModelObj::getDocumentSize()
     else
     {
         // convert to twips
-        aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab));
-        aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab));
+        aSize.setWidth(rDoc.GetColWidth(0, rnTiledRenderingAreaEndCol, nTab));
+        aSize.setHeight(rDoc.GetRowHeight(0, rnTiledRenderingAreaEndRow, nTab));
     }
 
     return aSize;

@@ -309,7 +309,7 @@ public:
                             tools::Long nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getDocumentSize().
-    virtual Size getDocumentSize() override;
+    virtual Size getDocumentSize() final override;
 
     /// @see vcl::ITiledRenderable::setPart().
     virtual void setPart(int nPart, bool bAllowChangeFocus = true) override;
@@ -392,6 +392,9 @@ public:
 
     /// @see vcl::ITiledRenderable::completeFunction().
     virtual void completeFunction(const OUString& rFunctionName) override;
+
+private:
+    Size getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTiledRenderingAreaEndRow );
 };
 
 class ScDrawPagesObj final : public cppu::WeakImplHelper<

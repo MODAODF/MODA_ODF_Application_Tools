@@ -1,8 +1,0 @@
---enable-dbgutil
---enable-compiler-plugins
-COMPILER_PLUGINS_CXX=ccache g++ -std=c++11
---enable-kf5
---disable-compiler-plugins-analyzer-pch
---disable-dependency-tracking
---disable-split-debug
---with-jdk-home=/etc/alternatives/java_sdk_11

@@ -58,7 +58,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplodf \
 	Package_tplgovodftool \
 	Package_wordbook \
-	Package_msvc_dlls \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,extras,\
@@ -102,10 +101,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 
 $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_wingdings2_fonts \
-))
-
-$(eval $(call gb_Module_add_targets,extras,\
-	CustomTarget_msvc_dlls \
 ))
 
 # vim: set noet sw=4 ts=4:

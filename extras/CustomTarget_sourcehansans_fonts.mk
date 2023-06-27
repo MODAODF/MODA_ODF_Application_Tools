@@ -9,17 +9,17 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/fonts/source/truetype/symbol))
 
-$(eval $(call gb_CustomTarget_register_targets,extras/fonts/source/truetype/symbol,SourceHanSansTC-Regular.otf.otf))
+$(eval $(call gb_CustomTarget_register_targets,extras/fonts/source/truetype/symbol,SourceHanSansTC-Regular.otf))
 $(eval $(call gb_CustomTarget_register_targets,extras/fonts/source/truetype/symbol,SourceHanSansTC-Bold.otf))
 
 ifneq (,$(FONTFORGE))
-$(call gb_CustomTarget_get_workdir,extras/fonts/source/truetype/symbol)/SourceHanSansTC-Regular.otf.otf : \
-		$(SRCDIR)/extras/source/truetype/symbol/SourceHanSansTC-Regular.otf.otf
+$(call gb_CustomTarget_get_workdir,extras/fonts/source/truetype/symbol)/SourceHanSansTC-Regular.otf : \
+		$(SRCDIR)/extras/source/truetype/symbol/SourceHanSansTC-Regular.otf
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),FNT,1)
 	$(FONTFORGE) -lang=ff -c 'Open($$1); Generate($$2)' $< $@
 else
-$(call gb_CustomTarget_get_workdir,extras/fonts/source/truetype/symbol)/SourceHanSansTC-Regular.otf.otf : \
-		$(SRCDIR)/extras/source/truetype/symbol/SourceHanSansTC-Regular.otf.otf
+$(call gb_CustomTarget_get_workdir,extras/fonts/source/truetype/symbol)/SourceHanSansTC-Regular.otf : \
+		$(SRCDIR)/extras/source/truetype/symbol/SourceHanSansTC-Regular.otf
 	cp $< $@
 endif
 

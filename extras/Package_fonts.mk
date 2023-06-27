@@ -13,7 +13,7 @@ $(eval $(call gb_Package_use_customtarget,extras_fonts,extras/fonts))
 
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/opens___.ttf,opens___.ttf))
 
-$(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/SourceHanSansTC-Regular.otf.otf,source/truetype/symbol/SourceHanSansTC-Regular.otf.otf)) \
+$(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/SourceHanSansTC-Regular.otf,source/truetype/symbol/SourceHanSansTC-Regular.otf)) \
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/SourceHanSansTC-Bold.otf,source/truetype/symbol/SourceHanSansTC-Bold.otf)) \
 
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/TW-Kai-98_1.ttf,source/truetype/symbol/TW-Kai-98_1.ttf)) \

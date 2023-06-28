@@ -718,7 +718,6 @@ sub set_default_productversion_if_required
     {
         $allvariables->{'PRODUCTVERSION'} = 1;  # FAKE
     }
-    $allvariables->{'PRODUCTVERSION'} = " ";
 }
 
 ####################################################

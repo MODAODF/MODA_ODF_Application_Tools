@@ -398,7 +398,7 @@ if test -n "$with_product_name" -a "$with_product_name" != no; then
 fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME="${PRODUCTNAME}Dev"
-    PRODUCTNAME=AC_PACKAGE_NAME
+    PRODUCTNAME="$PACKAGE_NAME"
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
@@ -477,7 +477,7 @@ AC_MSG_CHECKING([for product name])
 if test -n "$with_product_name" -a "$with_product_name" != "yes" ; then
     PRODUCTNAME="$with_product_name"
 else
-    PRODUCTNAME=AC_PACKAGE_NAME
+    PRODUCTNAME="$PACKAGE_NAME"
 fi
 AC_SUBST(PRODUCTNAME)
 
@@ -546,14 +546,9 @@ fi
 AC_SUBST(OXO_VERSION_PATCH)
 
 AC_MSG_CHECKING([for product version])
-PRODUCTVERSION="$USERDIRPRODUCTVERSION.$OXO_VERSION_MINOR.$OXO_VERSION_MICRO"
+PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
 AC_MSG_RESULT([$PRODUCTVERSION])
 AC_SUBST(PRODUCTVERSION)
-
-AC_MSG_CHECKING([for product extension])
-PRODUCTEXTENSION="$USERDIRPRODUCTVERSION.$OXO_VERSION_MINOR.$OXO_VERSION_MICRO-$OXO_VERSION_PATCH"
-AC_MSG_RESULT([$PRODUCTEXTENSION])
-AC_SUBST(PRODUCTEXTENSION)
 
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well

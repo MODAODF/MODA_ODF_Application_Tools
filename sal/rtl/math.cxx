@@ -1140,7 +1140,12 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
         return fValue;
 
     if ( nDecPlaces == 0 && eMode == rtl_math_RoundingMode_Corrected )
+    {
+        if (fValue < 0x1p52)
+            fValue = rtl::math::approxFloor(fValue + (fValue > 0 ? 0.5 : -0.5));
+
         return std::round( fValue );
+    }
 
     // sign adjustment
     bool bSign = std::signbit( fValue );

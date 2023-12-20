@@ -22,8 +22,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <unordered_map>
 
-// Disable by Firefly <firefly@opendesktop.org.tw>
-#if 0
 sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0 };
 sal_Unicode const aBatangChe[] = { 0xBC14, 0xD0D5, 0xCCB4, 0 };
 sal_Unicode const aGungsuh[] = { 0xAD81, 0xC11C, 0 };
@@ -178,7 +176,6 @@ sal_Unicode const aHiraginoKakuGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE,
 sal_Unicode const aHiraginoKakuGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x89D2, 0x30B4, 'p','r','o','n',0};
 sal_Unicode const aHiraginoMaruGothicPro[]   = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o',0};
 sal_Unicode const aHiraginoMaruGothicProN[]  = { 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
-#endif
 
 OUString StripScriptFromName(const OUString& _aName)
 {
@@ -276,10 +273,6 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
         i++;
     }
     OUString rNameStr = rName.makeStringAndClear();
-
-// Disable by Firefly <firefly@opendesktop.org.tw>
-// 沒道理
-#if 0
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
@@ -433,7 +426,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
         if( it != aDictionary.end() )
             rNameStr = OUString::createFromAscii ( it->second );
     }
-#endif
+
     return rNameStr;
 }
 

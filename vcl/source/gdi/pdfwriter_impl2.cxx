@@ -956,21 +956,16 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
                     const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
                     PhysicalFontFamily* pFontFamily = nullptr;
-                    PhysicalFontFamily* pDefaultData = nullptr;
-                    pDefaultData = pFontCollection->FindCNS11643FontFamily(GetEnglishSearchFontName(pA->GetFont().GetFamilyName()));
+
                     pFontFamily = pFontCollection->ImplFindByGroupName(pA->GetFont().GetFamilyName());
 
-                    if (pDefaultData && pDefaultData->GetFamilyName() == pA->GetFont().GetFamilyName()) {
-                        m_rOuterFace.SetFont( pA->GetFont() );
+                    if (pFontFamily) {
+                        vcl::Font aFont;
+                        aFont.SetFamilyName(pFontFamily->GetFamilyName());
+                        aFont.SetFontHeight(pA->GetFont().GetFontHeight());
+                        m_rOuterFace.SetFont( aFont );
                     } else {
-                        if (pFontFamily) {
-                            vcl::Font aFont = pA->GetFont();
-                            aFont.SetFamilyName(pFontFamily->GetFamilyName());
-                            aFont.SetFontHeight(pA->GetFont().GetFontHeight());
-                            m_rOuterFace.SetFont( aFont );
-                        } else {
-                            m_rOuterFace.SetFont( pA->GetFont() );
-                        }
+                        m_rOuterFace.SetFont( pA->GetFont() );
                     }
                 }
                 break;

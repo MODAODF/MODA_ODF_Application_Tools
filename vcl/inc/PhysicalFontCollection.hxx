@@ -89,6 +89,8 @@ private:
 
     PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
 
+    PhysicalFontFamily*     ImplFindFontFamilyByCJKFeatures( FontSelectPattern& ) const;
+
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX

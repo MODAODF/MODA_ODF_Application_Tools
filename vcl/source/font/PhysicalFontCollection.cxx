@@ -34,29 +34,19 @@
 // Add by Firefly <firefly@opendesktop.org.tw>
 static char const *aDefaultGroup = \
 "仿|" \
-"Ext-B;extb|" \
 "明;宋;Ming;Sung;Song|" \
 "楷;Kai|" \
 "隸;隶|" \
-"黑;Hei;Sans|" \
+"黑;Hei|" \
 "圓;圆|" \
 "行書;行书|勘亭流|古印|魏碑|" \
 "鋼筆;钢笔|" \
 "新藝;新艺|綜藝;综艺|海報;海报|空疊;空叠|疊圓;叠圆|廣告;广告|POP|" \
 "手寫;手写|注音|" \
+"Sans|" \
 "Serif|" \
 "Monospace|Mono" \
 "Symbol;Webdings;Dingbats";
-
-enum FontGroupID
-{
-    FONTGROUP_FANG,
-    FONTGROUP_EXTB,
-    FONTGROUP_SUNG,
-    FONTGROUP_KAI,
-    FONTGROUP_LISHU,
-    FONTGROUP_SANS
-};
 
 #if 0
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
@@ -411,7 +401,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFon
     return ImplFindFontFamilyBySearchName( GetEnglishSearchFontName( rFontName ) );
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindOrCreateFontFamily( const OUString &rFamilyName )
+PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFontFamily( const OUString &rFamilyName )
 {
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rFamilyName );
     PhysicalFontFamily* pFoundData = nullptr;
@@ -481,58 +471,6 @@ int PhysicalFontCollection::ImplCheckGroupID(const OUString& rName, const OUStri
     return -1;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindCNS11643FontFamily( const OUString &rFamilyName ) const
-{
-    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rFamilyName );
-    PhysicalFontFamily* pFoundData = nullptr;
-
-    if( it != maPhysicalFontFamilies.end() )
-        pFoundData = (*it).second.get();
-
-    return pFoundData;
-}
-
-PhysicalFontFamily* PhysicalFontCollection::ImplUseCNS11643(const OUString& rName, int fontid) const
-{
-    static char const *aTWKAI = "全字庫正楷體";
-    static char const *aTWSUNG = "全字庫正宋體";
-    static char const *aSOURCEHANSANSTW = "思源黑體tw";
-    OUString atwkai(aTWKAI, strlen(aTWKAI), RTL_TEXTENCODING_UTF8);
-    OUString atwsung(aTWSUNG, strlen(aTWSUNG), RTL_TEXTENCODING_UTF8);
-    OUString asourcehansanstw(aSOURCEHANSANSTW, strlen(aSOURCEHANSANSTW), RTL_TEXTENCODING_UTF8);
-
-    static char const *eTWKAI = "twkai";
-    static char const *eTWSUNG = "twsung";
-    static char const *eSOURCEHANSANSTW = "sourcehansanstw";
-    OUString etwkai(eTWKAI, strlen(eTWKAI), RTL_TEXTENCODING_UTF8);
-    OUString etwsung(eTWSUNG, strlen(eTWSUNG), RTL_TEXTENCODING_UTF8);
-    OUString esourcehansanstw(eSOURCEHANSANSTW, strlen(eSOURCEHANSANSTW), RTL_TEXTENCODING_UTF8);
-
-    PhysicalFontFamily* pData = nullptr;
-
-    switch ( fontid )
-    {
-        case FONTGROUP_SUNG:
-            if (pData = FindCNS11643FontFamily( atwsung ))
-                return pData;
-            else
-                pData = FindCNS11643FontFamily( etwsung );
-            return pData;
-        case FONTGROUP_KAI:
-            if (pData = FindCNS11643FontFamily( atwkai ))
-                return pData;
-            else
-                pData = FindCNS11643FontFamily( etwkai );
-            return pData;
-        case FONTGROUP_SANS:
-            if (pData = FindCNS11643FontFamily( asourcehansanstw ))
-                return pData;
-            else
-                pData = FindCNS11643FontFamily( esourcehansanstw );
-            return pData;
-    }
-}
-
 // Add by Firefly <firefly@opendesktop.org.tw>
 PhysicalFontFamily* PhysicalFontCollection::ImplFindByGroupName(const OUString& rName) const
 {
@@ -555,27 +493,11 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByGroupName(const OUString& 
        {
 		   PhysicalFontFamily* pData = nullptr;
            pData = (*it).second.get();
-        // 忽略不是該群組的字體
-            if (pData->GetGroupID() != nGroupID) {
-                continue;
-            } else {
-                switch ( nGroupID )
-                {
-                    case FONTGROUP_SUNG:
-                        if (pFoundData = ImplUseCNS11643(pData->GetFamilyName(), FONTGROUP_SUNG))
-                            return pFoundData;
-                        continue;
-                    case FONTGROUP_KAI:
-                        if (pFoundData = ImplUseCNS11643(pData->GetFamilyName(), FONTGROUP_KAI))
-                            return pFoundData;
-                        continue;
-                    case FONTGROUP_SANS:
-                        if (pFoundData = ImplUseCNS11643(pData->GetFamilyName(), FONTGROUP_SANS))
-                            return pFoundData;
-                        continue;
-                }
-            }
-            return pData;
+           // 忽略不是該群組的字體
+           if (pData->GetGroupID() != nGroupID)
+               continue;
+
+           return pData;
        }
 /*
        // 取得群組中最佳字體

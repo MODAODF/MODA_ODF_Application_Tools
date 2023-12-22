@@ -1144,7 +1144,6 @@ const std::map<OUString, sal_Int16> aMSOCompatibleNumberingType =
     { "One, Two, Three, ...",      style::NumberingType::TEXT_CARDINAL },
     { "First, Second, Third, ...", style::NumberingType::TEXT_ORDINAL },
     { u"１, ２, ３, ...",           style::NumberingType::FULLWIDTH_ARABIC },
-    { u"一, 一零, 一零零, ...",      style::NumberingType::NUMBER_DIGITAL2_KO },
     { u"一, 十, 一百(繁), ...",      style::NumberingType::NUMBER_LOWER_ZH },
 };
 

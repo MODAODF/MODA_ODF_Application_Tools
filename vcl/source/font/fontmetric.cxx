@@ -37,6 +37,61 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::utl;
 
+struct CorrectMetrics
+{
+    hb_position_t mnAscent;
+    hb_position_t mnDescent;
+    hb_position_t mnUnderlinePosition;
+    hb_position_t mnUnderlineSize;
+    hb_position_t mnStrikeoutPosition;
+    hb_position_t mnStrikeoutSize;
+    hb_position_t mnHHeadAscent;
+    hb_position_t mnHHeadDescent;
+    hb_position_t mnHHeadLineGap;
+};
+
+// 這是用來修正字型的 metrics 的，目前只有新細明體、標楷體、全字庫正宋體、全字>庫正楷體需要
+// 這會讓字型集合中的所有字型，共用一組 metrics，這樣不論用哪組字型，都會讓版面編排一致
+// TODO: implement dynamic lists
+std::vector<std::pair<OUString, CorrectMetrics>> aFontCorrectMetricsMap =
+{
+    {
+        u"新細明體;PMingLiU;細明體;MingLiU;細明體_HKSCS;MingLiU_HKSCS;新細明體-ExtB;PMingLiU-ExtB;細明體-ExtB;MingLiU-ExtB;細明體_HKSCS-ExtB;MingLiU_HKSCS-ExtB;全字庫正宋體;TW-Sung;全字庫正宋體 Ext-B;TW-Sung-Ext-B;全字庫正宋體 Plus;TW-Sung-Plus",
+        {
+            820, 204, -160, 32, 260, 51, 820, -204, 204
+        }
+    },
+    {
+        u"標楷體;DFKai-SB;全字庫正楷體;TW-Kai;全字庫正楷體 Ext-B;TW-Kai-Ext-B;>全字庫正楷體 Plus;TW-Kai-Plus",
+        {
+            820, 204, -160, 50, 260, 51, 820, -204, 204
+        }
+    }
+};
+
+CorrectMetrics* NeedCorrectMetrics(const OUString& rFamilyName)
+{
+    CorrectMetrics* pMetrics = nullptr;
+
+    // check if the font family name is in the list
+    for (auto& rCorrectMetrics : aFontCorrectMetricsMap)
+    {
+        sal_Int32 nTokenPos = 0;
+        while (nTokenPos != -1)
+        {
+            OUStringBuffer aTokenName(GetNextFontToken(rCorrectMetrics.first, nTokenPos));
+            OUString aFamilyName = aTokenName.makeStringAndClear();
+
+            if (aFamilyName == rFamilyName)
+            {
+                return &rCorrectMetrics.second;
+            }
+        }
+    }
+
+    return pMetrics;
+}
+
 FontMetric::FontMetric()
 :   mnAscent( 0 ),
     mnDescent( 0 ),
@@ -339,6 +394,14 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
     double fScale = mnHeight / nUPEM;
     double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
+    CorrectMetrics* pMetrics = NeedCorrectMetrics(GetFamilyName());
+    if (pMetrics)
+    {
+        fAscent = pMetrics->mnHHeadAscent * fScale;
+        fDescent = -pMetrics->mnHHeadDescent * fScale;
+        fExtLeading = pMetrics->mnHHeadLineGap * fScale;
+    }
+    else
     // Try hhea table first.
     // tdf#107605: Some fonts have weird values here, so check that ascender is
     // +ve and descender is -ve as they normally should.
